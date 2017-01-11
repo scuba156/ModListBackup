@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Mod List Backup</name>
+  <author>scuba156</author>
+  <targetVersion>0.16.0</targetVersion>
+  <description>Backup and restore the currently loaded mods, so mods can be swapped around without losing your previous order! Up to 5 different mod list save states can be used!
+Version: 0.1 alpha
+</description>
+</ModMetaData>

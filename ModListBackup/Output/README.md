@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModListBackup
+namespace ModListBackup.lib.Output
 {
-    public class Class1
+    class README
     {
     }
 }

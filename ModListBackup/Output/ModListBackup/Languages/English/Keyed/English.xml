@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <Restore_Button_Text>Restore</Restore_Button_Text>
+  <Backup_Button_Text>Backup</Backup_Button_Text>
+
+  <Status_Message_Restore>Loaded State</Status_Message_Restore>
+  <Status_Message_Backup>Saved State</Status_Message_Backup>
+
+</LanguageData>
