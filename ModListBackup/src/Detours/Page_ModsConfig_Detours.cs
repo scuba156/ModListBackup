@@ -72,7 +72,7 @@ namespace ModListBackup.Detours
             //Main.Log.Message("Backing up state {0}", selectedState);
 
             ModsConfigHandler.SaveState(selectedState);
-            SetStatus("Status_Message_Restore".Translate());
+            SetStatus("Status_Message_Backup".Translate());
         }
 
         private static void RestoreModList()
@@ -81,7 +81,7 @@ namespace ModListBackup.Detours
             //Main.Log.Message("Restoring state {0}", selectedState);
 
             ModsConfigHandler.LoadState(selectedState);
-            SetStatus("Status_Message_Backup".Translate());
+            SetStatus("Status_Message_Restore".Translate());
         }
 
         private static void SetStatus(string message, Globals.Status_Delay delay = Globals.Status_Delay.longDelay)
