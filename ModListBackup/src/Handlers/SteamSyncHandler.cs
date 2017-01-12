@@ -13,17 +13,20 @@ namespace ModListBackup.Handlers
             {
                 foreach (string stateFilepath in Directory.GetFiles(Globals.DIR_MODLIST_BACKUP, "*" + Globals.XML_FILE_PREFIX))
                 {
-                    string newFilepath = stateFilepath + Globals.RWS_FILE_PREFIX;
-                    if (File.Exists(newFilepath))
+                    if (new FileInfo(stateFilepath).Name != Globals.FILE_MODSCONFIG_NAME)
                     {
-                        if (new FileInfo(stateFilepath).Length != new FileInfo(newFilepath).Length)
+                        string newFilepath = stateFilepath + Globals.RWS_FILE_PREFIX;
+                        if (File.Exists(newFilepath))
                         {
-                            File.Copy(stateFilepath, newFilepath, true);
-                            File.Delete(stateFilepath);
+                            if (new FileInfo(stateFilepath).Length != new FileInfo(newFilepath).Length)
+                            {
+                                File.Copy(stateFilepath, newFilepath, true);
+                                File.Delete(stateFilepath);
+                            }
                         }
+                        else
+                            File.Move(stateFilepath, newFilepath);
                     }
-                    else
-                        File.Move(stateFilepath, newFilepath);
                 }
             }
             else

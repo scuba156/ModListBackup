@@ -62,6 +62,7 @@ namespace ModListBackup
         public override void Initialize()
         {
             InitDirectories();
+            ModsConfigHandler.BackupCurrent();
         }
 
         /// <summary>

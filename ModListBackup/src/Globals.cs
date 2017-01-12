@@ -63,5 +63,9 @@ namespace ModListBackup
         /// </summary>
         internal static string DIR_MODLIST_BACKUP = DIR_RIMWORLD_USER + @"ModListBackup\";
 
+        /// <summary>
+        /// Holds the filename of RimWorld's ModsConfig file
+        /// </summary>
+        internal static string FILE_MODSCONFIG_NAME = "ModsConfig" + XML_FILE_PREFIX;
     }
 }

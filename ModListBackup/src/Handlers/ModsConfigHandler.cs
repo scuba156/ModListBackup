@@ -1,5 +1,6 @@
 ﻿using RimWorldHandler;
 using System.Collections.Generic;
+using System.IO;
 using Verse;
 
 namespace ModListBackup.Handlers
@@ -30,6 +31,14 @@ namespace ModListBackup.Handlers
                 ExposeData(GenBackupStateFileSteamSync(state));
             else
                 ExposeData(GenBackupStateFile(state));
+        }
+
+        /// <summary>
+        /// Backup the current ModsConfig.xml for safekeeping
+        /// </summary>
+        internal static void BackupCurrent()
+        {
+            File.Copy(GenFilePaths.ModsConfigFilePath, Globals.DIR_MODLIST_BACKUP + Globals.FILE_MODSCONFIG_NAME, true);
         }
 
         /// <summary>
