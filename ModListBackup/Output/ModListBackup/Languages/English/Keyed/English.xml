@@ -7,4 +7,7 @@
   <Status_Message_Restore>Loaded State</Status_Message_Restore>
   <Status_Message_Backup>Saved State</Status_Message_Backup>
 
+  <Settings_Steam_Sync_Title>Steam Sync</Settings_Steam_Sync_Title>
+  <Settings_Steam_Sync_Desc>Sync your mod save states to Steam's cloud</Settings_Steam_Sync_Desc>
+
 </LanguageData>

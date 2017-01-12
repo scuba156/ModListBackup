@@ -13,9 +13,20 @@ namespace ModListBackup
         internal const string MOD_IDENTIFIER = "ModListBackup";
 
         /// <summary>
-        /// Holds a value to use debug mode, mainly used for logging purposes
+        /// Set true to use debug mode, mainly used for logging purposes
         /// </summary>
-        internal static bool DEBUG_MODE = true;
+        internal static bool DEBUG_MODE = false;
+
+        /// <summary>
+        /// Gets the steam sync setting
+        /// </summary>
+        internal static bool SYNC_TO_STEAM
+        {
+            get
+            {
+                return Main.SteamSyncSetting();
+            }
+        }
 
         /// <summary>
         /// The limit for how may states are available
@@ -36,6 +47,11 @@ namespace ModListBackup
         /// The extension prefix for an xml file
         /// </summary>
         internal const string XML_FILE_PREFIX = ".xml";
+
+        /// <summary>
+        /// The extension prefix for a RimWorld save file (Add this on the end of a Backup file to force steam sync)
+        /// </summary>
+        internal const string RWS_FILE_PREFIX = GenFilePaths.SavedGameExtension;
 
         /// <summary>
         /// Holds the path to RimWorlds user directories

@@ -26,7 +26,10 @@ namespace ModListBackup.Handlers
         internal static void SaveState(int state)
         {
             CurrentMode = Mode.Saving;
-            ExposeData(GenBackupStateFile(state));
+            if (Globals.SYNC_TO_STEAM)
+                ExposeData(GenBackupStateFileSteamSync(state));
+            else
+                ExposeData(GenBackupStateFile(state));
         }
 
         /// <summary>
@@ -36,7 +39,10 @@ namespace ModListBackup.Handlers
         internal static void LoadState(int state)
         {
             CurrentMode = Mode.Loading;
-            ExposeData(GenBackupStateFile(state));
+            if(Globals.SYNC_TO_STEAM)
+                ExposeData(GenBackupStateFileSteamSync(state));
+            else
+                ExposeData(GenBackupStateFile(state));
         }
 
         /// <summary>
@@ -47,6 +53,16 @@ namespace ModListBackup.Handlers
         private static string GenBackupStateFile(int state)
         {
             return Globals.DIR_MODLIST_BACKUP + state.ToString() + Globals.XML_FILE_PREFIX;
+        }
+
+        /// <summary>
+        /// Generates a filename for a state to sync with steam
+        /// </summary>
+        /// <param name="state">The state to generate a filename for</param>
+        /// <returns>The filename for the state</returns>
+        private static string GenBackupStateFileSteamSync(int state)
+        {
+            return Globals.DIR_MODLIST_BACKUP + state.ToString() + Globals.XML_FILE_PREFIX + Globals.RWS_FILE_PREFIX;
         }
 
         /// <summary>

@@ -1,6 +1,9 @@
 ﻿using HugsLib;
+using HugsLib.Settings;
 using HugsLib.Utils;
+using ModListBackup.Handlers;
 using System.IO;
+using Verse;
 
 namespace ModListBackup
 {
@@ -13,6 +16,21 @@ namespace ModListBackup
         /// An Instance of this class
         /// </summary>
         internal static Main Instance { get; private set; }
+
+        /// <summary>
+        /// Holds the steam sync setting for HugsLib
+        /// </summary>
+        private SettingHandle<bool> steamSyncSetting;
+
+
+        /// <summary>
+        /// Returns the current value for steam sync
+        /// </summary>
+        /// <returns>The current value</returns>
+        internal static bool SteamSyncSetting()
+        {
+            return Instance.steamSyncSetting.Value;
+        }
 
         /// <summary>
         /// Identifies the mod to HugsLib
@@ -63,6 +81,15 @@ namespace ModListBackup
         private static void InitDirectories()
         {
             Directory.CreateDirectory(Globals.DIR_MODLIST_BACKUP);
+        }
+
+        /// <summary>
+        /// Gets called after all defs are loaded
+        /// </summary>
+        public override void DefsLoaded()
+        {
+            steamSyncSetting = Settings.GetHandle<bool>("SteamSync", "Settings_Steam_Sync_Title".Translate(), "Settings_Steam_Sync_Desc".Translate(), false);
+            SteamSyncHandler.UpdateAllStates();
         }
     }
 }

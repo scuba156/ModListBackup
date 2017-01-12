@@ -15,7 +15,8 @@ namespace RimWorldHandler
         /// <param name="active">The state to set</param>
         public static void SetActive(string modIdentifier, bool active)
         {
-            Verse.ModsConfig.SetActive(modIdentifier, active);
+            ModsConfig.SetActive(modIdentifier, active);
+            ModsConfig.DeactivateNotInstalledMods();
         }
 
         /// <summary>
@@ -25,7 +26,8 @@ namespace RimWorldHandler
         /// <param name="active">The state to set</param>
         public static void SetActive(ModMetaData modIdentifier, bool active)
         {
-            Verse.ModsConfig.SetActive(modIdentifier, active);
+            ModsConfig.SetActive(modIdentifier, active);
+            ModsConfig.DeactivateNotInstalledMods();
         }
 
         /// <summary>
@@ -33,7 +35,7 @@ namespace RimWorldHandler
         /// </summary>
         public static void Reset()
         {
-            Verse.ModsConfig.Reset();
+            ModsConfig.Reset();
         }
 
         /// <summary>

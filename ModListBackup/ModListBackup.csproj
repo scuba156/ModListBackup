@@ -54,6 +54,7 @@
     <Compile Include="src\Detours\Page_ModsConfig_Detours.cs" />
     <Compile Include="src\Globals.cs" />
     <Compile Include="src\Handlers\ModsConfigHandler.cs" />
+    <Compile Include="src\Handlers\SteamSyncHandler.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
