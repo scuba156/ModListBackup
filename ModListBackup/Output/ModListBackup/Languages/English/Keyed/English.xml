@@ -14,6 +14,10 @@
   <Settings_Steam_Sync_Desc>Sync your mod save states to Steam's cloud</Settings_Steam_Sync_Desc>
 
   <Settings_State_Names_Title>Slot Names:</Settings_State_Names_Title>
-  <Settings_State_Names_Desc>You can name each save state here. Separate each name with a |</Settings_State_Names_Desc>
+  <Settings_State_Names_Desc>You can name each save state here.</Settings_State_Names_Desc>
 
+  <Settings_Button_Show_Text>Show</Settings_Button_Show_Text>
+  <Settings_Button_Hide_Text>Hide</Settings_Button_Hide_Text>
+
+  <Settings_Label_State_Name>Slot</Settings_Label_State_Name>
 </LanguageData>
