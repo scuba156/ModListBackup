@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AAC133EF-7E43-4142-AFB1-24F99041B808}</ProjectGuid>
+    <ProjectGuid>{5CEF0407-C649-43E2-8DF0-2ADF0238EBD2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModListBackup</RootNamespace>
-    <AssemblyName>ModListBackup</AssemblyName>
+    <RootNamespace>RimWorldHandler</RootNamespace>
+    <AssemblyName>RimWorldHandler</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -17,7 +17,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
+    <OutputPath>..\ModListBackup\lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -35,10 +35,6 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HugsLib">
-      <HintPath>..\..\..\..\GitHub\RimworldHugsLib\Mods\HugsLib\Assemblies\HugsLib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,42 +47,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Detours\Page_ModsConfig_Detours.cs" />
-    <Compile Include="src\Globals.cs" />
-    <Compile Include="src\Handlers\ModsConfigHandler.cs" />
-    <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\ModsConfigAPI.cs" />
+    <Compile Include="src\XmlLoaderAPI.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <None Include=".gitattributes" />
-    <None Include=".gitignore" />
-    <None Include="img\Preview.xcf" />
-    <None Include="Output\README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RimWorldHandler\RimWorldHandler.csproj">
-      <Project>{5cef0407-c649-43e2-8df0-2adf0238ebd2}</Project>
-      <Name>RimWorldHandler</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lib\%24HugsLibChecker.dll" />
-    <Content Include="lib\RimWorldHandler.dll" />
-    <Content Include="Output\ModListBackup\About\About.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Output\ModListBackup\About\Version.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Output\ModListBackup\Assemblies\%24HugsLibChecker.dll" />
-    <Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
-    <Content Include="Output\ModListBackup\Languages\English\Keyed\English.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Output\ModListBackup\Languages\English\LanguageInfo.xml" />
+    <Compile Include="src\XmlSaverAPI.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /I /E /Y "$(ProjectDir)Output\*" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

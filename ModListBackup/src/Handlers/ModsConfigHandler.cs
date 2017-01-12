@@ -1,89 +1,124 @@
-﻿using System.Collections.Generic;
+﻿using RimWorldHandler;
+using System.Collections.Generic;
 using Verse;
 
 namespace ModListBackup.Handlers
 {
+    /// <summary>
+    /// Class for handling ModsConfig
+    /// </summary>
     class ModsConfigHandler
     {
-        internal enum Mode
-        {
-            Saving,
-            Loading
-        }
+        /// <summary>
+        /// Holds the config handler mode
+        /// </summary>
+        private static Mode CurrentMode { get; set; }
 
-        internal static Mode CurrentMode { get; private set; }
+        /// <summary>
+        /// Holds a copy of the loaded/saved data
+        /// </summary>
+        private static ModsConfigData Data { get; set; }
 
-        private static IEnumerable<ModMetaData> CurrentMods { get; set; }
-
-        private static ModsConfigData data;
-
+        /// <summary>
+        /// Save a state
+        /// </summary>
+        /// <param name="state">The state to save it into</param>
         internal static void SaveState(int state)
         {
             CurrentMode = Mode.Saving;
             ExposeData(GenBackupStateFile(state));
         }
 
+        /// <summary>
+        /// Load a state
+        /// </summary>
+        /// <param name="state">The state to load from</param>
         internal static void LoadState(int state)
         {
             CurrentMode = Mode.Loading;
             ExposeData(GenBackupStateFile(state));
         }
 
+        /// <summary>
+        /// Generates a filename for a state
+        /// </summary>
+        /// <param name="state">The state to generate a filename for</param>
+        /// <returns>The filename for the state</returns>
         private static string GenBackupStateFile(int state)
         {
-            return Globals.DIR_MODLIST_BACKUP + state.ToString() + ".xml";
+            return Globals.DIR_MODLIST_BACKUP + state.ToString() + Globals.XML_FILE_PREFIX;
         }
 
-        private static void SaveData(string filepath)
+        /// <summary>
+        /// Gets a list of active mods in load order
+        /// </summary>
+        /// <returns>A list of the active mods identifier</returns>
+        private static List<string> GetActiveMods()
         {
-            XmlSaver.SaveDataObject((object)data, filepath);
+            List<string> result = new List<string>();
+            foreach (ModMetaData mod in ModsConfigAPI.ActiveModsInLoadOrder())
+                result.Add(mod.Identifier);
+            return result;
         }
 
-        internal static void ExposeData(string filepath)
+        /// <summary>
+        /// Clears the current active mods
+        /// </summary>
+        /// <param name="removeCore">Set to true to remove core [Optional](Default:false)</param>
+        private static void ClearLoadedMods(bool removeCore = false)
         {
-            if (CurrentMode == Mode.Saving)
-            {
-                data = new ModsConfigData();
-                data.buildNumber = RimWorld.VersionControl.CurrentBuild;
-                data.activeMods = new List<string>();
-                foreach (ModMetaData mod in ModsConfig.ActiveModsInLoadOrder)
-                {
-                    data.activeMods.Add(mod.Identifier);
-                }
+            ModsConfigAPI.Reset();
+            if(removeCore)
+                ModsConfigAPI.SetActive(ModContentPack.CoreModIdentifier, false);
+        }
 
-                SaveData(filepath);
+        /// <summary>
+        /// Saves or Loads the state
+        /// </summary>
+        /// <param name="filepath">The filepath to the state</param>
+        private static void ExposeData(string filepath)
+        {
+            try
+            {
+                if (CurrentMode == Mode.Saving)
+                {
+                    Main.LogDebug("Saving state to {0}", filepath);
+                    Data = new ModsConfigData
+                    {
+                        buildNumber = RimWorld.VersionControl.CurrentBuild,
+                        activeMods = GetActiveMods()
+                    };
+                    XmlSaverAPI.SaveDataObject((object)Data, filepath);
+                }
+                else if (CurrentMode == Mode.Loading)
+                {
+                    Main.LogDebug("Loading state from {0}", filepath);
+                    Data = XmlLoaderAPI.ItemFromXmlFile<ModsConfigData>(filepath, true);
+                    ClearLoadedMods(true);
+                    foreach (string modID in Data.activeMods)
+                        ModsConfigAPI.SetActive(modID, true);
+                }
             }
-            else if (CurrentMode == Mode.Loading)
+            catch (System.Exception e)
             {
-                data = XmlLoader.ItemFromXmlFile<ModsConfigData>(filepath, true);
-
-                ModsConfig.Reset();
-
-                bool foundCore = false;
-
-                foreach (string modID in data.activeMods)
-                {
-                    if (modID != ModContentPack.CoreModIdentifier)
-                        ModsConfig.SetActive(modID, true);
-                    else
-                        foundCore = true;
-                }
-
-                if (!foundCore)
-                {
-                    ModsConfig.SetActive(ModContentPack.CoreModIdentifier, false);
-                }
-            }
-            else
-            {
-                Main.Log.Error("Tried to expose data but an unknown mode was set");
+                //An error occurred, output to log and reset loaded mods
+                Main.Log.ReportException(e, Globals.MOD_IDENTIFIER, true, "ExposeData");
+                ClearLoadedMods();
             }
         }
 
+        /// <summary>
+        /// A Class to define the ModsConfig data to hold
+        /// </summary>
         private class ModsConfigData
         {
             public int buildNumber = -1;
             public List<string> activeMods = new List<string>();
         }
+
+        /// <summary>
+        /// Enum for easily setting current mode
+        /// </summary>
+        private enum Mode { Saving, Loading }
     }
 }
