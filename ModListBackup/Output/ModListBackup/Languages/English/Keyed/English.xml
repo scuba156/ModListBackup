@@ -1,20 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-
-  <Restore_Button_Text>Restore</Restore_Button_Text>
-  <Backup_Button_Text>Backup</Backup_Button_Text>
+  <Button_Restore_Text>Restore</Button_Restore_Text>
+  <Button_Backup_Text>Backup</Button_Backup_Text>
+  <Button_Revert_Text>Revert</Button_Revert_Text>
+  <Button_Select_Text>Select</Button_Select_Text>
+  <Button_Import_Text>Import</Button_Import_Text>
 
   <Default_State_Name>[Unnamed]</Default_State_Name>
 
   <Status_Message_Restore>Loaded State</Status_Message_Restore>
   <Status_Message_Backup>Saved State</Status_Message_Backup>
+  <Status_Message_Restored>Restored</Status_Message_Restored>
   <Status_Message_Null>Not Set</Status_Message_Null>
 
-  <Settings_Steam_Sync_Title>Steam Sync</Settings_Steam_Sync_Title>
-  <Settings_Steam_Sync_Desc>Sync your mod save states to Steam's cloud</Settings_Steam_Sync_Desc>
+  <Dialog_Import_Title>Import Mods</Dialog_Import_Title>
+  <Dialog_Import_Desc>Select a save to load mods from. This will load it directly into RimWorld and overwrite what mods are currently selected. You can then backup the mod list into a slot.</Dialog_Import_Desc>
 
-  <Settings_State_Names_Title>Slot Names:</Settings_State_Names_Title>
+  <Settings_Steam_Sync_Title>Steam Sync</Settings_Steam_Sync_Title>
+  <Settings_Steam_Sync_Desc>Sync your mod save states to Steam's cloud. It is reccomended to close Rimworld and allow Steam to sync after changing this setting.</Settings_Steam_Sync_Desc>
+
+  <Settings_State_Names_Title>Slot Names</Settings_State_Names_Title>
   <Settings_State_Names_Desc>You can name each save state here.</Settings_State_Names_Desc>
+
+  <Settings_State_Revert_Title>Revert Mod List</Settings_State_Revert_Title>
+  <Settings_State_Revert_Desc>This will restore the mods backup that is created everytime RimWorld starts. Use this if something goes wrong and you lose your mod order</Settings_State_Revert_Desc>
 
   <Settings_Button_Show_Text>Show</Settings_Button_Show_Text>
   <Settings_Button_Hide_Text>Hide</Settings_Button_Hide_Text>
