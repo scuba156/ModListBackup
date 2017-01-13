@@ -14,7 +14,7 @@
   <Button_Import_Text>Import</Button_Import_Text>
   <Button_Import_Tooltip>Import a mod list from a save game.</Button_Import_Tooltip>
 
-  <Button_State_Select_Tooltip>Select a slot to Backup/Restore into.</Button_State_Select_Tooltip>
+  <Button_State_Select_Tooltip>Select a slot to Backup/Restore into.\n* means the slot is empty</Button_State_Select_Tooltip>
 
   <Default_State_Name>[Unnamed]</Default_State_Name>
 
