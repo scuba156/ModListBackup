@@ -25,14 +25,6 @@ namespace ModListBackup.Settings
             return StateNames != null ? string.Join(Globals.SETTINGS_LIST_SEPARATOR.ToString(), StateNames.ToArray()) : "";
         }
 
-        internal string GetStateNamePretty(int state)
-        {
-            if (StateNames[state - 1].Trim() == "")
-                return "Default_State_Name".Translate();
-            else
-                return GetStateName(state).Trim();
-        }
-
         internal string GetStateName(int state)
         {
             return StateNames[state - 1];

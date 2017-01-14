@@ -1,4 +1,5 @@
-﻿using RimWorldHandler;
+﻿using ModListBackup.Settings;
+using RimWorldHandler;
 using System.Collections.Generic;
 using System.IO;
 using Verse;
@@ -58,6 +59,14 @@ namespace ModListBackup.Handlers
                 return File.Exists(GenBackupStateFileSteamSync(state));
             else
                 return File.Exists(GenBackupStateFile(state));
+        }
+
+        internal static string GetStateNamePretty(int state)
+        {
+            if (SettingsHandler.StateNamesSetting.Value == null || SettingsHandler.StateNamesSetting.Value.StateNames[state - 1].Trim() == "")
+                return "Default_State_Name".Translate();
+            else
+                return SettingsHandler.StateNamesSetting.Value.GetStateName(state).Trim();
         }
 
         /// <summary>

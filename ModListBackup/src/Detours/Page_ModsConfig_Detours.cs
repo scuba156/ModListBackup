@@ -136,7 +136,7 @@ namespace ModListBackup.Detours
         /// <returns>The name of the state</returns>
         private static string GetStateName(int state)
         {
-            return String.Format("{0}. {1}{2}", state, SettingsHandler.StateNamesSetting.Value.GetStateNamePretty(state), (ModsConfigHandler.StateIsSet(state)) ? null : " [*]");
+            return String.Format("{0}. {1}{2}", state, ModsConfigHandler.GetStateNamePretty(state), (ModsConfigHandler.StateIsSet(state)) ? null : " [*]");
         }
 
         /// <summary>
