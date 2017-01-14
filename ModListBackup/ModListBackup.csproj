@@ -66,7 +66,6 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="img\Preview.xcf" />
-    <None Include="Output\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RimWorldHandler\RimWorldHandler.csproj">
