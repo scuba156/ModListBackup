@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using ModListBackup.Settings;
+using Verse;
 
 namespace ModListBackup
 {
@@ -24,14 +25,14 @@ namespace ModListBackup
         {
             get
             {
-                return Main.SteamSyncSetting();
+                return SettingsHandler.SteamSyncSetting;
             }
         }
 
         /// <summary>
         /// The limit for how may states are available
         /// </summary>
-        internal const int STATE_LIMIT = 5;
+        internal const int STATE_LIMIT = 20;
 
         /// <summary>
         /// Status message short delay time in ticks
@@ -47,6 +48,11 @@ namespace ModListBackup
         /// The extension prefix for an xml file
         /// </summary>
         internal const string XML_FILE_PREFIX = ".xml";
+
+        /// <summary>
+        /// The separator to split settings list with
+        /// </summary>
+        internal const char SETTINGS_LIST_SEPARATOR = '|';
 
         /// <summary>
         /// The extension prefix for a RimWorld save file (Add this on the end of a Backup file to force steam sync)

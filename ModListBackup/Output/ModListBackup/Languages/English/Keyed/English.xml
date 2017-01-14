@@ -14,7 +14,7 @@
   <Button_Import_Text>Import</Button_Import_Text>
   <Button_Import_Tooltip>Import a mod list from a save game.</Button_Import_Tooltip>
 
-  <Button_State_Select_Tooltip>Select a slot to Backup/Restore into.\n* means the slot is empty</Button_State_Select_Tooltip>
+  <Button_State_Select_Tooltip>Select a slot to Backup/Restore into.\n* means the slot has not been set.</Button_State_Select_Tooltip>
 
   <Default_State_Name>[Unnamed]</Default_State_Name>
 
@@ -28,13 +28,13 @@
   <Dialog_Import_Message>Importing</Dialog_Import_Message>
 
   <Settings_Steam_Sync_Title>Steam Sync</Settings_Steam_Sync_Title>
-  <Settings_Steam_Sync_Desc>Sync your mod save states to Steam's cloud. It is reccomended to close Rimworld and allow Steam to sync after changing this setting.</Settings_Steam_Sync_Desc>
+  <Settings_Steam_Sync_Desc>Sync your mod save states to Steam's cloud. It is recommended to close Rimworld and allow Steam to sync after changing this setting.</Settings_Steam_Sync_Desc>
 
   <Settings_State_Names_Title>Slot Names</Settings_State_Names_Title>
-  <Settings_State_Names_Desc>You can name each save state here.</Settings_State_Names_Desc>
+  <Settings_State_Names_Desc>You can name each save state here.\n* means the slot has not been set.</Settings_State_Names_Desc>
 
   <Settings_State_Revert_Title>Revert Mod List</Settings_State_Revert_Title>
-  <Settings_State_Revert_Desc>This will restore the mods backup that is created everytime RimWorld starts. Use this if something goes wrong and you lose your mod order</Settings_State_Revert_Desc>
+  <Settings_State_Revert_Desc>This will restore the mods backup that is created everytime RimWorld starts. Use this if something goes wrong and you lose your mod order\n\nNOTE:You must restart RimWorld for the new mods list to take effect.</Settings_State_Revert_Desc>
 
   <Settings_Button_Show_Text>Show</Settings_Button_Show_Text>
   <Settings_Button_Hide_Text>Hide</Settings_Button_Hide_Text>

@@ -34,6 +34,33 @@ namespace ModListBackup.Handlers
         }
 
         /// <summary>
+        /// Set the current active mods
+        /// </summary>
+        /// <param name="modsToActivate">The mods to set as active</param>
+        internal static void SetActiveMods(List<string> modsToActivate)
+        {
+            ClearLoadedMods(true);
+            foreach (string modID in modsToActivate)
+            {
+                ModsConfigAPI.SetActive(modID, true);
+            }
+            ModsConfigAPI.Save();
+        }
+
+        /// <summary>
+        /// Check if a state is empty
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        internal static bool StateIsSet(int state)
+        {
+            if (Globals.SYNC_TO_STEAM)
+                return File.Exists(GenBackupStateFileSteamSync(state));
+            else
+                return File.Exists(GenBackupStateFile(state));
+        }
+
+        /// <summary>
         /// Backup the current ModsConfig.xml for safekeeping
         /// </summary>
         internal static void BackupCurrent()
@@ -42,11 +69,20 @@ namespace ModListBackup.Handlers
         }
 
         /// <summary>
+        /// Restores the ModsConfig.xml Backup
+        /// </summary>
+        internal static void RestoreCurrent()
+        {
+            File.Copy(Globals.DIR_MODLIST_BACKUP + Globals.FILE_MODSCONFIG_NAME, GenFilePaths.ModsConfigFilePath, true);
+        }
+
+        /// <summary>
         /// Load a state
         /// </summary>
         /// <param name="state">The state to load from</param>
         internal static void LoadState(int state)
         {
+            //TODO: check if no mods were loaded
             CurrentMode = Mode.Loading;
             if(Globals.SYNC_TO_STEAM)
                 ExposeData(GenBackupStateFileSteamSync(state));
@@ -144,6 +180,6 @@ namespace ModListBackup.Handlers
         /// <summary>
         /// Enum for easily setting current mode
         /// </summary>
-        private enum Mode { Saving, Loading }
+        private enum Mode { Saving, Loading, Inactive }
     }
 }

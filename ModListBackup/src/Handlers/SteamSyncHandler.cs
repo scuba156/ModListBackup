@@ -2,10 +2,13 @@
 
 namespace ModListBackup.Handlers
 {
+    /// <summary>
+    /// Class to handle syncing to steam cloud
+    /// </summary>
     internal static class SteamSyncHandler
     {
         /// <summary>
-        /// Sets all state files to use steam sync or not, depending on what seeting is selected
+        /// Sets all state files to use steam sync or not, depending on what setting is selected
         /// </summary>
         internal static void UpdateAllStates()
         {

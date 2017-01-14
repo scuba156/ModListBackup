@@ -31,6 +31,14 @@ namespace RimWorldHandler
         }
 
         /// <summary>
+        /// Saves the current active mods
+        /// </summary>
+        public static void Save()
+        {
+            ModsConfig.Save();
+        }
+
+        /// <summary>
         /// Deactivate all mods except core
         /// </summary>
         public static void Reset()

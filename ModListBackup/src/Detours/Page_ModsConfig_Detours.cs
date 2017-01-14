@@ -1,5 +1,6 @@
 ﻿using HugsLib.GuiInject;
 using ModListBackup.Handlers;
+using ModListBackup.Settings;
 using RimWorld;
 using RimWorld.Planet;
 using System;
@@ -12,8 +13,24 @@ namespace ModListBackup.Detours
     /// <summary>
     /// Class to Handle our code injection
     /// </summary>
-    class Page_ModsConfig_Detours
+    class Page_ModsConfig_Detours : Page_ModsConfig
     {
+        private static float ButtonBigWidth = 110f;
+        private static float ButtonSmallWidth = 50f;
+
+        private static float BottomLeftContentWidth = 330;
+        private static float BottomLeftContentOffset = (350f - BottomLeftContentWidth) / 2;
+        private static float BottomRightContentOffset = 109f;
+
+        private static float LabelWidth = 20f;
+        private static float LabelGap = 5f;
+
+        private static float LabelStatusWidth = 100f;
+        private static float LabelStatusHeight = 18f;
+
+        private static float BottomHeight = 40f;
+
+
         /// <summary>
         /// Holds the currently selected save state, default to 1
         /// </summary>
@@ -37,19 +54,31 @@ namespace ModListBackup.Detours
         [WindowInjection(typeof(Page_ModsConfig))]
         private static void DoWindowContents(Window window, Rect rect)
         {
+            DoBottomLeftWindowContents(rect);
+            DoBottomRightWindowContents(rect);
+        }
+
+        /// <summary>
+        /// Fills the bottom left corner of the window
+        /// </summary>
+        /// <param name="rect">The rect to draw into</param>
+        private static void DoBottomLeftWindowContents(Rect rect)
+        {
             // Backup Button
-            Rect BackupRect = new Rect(rect.xMax - 400, rect.yMax - 38, 120f, 38f);
-            if(Widgets.ButtonText(BackupRect, "Backup_Button_Text".Translate()))
+            Rect BackupRect = new Rect((rect.xMin - 1) + BottomLeftContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
+            TooltipHandler.TipRegion(BackupRect, "Button_Backup_Tooltip".Translate());
+            if (Widgets.ButtonText(BackupRect, "Button_Backup_Text".Translate()))
                 BackupModList();
 
             // '>>' Label
             Text.Anchor = TextAnchor.MiddleCenter;
-            Rect toRect = new Rect(BackupRect.xMax + 5f, BackupRect.y, 20f, BackupRect.height);
+            Rect toRect = new Rect(BackupRect.xMax + LabelGap, BackupRect.y, LabelWidth, BottomHeight);
             Widgets.Label(toRect, ">>");
 
             // State button and Float menu
-            Rect StateRect = new Rect(BackupRect.xMax + 32f, BackupRect.y, BackupRect.width - 60f, BackupRect.height);
-            if (Widgets.ButtonText(StateRect, selectedState.ToString()))
+            Rect StateRect = new Rect(toRect.xMax + LabelGap, BackupRect.y, ButtonSmallWidth, BottomHeight);
+            TooltipHandler.TipRegion(StateRect, "Button_State_Select_Tooltip".Translate());
+            if (Widgets.ButtonText(StateRect, string.Format("{0}{1}", selectedState.ToString(), (ModsConfigHandler.StateIsSet(selectedState)) ? null : "*")))
             {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
 
@@ -57,29 +86,57 @@ namespace ModListBackup.Detours
                 {
                     //set a new variable here, otherwise the selected state and button text will change when int i next iterates
                     int n = i;
-                    options.Add(new FloatMenuOption(i.ToString(), (Action)(() => selectedState = n), MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null));
+                    options.Add(new FloatMenuOption(GetStateName(i), (Action)(() => { selectedState = n; }), MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null));
                 }
 
                 Find.WindowStack.Add((Window)new FloatMenu(options));
             }
 
             // '<<' Label
-            Rect fromRect = new Rect(StateRect.xMax + 5f, StateRect.y, 20f, BackupRect.height);
+            Rect fromRect = new Rect(StateRect.xMax + LabelGap, StateRect.y, LabelWidth, BottomHeight);
             Widgets.Label(fromRect, "<<");
 
             // Restore Button
-            Rect RestoreRect = new Rect(StateRect.xMax + 32f, StateRect.y, BackupRect.width, BackupRect.height);
-            if (Widgets.ButtonText(RestoreRect, "Restore_Button_Text".Translate()))
+            Rect RestoreRect = new Rect(fromRect.xMax + LabelGap, StateRect.y, ButtonBigWidth, BottomHeight);
+            TooltipHandler.TipRegion(RestoreRect, "Button_Restore_Tooltip".Translate());
+            if (Widgets.ButtonText(RestoreRect, "Button_Restore_Text".Translate()))
                 RestoreModList();
 
             // Status Label
             UpdateStatus();
             Text.Font = GameFont.Tiny;
-            Rect StatusRect = new Rect(StateRect.x - 22f, StateRect.yMax - 58f, 100f, 18f);
+            Rect StatusRect = new Rect(StateRect.x - 25f, StateRect.yMax - 58f, LabelStatusWidth, LabelStatusHeight);
             Widgets.Label(StatusRect, StatusMessage);
 
-            //Reset text anchor
+            //Reset text
+            Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
+        }
+
+        /// <summary>
+        /// Fills the bottom right corner of the window
+        /// </summary>
+        /// <param name="rect">The rect to draw into</param>
+        private static void DoBottomRightWindowContents(Rect rect)
+        {
+            // Import Button
+            Rect ImportRect = new Rect(rect.xMax - BottomRightContentOffset, rect.yMax -37f, ButtonBigWidth, BottomHeight);
+            TooltipHandler.TipRegion(ImportRect, "Button_Import_Tooltip".Translate());
+            if (Widgets.ButtonText(ImportRect, "Button_Import_Text".Translate()))
+            {
+                Dialogs.Dialog_Import importWindow = new Dialogs.Dialog_Import();
+                Find.WindowStack.Add(importWindow);
+            }
+        }
+
+        /// <summary>
+        /// Gets the formated name of a state
+        /// </summary>
+        /// <param name="state">The state to get</param>
+        /// <returns>The name of the state</returns>
+        private static string GetStateName(int state)
+        {
+            return String.Format("{0}. {1}{2}", state, SettingsHandler.StateNamesSetting.Value.GetStateNamePretty(state), (ModsConfigHandler.StateIsSet(state)) ? null : " [*]");
         }
 
         /// <summary>
@@ -96,8 +153,16 @@ namespace ModListBackup.Detours
         /// </summary>
         private static void RestoreModList()
         {
-            ModsConfigHandler.LoadState(selectedState);
-            SetStatus("Status_Message_Restore".Translate());
+            if (!ModsConfigHandler.StateIsSet(selectedState))
+            {
+                Main.Log.Message("state not set");
+                SetStatus("Status_Message_Null".Translate());
+            }
+            else
+            {
+                ModsConfigHandler.LoadState(selectedState);
+                SetStatus("Status_Message_Restore".Translate());
+            }
         }
 
         /// <summary>

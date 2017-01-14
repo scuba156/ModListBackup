@@ -52,11 +52,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Detours\Page_ModsConfig_Detours.cs" />
+    <Compile Include="src\Dialogs\Dialog_Import.cs" />
     <Compile Include="src\Globals.cs" />
     <Compile Include="src\Handlers\ModsConfigHandler.cs" />
+    <Compile Include="src\Handlers\SaveFileHandler.cs" />
+    <Compile Include="src\Settings\SettingsHandler.cs" />
     <Compile Include="src\Handlers\SteamSyncHandler.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Settings\StateNamesHandleType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -76,11 +80,13 @@
     <Content Include="Output\ModListBackup\About\About.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Output\ModListBackup\About\Preview.png" />
     <Content Include="Output\ModListBackup\About\Version.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Output\ModListBackup\Assemblies\%24HugsLibChecker.dll" />
     <Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
+    <Content Include="Output\ModListBackup\Assemblies\RimWorldHandler.dll" />
     <Content Include="Output\ModListBackup\Languages\English\Keyed\English.xml">
       <SubType>Designer</SubType>
     </Content>
