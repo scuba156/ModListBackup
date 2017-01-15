@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Detours\Page_ModsConfig_Detours.cs" />
+    <Compile Include="src\Dialogs\Dialog_EditNames.cs" />
     <Compile Include="src\Dialogs\Dialog_Import.cs" />
     <Compile Include="src\Globals.cs" />
     <Compile Include="src\Handlers\ModsConfigHandler.cs" />

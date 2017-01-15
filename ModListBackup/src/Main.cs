@@ -76,7 +76,7 @@ namespace ModListBackup
         /// </summary>
         private static void InitDirectories()
         {
-            Directory.CreateDirectory(Globals.DIR_MODLIST_BACKUP);
+            Directory.CreateDirectory(Globals.DIR_BACKUPs);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VersionData>
-  <overrideVersion>1.0.1</overrideVersion>
+  <overrideVersion>1.1</overrideVersion>
   <requiredLibraryVersion>2.3.3</requiredLibraryVersion>
   <gitHubRepository>scuba156/ModListBackup</gitHubRepository>
 </VersionData>

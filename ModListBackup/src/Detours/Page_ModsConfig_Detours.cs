@@ -5,6 +5,7 @@ using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Verse;
 
@@ -23,7 +24,7 @@ namespace ModListBackup.Detours
         private static float BottomRightContentOffset = 109f;
 
         private static float LabelWidth = 20f;
-        private static float LabelGap = 5f;
+        private static float Padding = 5f;
 
         private static float LabelStatusWidth = 100f;
         private static float LabelStatusHeight = 18f;
@@ -72,11 +73,11 @@ namespace ModListBackup.Detours
 
             // '>>' Label
             Text.Anchor = TextAnchor.MiddleCenter;
-            Rect toRect = new Rect(BackupRect.xMax + LabelGap, BackupRect.y, LabelWidth, BottomHeight);
+            Rect toRect = new Rect(BackupRect.xMax + Padding, BackupRect.y, LabelWidth, BottomHeight);
             Widgets.Label(toRect, ">>");
 
             // State button and Float menu
-            Rect StateRect = new Rect(toRect.xMax + LabelGap, BackupRect.y, ButtonSmallWidth, BottomHeight);
+            Rect StateRect = new Rect(toRect.xMax + Padding, BackupRect.y, ButtonSmallWidth, BottomHeight);
             TooltipHandler.TipRegion(StateRect, "Button_State_Select_Tooltip".Translate());
             if (Widgets.ButtonText(StateRect, string.Format("{0}{1}", selectedState.ToString(), (ModsConfigHandler.StateIsSet(selectedState)) ? null : "*")))
             {
@@ -89,15 +90,17 @@ namespace ModListBackup.Detours
                     options.Add(new FloatMenuOption(GetStateName(i), (Action)(() => { selectedState = n; }), MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null));
                 }
 
+                options.Add(new FloatMenuOption("Edit Names...", (Action)(() => { Find.WindowStack.Add(new Dialogs.Dialog_EditNames()); }), MenuOptionPriority.Default, (Action)null, (Thing)null, 0f, null, null));
+
                 Find.WindowStack.Add((Window)new FloatMenu(options));
             }
 
             // '<<' Label
-            Rect fromRect = new Rect(StateRect.xMax + LabelGap, StateRect.y, LabelWidth, BottomHeight);
+            Rect fromRect = new Rect(StateRect.xMax + Padding, StateRect.y, LabelWidth, BottomHeight);
             Widgets.Label(fromRect, "<<");
 
             // Restore Button
-            Rect RestoreRect = new Rect(fromRect.xMax + LabelGap, StateRect.y, ButtonBigWidth, BottomHeight);
+            Rect RestoreRect = new Rect(fromRect.xMax + Padding, StateRect.y, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(RestoreRect, "Button_Restore_Tooltip".Translate());
             if (Widgets.ButtonText(RestoreRect, "Button_Restore_Text".Translate()))
                 RestoreModList();
@@ -120,7 +123,7 @@ namespace ModListBackup.Detours
         private static void DoBottomRightWindowContents(Rect rect)
         {
             // Import Button
-            Rect ImportRect = new Rect(rect.xMax - BottomRightContentOffset, rect.yMax -37f, ButtonBigWidth, BottomHeight);
+            Rect ImportRect = new Rect(rect.xMax - BottomRightContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(ImportRect, "Button_Import_Tooltip".Translate());
             if (Widgets.ButtonText(ImportRect, "Button_Import_Text".Translate()))
             {
@@ -170,7 +173,7 @@ namespace ModListBackup.Detours
         /// </summary>
         /// <param name="message">The messge to display</param>
         /// <param name="delay">How long the message should stay visable (Default:longDelay)</param>
-        private static void SetStatus(string message, Status_Delay delay = Status_Delay.longDelay)
+        internal static void SetStatus(string message, Status_Delay delay = Status_Delay.longDelay)
         {
             StatusMessage = message;
             if (delay == Status_Delay.longDelay)

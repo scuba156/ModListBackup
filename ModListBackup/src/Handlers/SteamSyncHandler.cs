@@ -14,7 +14,7 @@ namespace ModListBackup.Handlers
         {
             if (Globals.SYNC_TO_STEAM)
             {
-                foreach (string stateFilepath in Directory.GetFiles(Globals.DIR_MODLIST_BACKUP, "*" + Globals.XML_FILE_PREFIX))
+                foreach (string stateFilepath in Directory.GetFiles(Globals.DIR_BACKUPs, "*" + Globals.XML_FILE_PREFIX))
                 {
                     if (new FileInfo(stateFilepath).Name != Globals.FILE_MODSCONFIG_NAME)
                     {
@@ -34,7 +34,7 @@ namespace ModListBackup.Handlers
             }
             else
             {
-                foreach (string syncFilepath in Directory.GetFiles(Globals.DIR_MODLIST_BACKUP, "*" + Globals.RWS_FILE_PREFIX))
+                foreach (string syncFilepath in Directory.GetFiles(Globals.DIR_BACKUPs, "*" + Globals.RWS_FILE_PREFIX))
                 {
                     string newFilepath = syncFilepath.Replace(Globals.RWS_FILE_PREFIX, "");
 

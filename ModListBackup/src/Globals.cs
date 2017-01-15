@@ -62,12 +62,12 @@ namespace ModListBackup
         /// <summary>
         /// Holds the path to RimWorlds user directories
         /// </summary>
-        private static string DIR_RIMWORLD_USER = GenFilePaths.SaveDataFolderPath + @"\";
-
+        internal static string DIR_RIMWORLD_USER = GenFilePaths.SaveDataFolderPath + @"\";
+        
         /// <summary>
         /// Holds the path to store mod list backup files
         /// </summary>
-        internal static string DIR_MODLIST_BACKUP = DIR_RIMWORLD_USER + @"ModListBackup\";
+        internal static string DIR_BACKUPs = DIR_RIMWORLD_USER + @"ModListBackup\";
 
         /// <summary>
         /// Holds the filename of RimWorld's ModsConfig file

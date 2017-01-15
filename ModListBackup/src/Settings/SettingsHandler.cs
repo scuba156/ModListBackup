@@ -15,6 +15,7 @@ namespace ModListBackup.Settings
 
         private static float showNamesListButtonHeight = 30f;
         private static int showRevertTick = 0;
+        private static Vector2 scrollPosition = Vector2.zero;
 
         /// <summary>
         /// Holds the steam sync setting for HugsLib
@@ -47,8 +48,29 @@ namespace ModListBackup.Settings
 
             StateNamesSetting.CustomDrawer = rect =>
             {
-                return DoStateNamesDrawerContents(rect);
+                string buttonText;
+
+                if (ShowNamesList)
+                    buttonText = "Settings_Button_Hide_Text".Translate();
+                else
+                    buttonText = "Settings_Button_Show_Text".Translate();
+
+                if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, showNamesListButtonHeight), buttonText))
+                {
+                    ShowNamesList = !ShowNamesList;
+                    StateNamesSetting.CustomDrawerHeight = !ShowNamesList ? 30f : Globals.STATE_LIMIT * 42f;//400f;
+                }
+
+                if (ShowNamesList)
+                    return DoStateNamesDrawerContents(rect);
+                else
+                    return false;
             };
+        }
+
+        internal static void RefreshStateNameSettings()
+        {
+            StateNamesSetting = Main.GetSettings.GetHandle<StateNamesHandleType>("StateNames", "Settings_State_Names_Title".Translate(), "Settings_State_Names_Desc".Translate(), null);
         }
 
         /// <summary>
@@ -85,38 +107,33 @@ namespace ModListBackup.Settings
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
         /// <returns>True if values changed</returns>
-        private static bool DoStateNamesDrawerContents(Rect rect)
+        internal static bool DoStateNamesDrawerContents(Rect rect)
         {
             if (StateNamesSetting.Value == null)
                 StateNamesSetting.Value = new StateNamesHandleType();
-            string buttonText;
 
-            if (ShowNamesList)
-                buttonText = "Settings_Button_Hide_Text".Translate();
-            else
-                buttonText = "Settings_Button_Show_Text".Translate();
+            Rect inRect = new Rect(rect.x - 18f, rect.y + 40f, rect.width, rect.height - 30);
 
-            if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, showNamesListButtonHeight), buttonText))
+            Listing_Standard listing_Standard = new Listing_Standard(inRect);
+
+            for (int i = 0; i <= Globals.STATE_LIMIT - 1; i++)
             {
-                ShowNamesList = !ShowNamesList;
-                StateNamesSetting.CustomDrawerHeight = !ShowNamesList ? 30f : Globals.STATE_LIMIT * 42f;//400f;
-            }
+                string label = String.Format("{2}{0} {1}: ", "Settings_Label_State_Name".Translate(), i + 1, (ModsConfigHandler.StateIsSet(i)) ? null : "* ");
+                string oldName = StateNamesSetting.Value.StateNames[i];
+                string newName = listing_Standard.TextEntryLabeled(label, oldName);
 
-            if (ShowNamesList)
-            {
-                Rect inRect = new Rect(rect.x - 12f, rect.y + 40f, rect.width, rect.height - 30);
-                Listing_Standard listing_Standard = new Listing_Standard(inRect);
+                listing_Standard.Gap(16f);
 
-                for (int i = 0; i <= Globals.STATE_LIMIT - 1; i++)
+                if (newName != oldName)
                 {
-                    string label = String.Format("{2}{0} {1}: ", "Settings_Label_State_Name".Translate(), i + 1, (ModsConfigHandler.StateIsSet(i)) ? null : "* ");
-                    StateNamesSetting.Value.StateNames[i] = listing_Standard.TextEntryLabeled(label, StateNamesSetting.Value.StateNames[i]);
-                    listing_Standard.Gap(16f);
+                    StateNamesSetting.Value.StateNames[i] = newName;
+                    return true;
                 }
-
-                listing_Standard.End();
             }
-            return true;
+
+            listing_Standard.End();
+
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ModListBackup.Handlers;
+﻿using ModListBackup.Detours;
+using ModListBackup.Handlers;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,11 @@ namespace ModListBackup.Dialogs
     class Dialog_Import : Window
     {
         private static readonly Color DefaultFileTextColor = new Color(1f, 1f, 0.6f);
-        protected string interactButLabel = "Button_Select_Text".Translate();
-        protected List<SaveFileInfo> files = new List<SaveFileInfo>();
+        private string interactButLabel = "Button_Select_Text".Translate();
+        private List<SaveFileInfo> files = new List<SaveFileInfo>();
+        private List<int> filesModCount = new List<int>();
 
         private Vector2 scrollPosition = Vector2.zero;
-        private float bottomAreaHeight = 0f;
 
         private float paddingSize = 5f;
         private float labelDescriptionHeight = 60f;
@@ -71,6 +72,7 @@ namespace ModListBackup.Dialogs
                 try
                 {
                     this.files.Add(new SaveFileInfo(saveFile));
+                    this.filesModCount.Add(SaveFileHandler.GetModCount(Path.GetFileNameWithoutExtension(saveFile.Name)));
                 }
                 catch (Exception ex)
                 {
@@ -116,7 +118,7 @@ namespace ModListBackup.Dialogs
             inRect.height = listViewHeight;
             float height = (float)this.files.Count * (vector2_1.y + 3f);
             Rect viewRect = new Rect(0.0f, 0.0f, inRect.width - 800f, height);
-            Rect outRect = new Rect(inRect.AtZero());
+            Rect outRect = inRect.AtZero();
             outRect.y = DescRect.yMax + paddingSize;
             Widgets.BeginScrollView(outRect, ref this.scrollPosition, viewRect);
             float y = 0.0f;
@@ -140,6 +142,12 @@ namespace ModListBackup.Dialogs
                     GUI.color = Color.white;
                     Rect rect3 = new Rect(270f, 0.0f, 200f, position.height);
                     Dialog_FileList.DrawDateAndVersion(current, rect3);
+
+                    // Mod count label
+                    GUI.color = SaveFileInfo.UnimportantTextColor;
+                    Rect countLabel = new Rect(430, 10f, 150f, position.height);
+                    Widgets.Label(countLabel, GetModsCountString(current));
+
                     GUI.color = Color.white;
                     Text.Anchor = TextAnchor.UpperLeft;
                     Text.Font = GameFont.Small;
@@ -162,14 +170,17 @@ namespace ModListBackup.Dialogs
         private void DoFileInteraction(string file)
         {
             SelectedFile = file;
-            LongEventHandler.QueueLongEvent((Action)(() =>
-            {
-                SaveFileHandler.ImportMods(file);
-                LongEventHandler.ExecuteWhenFinished((Action)(() =>
-                {
-                    this.Close(true);
-                }));
-            }), "Dialog_Import_Message", true, (Action<Exception>)null);
+
+            SaveFileHandler.ImportMods(file);
+            Page_ModsConfig_Detours.SetStatus("Status_Message_Imported".Translate());
+            this.Close(true);
+        }
+
+        private string GetModsCountString(SaveFileInfo saveFile)
+        {
+            int index = files.FindIndex(name => saveFile.FileInfo.Name == name.FileInfo.Name);
+
+            return String.Format("{0} {1}", filesModCount[index], "Dialog_EditNames_ModCount_Label".Translate());
         }
 
     }

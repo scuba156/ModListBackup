@@ -21,11 +21,14 @@
   <Status_Message_Restore>Loaded State</Status_Message_Restore>
   <Status_Message_Backup>Saved State</Status_Message_Backup>
   <Status_Message_Restored>Restored</Status_Message_Restored>
+  <Status_Message_Imported>Imported</Status_Message_Imported>
   <Status_Message_Null>Not Set</Status_Message_Null>
 
   <Dialog_Import_Title>Import Mods</Dialog_Import_Title>
   <Dialog_Import_Desc>Select a save to load mods from. This will load it directly into RimWorld and overwrite what mods are currently selected. You can then backup the mod list into a slot.</Dialog_Import_Desc>
-  <Dialog_Import_Message>Importing</Dialog_Import_Message>
+
+  <Dialog_EditNames_Title>Edit Slot Names</Dialog_EditNames_Title>
+  <Dialog_EditNames_ModCount_Label>Mod(s)</Dialog_EditNames_ModCount_Label>
 
   <Settings_Steam_Sync_Title>Steam Sync</Settings_Steam_Sync_Title>
   <Settings_Steam_Sync_Desc>Sync your mod save states to Steam's cloud. It is recommended to close Rimworld and allow Steam to sync after changing this setting.</Settings_Steam_Sync_Desc>

@@ -24,6 +24,12 @@ namespace ModListBackup.Handlers
             ModsConfigHandler.SetActiveMods(importList);
         }
 
+        internal static int GetModCount(string filename)
+        {
+            Read(GenFilePaths.FilePathForSavedGame(filename));
+            return importList.Count;
+        }
+
         /// <summary>
         /// Expose the modIds
         /// </summary>
@@ -38,13 +44,14 @@ namespace ModListBackup.Handlers
         /// <param name="filepath">The path to the savefile</param>
         private static void Read(string filepath)
         {
-            Scribe.InitLoading(filepath);
-            if (Scribe.EnterNode("meta"))
-            {
-                ExposeData();
-                Scribe.ExitNode();
-            }
+            Main.Log.Message("reading {0}", filepath);
+
+            Scribe.SaveState();
+            Scribe.InitLoadingMetaHeaderOnly(filepath);
+            ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.Map, false);
+            importList = ScribeMetaHeaderUtility.loadedModIdsList;
             Scribe.FinalizeLoading();
+            Scribe.RestoreState();
         }
     }
 }
