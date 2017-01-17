@@ -8,6 +8,8 @@
 
   <Button_Revert_Text>Revert</Button_Revert_Text>
 
+  <Button_Undo_Tooltip>Undo the last action.</Button_Undo_Tooltip>
+
   <Button_Select_Text>Select</Button_Select_Text>
   <Button_Select_Tooltip>Import this game's mod list.</Button_Select_Tooltip>
 
