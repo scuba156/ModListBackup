@@ -24,6 +24,7 @@
   <Status_Message_Backup>Saved State</Status_Message_Backup>
   <Status_Message_Restored>Restored</Status_Message_Restored>
   <Status_Message_Imported>Imported</Status_Message_Imported>
+  <Status_Message_Undone>Undone</Status_Message_Undone>
   <Status_Message_Null>Not Set</Status_Message_Null>
 
   <Dialog_Import_Title>Import Mods</Dialog_Import_Title>
