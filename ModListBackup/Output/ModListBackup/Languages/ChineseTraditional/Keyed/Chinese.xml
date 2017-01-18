@@ -24,6 +24,7 @@
   <Status_Message_Backup>已保存MOD狀態</Status_Message_Backup>
   <Status_Message_Restored>已恢復</Status_Message_Restored>
   <Status_Message_Imported>已導入</Status_Message_Imported>
+  <Status_Message_Undone>撤銷</Status_Message_Undone>
   <Status_Message_Null>尚未配置</Status_Message_Null>
 
   <Dialog_Import_Title>導入MOD</Dialog_Import_Title>
