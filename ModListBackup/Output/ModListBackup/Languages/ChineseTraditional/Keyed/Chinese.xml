@@ -27,19 +27,19 @@
   <Status_Message_Null>尚未配置</Status_Message_Null>
 
   <Dialog_Import_Title>導入MOD</Dialog_Import_Title>
-  <Dialog_Import_Desc>選擇保存以從中加載mods。 這將加載它直接到RimWorld和覆蓋當前選擇什麼mods。 然後可以將mod列表備份到插槽中。</Dialog_Import_Desc>
+  <Dialog_Import_Desc>選擇存檔以從中加載Mod列表。載入後會直接覆蓋當前的Mod列表。然後你可以將mod列表備份到插槽中。</Dialog_Import_Desc>
 
   <Dialog_EditNames_Title>編輯插槽名稱</Dialog_EditNames_Title>
   <Dialog_EditNames_ModCount_Label>Mod(s)</Dialog_EditNames_ModCount_Label>
 
   <Settings_Steam_Sync_Title>Steam 同步</Settings_Steam_Sync_Title>
-  <Settings_Steam_Sync_Desc>將您的mod保存狀態同步到Steam雲。 建議在更改此設置後關閉Rimworld並允許Steam同步。</Settings_Steam_Sync_Desc>
+  <Settings_Steam_Sync_Desc>將您的mod保存狀態同步到Steam雲。建議在更改此設置後關閉Rimworld並允許Steam同步。</Settings_Steam_Sync_Desc>
 
   <Settings_State_Names_Title>插槽名稱</Settings_State_Names_Title>
   <Settings_State_Names_Desc>您可以在此處命名每個保存狀態。\n帶*號表示尚未配置插槽.</Settings_State_Names_Desc>
 
   <Settings_State_Revert_Title>還原Mod列表</Settings_State_Revert_Title>
-  <Settings_State_Revert_Desc>這將恢復每次RimWorld啟動時創建的mods備份。 如果出現問題並丟失了mod排序，請使用此選項\n\n注意：您必須重新啟動RimWorld才能使新的mods列表生效。</Settings_State_Revert_Desc>
+  <Settings_State_Revert_Desc>這將恢復每次RimWorld啟動時創建的mods備份。如果出現問題並丟失了mod排序，請使用此選項\n\n注意：您必須重新啟動RimWorld才能使新的mods列表生效。</Settings_State_Revert_Desc>
 
   <Settings_Button_Show_Text>顯示</Settings_Button_Show_Text>
   <Settings_Button_Hide_Text>隱藏</Settings_Button_Hide_Text>
