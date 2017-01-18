@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <Button_Restore_Text>恢复</Button_Restore_Text>
+  <Button_Restore_Tooltip>从所选插槽恢复mod列表。</Button_Restore_Tooltip>
+
+  <Button_Backup_Text>备份</Button_Backup_Text>
+  <Button_Backup_Tooltip>将当前mod列表备份到所选插槽中。</Button_Backup_Tooltip>
+
+  <Button_Revert_Text>还原</Button_Revert_Text>
+
+  <Button_Undo_Tooltip>撤销上一次动作。</Button_Undo_Tooltip>
+
+  <Button_Select_Text>选择</Button_Select_Text>
+  <Button_Select_Tooltip>导入此游戏的mod列表。</Button_Select_Tooltip>
+
+  <Button_Import_Text>导入</Button_Import_Text>
+  <Button_Import_Tooltip>从保存的游戏中导入mod列表。</Button_Import_Tooltip>
+
+  <Button_State_Select_Tooltip>选择要备份/恢复的插槽。\n带*号的表示尚未配置的插槽。</Button_State_Select_Tooltip>
+
+  <Default_State_Name>[未命名]</Default_State_Name>
+
+  <Status_Message_Restore>加载MOD中</Status_Message_Restore>
+  <Status_Message_Backup>已保存MOD状态</Status_Message_Backup>
+  <Status_Message_Restored>已恢复</Status_Message_Restored>
+  <Status_Message_Imported>已导入</Status_Message_Imported>
+  <Status_Message_Null>尚未配置</Status_Message_Null>
+
+  <Dialog_Import_Title>导入MOD</Dialog_Import_Title>
+  <Dialog_Import_Desc>选择存档以从中加载Mod列表。载入后会直接覆盖当前的Mod列表。然后你可以将mod列表备份到插槽中。</Dialog_Import_Desc>
+
+  <Dialog_EditNames_Title>编辑插槽名称</Dialog_EditNames_Title>
+  <Dialog_EditNames_ModCount_Label>Mod(s)</Dialog_EditNames_ModCount_Label>
+
+  <Settings_Steam_Sync_Title>Steam 同步</Settings_Steam_Sync_Title>
+  <Settings_Steam_Sync_Desc>将您的mod保存状态同步到Steam云。建议在更改此设置后关闭Rimworld并允许Steam同步。</Settings_Steam_Sync_Desc>
+
+  <Settings_State_Names_Title>插槽名称</Settings_State_Names_Title>
+  <Settings_State_Names_Desc>您可以在此处命名每个保存状态。\n带*号的表示尚未配置的插槽.</Settings_State_Names_Desc>
+
+  <Settings_State_Revert_Title>还原Mod列表</Settings_State_Revert_Title>
+  <Settings_State_Revert_Desc>这将恢复每次RimWorld启动时创建的mods备份。如果出现问题并丢失了mod排序，请使用此选项\n\n注意：您必须重新启动RimWorld才能使新的mods列表生效。</Settings_State_Revert_Desc>
+
+  <Settings_Button_Show_Text>显示</Settings_Button_Show_Text>
+  <Settings_Button_Hide_Text>隐藏</Settings_Button_Hide_Text>
+
+  <Settings_Label_State_Name>插槽</Settings_Label_State_Name>
+
+</LanguageData>
