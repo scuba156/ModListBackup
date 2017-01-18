@@ -222,7 +222,7 @@ namespace ModListBackup.Handlers
 
             public UndoActionType(int state, LastActionType lastAction = LastActionType.none)
             {
-                Main.Log.Message("Creating last action type {1} for state {0}", state, lastAction.ToString());
+                Main.LogDebug("Creating last action type {1} for state {0}", state, lastAction.ToString());
                 State = state;
                 LastAction = lastAction;
                 switch (LastAction)
@@ -253,21 +253,21 @@ namespace ModListBackup.Handlers
 
             public bool UndoLastAction()
             {
-                Main.Log.Message("Undoing last action type {1} for state {0}", State, LastAction.ToString());
+                Main.LogDebug("Undoing last action type {1} for state {0}", State, LastAction.ToString());
                 switch (LastAction)
                 {
                     case LastActionType.restore:
-                        Main.Log.Message("Restoring {0} active mods", ModData.activeMods.Count);
+                        Main.LogDebug("Restoring {0} active mods", ModData.activeMods.Count);
                         SetActiveMods(ModData.activeMods);
                         return true;
                     case LastActionType.backup:
                         if (ModData != null)
                         {
-                            Main.Log.Message("Restored {0}'s last state", State);
+                            Main.LogDebug("Restored {0}'s last state", State);
                             XmlSaverAPI.SaveDataObject((object)ModData, GenBackupStateFile(State));
                         }
                         else {
-                            Main.Log.Message("Attempting to delete {0}", State);
+                            Main.LogDebug("Attempting to delete {0}", State);
                             File.Delete(GenBackupStateFile(State));
                         }
                         return true;

@@ -126,7 +126,6 @@ namespace ModListBackup.Detours
             TooltipHandler.TipRegion(UndoRect, "Button_Undo_Tooltip".Translate());
             if (CustomWidgets.ButtonImage(UndoRect, Textures.Undo))
             {
-                Main.Log.Message("button was pushed");
                 if (ModsConfigHandler.CanUndo)
                 {
                     if (ModsConfigHandler.DoUndoAction())
