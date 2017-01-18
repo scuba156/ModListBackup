@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-using System.IO;
-
-using ModListBackup.Settings;
+﻿using ModListBackup.Settings;
+using System.Reflection;
 using Verse;
 
 namespace ModListBackup

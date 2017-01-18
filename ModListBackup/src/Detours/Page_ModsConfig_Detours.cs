@@ -1,4 +1,6 @@
-﻿using HugsLib.GuiInject;
+﻿using ExtraWidgets;
+using HugsLib.GuiInject;
+using HugsLib.Source.Detour;
 using ModListBackup.Handlers;
 using ModListBackup.Settings;
 using RimWorld;
@@ -31,7 +33,6 @@ namespace ModListBackup.Detours
 
         private static float BottomHeight = 40f;
 
-
         /// <summary>
         /// Holds the currently selected save state, default to 1
         /// </summary>
@@ -57,6 +58,21 @@ namespace ModListBackup.Detours
         {
             DoBottomLeftWindowContents(rect);
             DoBottomRightWindowContents(rect);
+        }
+
+        [DetourMethod(typeof(Page_ModsConfig), "ExtraOnGUI")]
+        private static void _ExtraOnGUI()
+        {
+            //Log.Message("Hey GUI!");
+            if (Event.current.isMouse && Mouse.IsOver(GetModRect()))
+            {
+                Main.Log.Message("mouse was button {0}", Event.current.button);
+            }
+        }
+
+        private static Rect GetModRect()
+        {
+            return new Rect();//rect.GetInnerRect().GetInnerRect(wind);
         }
 
         /// <summary>
@@ -105,6 +121,19 @@ namespace ModListBackup.Detours
             if (Widgets.ButtonText(RestoreRect, "Button_Restore_Text".Translate()))
                 RestoreModList();
 
+            // Undo Button
+            Rect UndoRect = new Rect(RestoreRect.xMax + Padding, RestoreRect.y, ButtonSmallWidth, BottomHeight);
+            TooltipHandler.TipRegion(UndoRect, "Button_Undo_Tooltip".Translate());
+            if (CustomWidgets.ButtonImage(UndoRect, Textures.Undo))
+            {
+                Main.Log.Message("button was pushed");
+                if (ModsConfigHandler.CanUndo)
+                {
+                    if (ModsConfigHandler.DoUndoAction())
+                        SetStatus("Status_Message_Undone".Translate());
+                }
+            }
+
             // Status Label
             UpdateStatus();
             Text.Font = GameFont.Tiny;
@@ -130,6 +159,7 @@ namespace ModListBackup.Detours
                 Dialogs.Dialog_Import importWindow = new Dialogs.Dialog_Import();
                 Find.WindowStack.Add(importWindow);
             }
+
         }
 
         /// <summary>
