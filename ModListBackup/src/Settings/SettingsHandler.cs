@@ -15,7 +15,7 @@ namespace ModListBackup.Settings
 
         private static float showNamesListButtonHeight = 30f;
         private static int showRevertTick = 0;
-        private static Vector2 scrollPosition = Vector2.zero;
+        //private static Vector2 scrollPosition = Vector2.zero;
 
         /// <summary>
         /// Holds the steam sync setting for HugsLib

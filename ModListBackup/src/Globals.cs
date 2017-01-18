@@ -1,4 +1,7 @@
-﻿using ModListBackup.Settings;
+﻿using System.Reflection;
+using System.IO;
+
+using ModListBackup.Settings;
 using Verse;
 
 namespace ModListBackup
@@ -60,14 +63,9 @@ namespace ModListBackup
         internal const string RWS_FILE_PREFIX = GenFilePaths.SavedGameExtension;
 
         /// <summary>
-        /// Holds the path to RimWorlds user directories
-        /// </summary>
-        internal static string DIR_RIMWORLD_USER = GenFilePaths.SaveDataFolderPath + @"\";
-        
-        /// <summary>
         /// Holds the path to store mod list backup files
         /// </summary>
-        internal static string DIR_BACKUPs = DIR_RIMWORLD_USER + @"ModListBackup\";
+        internal static string DIR_BACKUPs = (string)typeof(GenFilePaths).GetMethod("FolderUnderSaveData", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { "ModListBackup" });
 
         /// <summary>
         /// Holds the filename of RimWorld's ModsConfig file
