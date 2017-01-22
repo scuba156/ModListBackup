@@ -1,4 +1,5 @@
 ﻿using ExtraWidgets;
+using HugsLib;
 using HugsLib.GuiInject;
 using HugsLib.Source.Detour;
 using ModListBackup.Handlers;
@@ -7,7 +8,8 @@ using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 
@@ -16,7 +18,7 @@ namespace ModListBackup.Detours
     /// <summary>
     /// Class to Handle our code injection
     /// </summary>
-    class Page_ModsConfig_Detours : Page_ModsConfig
+    static class Page_ModsConfig_Detours
     {
         private static float ButtonBigWidth = 110f;
         private static float ButtonSmallWidth = 50f;
@@ -32,6 +34,8 @@ namespace ModListBackup.Detours
         private static float LabelStatusHeight = 18f;
 
         private static float BottomHeight = 40f;
+
+        internal static bool RestartOnClose = false;
 
         /// <summary>
         /// Holds the currently selected save state, default to 1
@@ -67,6 +71,41 @@ namespace ModListBackup.Detours
             if (Event.current.isMouse && Mouse.IsOver(GetModRect()))
             {
                 Main.Log.Message("mouse was button {0}", Event.current.button);
+            }
+        }
+
+        [DetourMethod(typeof(Page_ModsConfig), "PostClose")]
+        private static void _PostClose(this Page_ModsConfig self)
+        {
+            if (SettingsHandler.LastRestartOnClose.Value != RestartOnClose)
+            {
+                SettingsHandler.LastRestartOnClose.Value = RestartOnClose;
+                HugsLibController.Instance.Settings.SaveChanges();
+            }
+            int a = (int)typeof(Page_ModsConfig).GetField("activeModsWhenOpenedHash", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
+            int b = ModLister.InstalledModsListHash(true);
+            ModsConfig.Save();
+            PlatformID current = Globals.GetCurrentPlatform();
+            if (a != b)
+            {
+                if (RestartOnClose)
+                {
+                    Main.RestartRimWorld();
+                }
+
+                bool assemblyWasLoaded = LoadedModManager.RunningMods.Any((ModContentPack m) => m.LoadedAnyAssembly);
+                LongEventHandler.QueueLongEvent(delegate
+                {
+                    PlayDataLoader.ClearAllPlayData();
+                    PlayDataLoader.LoadAllPlayData(false);
+                    if (assemblyWasLoaded)
+                    {
+                        LongEventHandler.ExecuteWhenFinished(delegate
+                        {
+                            Find.WindowStack.Add(new Dialog_MessageBox("ModWithAssemblyWasUnloaded".Translate(), null, null, null, null, null, false));
+                        });
+                    }
+                }, "LoadingLongEvent", true, null);
             }
         }
 
@@ -150,6 +189,11 @@ namespace ModListBackup.Detours
         /// <param name="rect">The rect to draw into</param>
         private static void DoBottomRightWindowContents(Rect rect)
         {
+            // Restart checkbox
+            Rect RestartCheckbox = new Rect((rect.xMax - (rect.width /2)) + 65f, rect.yMax - 29f, 150f, BottomHeight);
+            TooltipHandler.TipRegion(RestartCheckbox, "Checkbox_Restart_Tooltip".Translate());
+            CustomWidgets.CheckboxLabeledInverse(RestartCheckbox, "Checkbox_Restart_Label".Translate(), ref RestartOnClose);
+
             // Import Button
             Rect ImportRect = new Rect(rect.xMax - BottomRightContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(ImportRect, "Button_Import_Tooltip".Translate());

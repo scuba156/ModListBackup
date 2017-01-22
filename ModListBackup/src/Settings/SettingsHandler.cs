@@ -1,4 +1,5 @@
 ﻿using HugsLib.Settings;
+using ModListBackup.Detours;
 using ModListBackup.Handlers;
 using System;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace ModListBackup.Settings
     internal static class SettingsHandler
     {
         private static bool ShowNamesList { get; set; }
+        internal static SettingHandle<bool> LastRestartOnClose { get; set; }
 
         private static float showNamesListButtonHeight = 30f;
         private static int showRevertTick = 0;
@@ -37,6 +39,12 @@ namespace ModListBackup.Settings
             SettingHandle revertButtonHandle = Main.GetSettings.GetHandle<bool>("RevertButton", "Settings_State_Revert_Title".Translate(), "Settings_State_Revert_Desc".Translate());
 
             StateNamesSetting = Main.GetSettings.GetHandle<StateNamesHandleType>("StateNames", "Settings_State_Names_Title".Translate(), "Settings_State_Names_Desc".Translate(), null);
+
+            LastRestartOnClose = Main.GetSettings.GetHandle<bool>("LastRestartOnExit", "", "", false);
+
+            LastRestartOnClose.NeverVisible = true;
+
+            Page_ModsConfig_Detours.RestartOnClose = LastRestartOnClose;
 
             StateNamesSetting.CustomDrawerHeight = 30f;
             revertButtonHandle.CustomDrawerHeight = 50f;

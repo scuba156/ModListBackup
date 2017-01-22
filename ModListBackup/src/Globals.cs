@@ -1,7 +1,9 @@
 ﻿using ModListBackup.Settings;
 using RimWorldHandler;
+using System;
 using System.IO;
 using System.Reflection;
+using UnityEngine;
 using Verse;
 
 namespace ModListBackup
@@ -76,5 +78,27 @@ namespace ModListBackup
         /// Holds the filename of RimWorld's ModsConfig file
         /// </summary>
         internal static string FILE_MODSCONFIG_NAME = "ModsConfig" + XML_FILE_PREFIX;
+
+        internal static PlatformID GetCurrentPlatform()
+        {
+            if(UnityData.platform == RuntimePlatform.OSXPlayer || UnityData.platform == RuntimePlatform.OSXEditor || UnityData.platform == RuntimePlatform.OSXDashboardPlayer)
+                return PlatformID.MacOSX;
+            else if(UnityData.platform == RuntimePlatform.WindowsPlayer || UnityData.platform == RuntimePlatform.WindowsEditor)
+                return PlatformID.Win32NT;
+            else
+                return PlatformID.Unix;
+        }
+
+        internal static string GetAppExecutable()
+        {
+            string filename = "";
+
+            if (GetCurrentPlatform() == PlatformID.Win32NT)
+                filename = "RimWorldWin.exe";
+            else if (GetCurrentPlatform() == PlatformID.Unix)
+                filename = "start_RimWorld.sh";
+
+            return Path.Combine(new DirectoryInfo(UnityData.dataPath).Parent.FullName, filename);
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using HugsLib.Settings;
 using System.Collections.Generic;
 using System.Linq;
-using Verse;
 
 namespace ModListBackup.Settings
 {

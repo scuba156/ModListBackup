@@ -94,6 +94,10 @@
     <Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
     <Content Include="Output\ModListBackup\Assemblies\RimWorldHandler.dll" />
     <Content Include="Output\ModListBackup\img\undo-icon.png" />
+    <Content Include="Output\ModListBackup\Languages\ChineseSimplified\Keyed\Chinese.xml" />
+    <Content Include="Output\ModListBackup\Languages\ChineseSimplified\LanguageInfo.xml" />
+    <Content Include="Output\ModListBackup\Languages\ChineseTraditional\Keyed\Chinese.xml" />
+    <Content Include="Output\ModListBackup\Languages\ChineseTraditional\LanguageInfo.xml" />
     <Content Include="Output\ModListBackup\Languages\English\Keyed\English.xml">
       <SubType>Designer</SubType>
     </Content>

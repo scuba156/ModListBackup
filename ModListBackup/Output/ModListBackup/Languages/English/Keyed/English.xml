@@ -18,6 +18,10 @@
 
   <Button_State_Select_Tooltip>Select a slot to Backup/Restore into.\n* means the slot has not been set.</Button_State_Select_Tooltip>
 
+  <Checkbox_Restart_Label>Restart On Close</Checkbox_Restart_Label>
+
+  <Checkbox_Restart_Tooltip>Restart RimWorld instead of going back to the main menu when changes have been made.\n\nThis will save time since you should restart RimWorld after changing mods anyway.</Checkbox_Restart_Tooltip>
+
   <Default_State_Name>[Unnamed]</Default_State_Name>
 
   <Status_Message_Restore>Loaded State</Status_Message_Restore>

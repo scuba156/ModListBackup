@@ -3,7 +3,10 @@ using HugsLib.Settings;
 using HugsLib.Utils;
 using ModListBackup.Handlers;
 using ModListBackup.Settings;
+using System;
+using System.Diagnostics;
 using System.IO;
+using Verse;
 
 namespace ModListBackup
 {
@@ -86,6 +89,56 @@ namespace ModListBackup
         {
             SettingsHandler.Update();
             SteamSyncHandler.UpdateAllStates();
+        }
+
+        internal static void RestartRimWorld()
+        {
+            string command = "";
+            string steamCommand = " -a steam --args \"rungameid/294100\"";
+            switch (Globals.GetCurrentPlatform())
+            {
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32NT:
+                case PlatformID.WinCE:
+                    command = "cmd.exe";
+                    if (Verse.Steam.SteamManager.Initialized)
+                        steamCommand = "/c start steam://rungameid/294100";
+                    else
+                        steamCommand = "/c \"" + Globals.GetAppExecutable() + "\"";
+                    break;
+                case PlatformID.Unix:
+                case (PlatformID)128:
+                    command = "bash";
+                    if (Verse.Steam.SteamManager.Initialized)
+                        steamCommand = "steam steam://rungameid/294100";
+                    else
+                        steamCommand = "\"" + Globals.GetAppExecutable() + "\"";
+                    break;
+                case PlatformID.MacOSX:
+                    command = "open";
+                    if (Verse.Steam.SteamManager.Initialized)
+                        steamCommand = "steam://rungameid/294100";
+                    else
+                        steamCommand = "-n -a \"" + Globals.GetAppExecutable() + "\"";
+                    break;
+                default:
+                    break;
+            }
+            LogDebug("Restarting using {0}{1}", command, steamCommand);
+
+            ProcessStartInfo psi = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                FileName = command,
+                Arguments = steamCommand
+            };
+
+            Process process = Process.Start(psi);
+
+            LogDebug("now shutting down");
+            Root.Shutdown();
         }
     }
 }
