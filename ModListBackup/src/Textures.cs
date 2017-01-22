@@ -9,7 +9,7 @@ namespace ModListBackup
     {
         public static readonly Texture2D DeleteX = ContentFinder<Texture2D>.Get("UI/Buttons/Delete", true);
 
-        public static readonly Texture2D Undo = LoadPNG(Path.Combine(GenFilePaths.CoreModsFolderPath, @"ModListBackup\img\undo-icon.png"));
+        public static readonly Texture2D Undo = LoadPNG(Path.Combine(Globals.DIR_IMAGES, "undo-icon.png"));
 
         public static Texture2D LoadPNG(string filePath)
         {

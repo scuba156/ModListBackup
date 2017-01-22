@@ -1,4 +1,5 @@
 ﻿using ModListBackup.Settings;
+using System.IO;
 using System.Reflection;
 using Verse;
 
@@ -63,7 +64,9 @@ namespace ModListBackup
         /// <summary>
         /// Holds the path to store mod list backup files
         /// </summary>
-        internal static string DIR_BACKUPs = (string)typeof(GenFilePaths).GetMethod("FolderUnderSaveData", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { "ModListBackup" });
+        internal static string DIR_BACKUPS = (string)typeof(GenFilePaths).GetMethod("FolderUnderSaveData", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { "ModListBackup" });
+
+        internal static string DIR_IMAGES = Path.Combine(Path.Combine(GenFilePaths.CoreModsFolderPath, MOD_IDENTIFIER), "img");
 
         /// <summary>
         /// Holds the filename of RimWorld's ModsConfig file

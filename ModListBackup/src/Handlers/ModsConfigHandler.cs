@@ -98,7 +98,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void BackupCurrent()
         {
-            File.Copy(GenFilePaths.ModsConfigFilePath, Path.Combine(Globals.DIR_BACKUPs, Globals.FILE_MODSCONFIG_NAME), true);
+            File.Copy(GenFilePaths.ModsConfigFilePath, Path.Combine(Globals.DIR_BACKUPS, Globals.FILE_MODSCONFIG_NAME), true);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void RestoreCurrent()
         {
-            File.Copy(Path.Combine(Globals.DIR_BACKUPs, Globals.FILE_MODSCONFIG_NAME), GenFilePaths.ModsConfigFilePath, true);
+            File.Copy(Path.Combine(Globals.DIR_BACKUPS, Globals.FILE_MODSCONFIG_NAME), GenFilePaths.ModsConfigFilePath, true);
         }
 
         /// <summary>
@@ -132,9 +132,9 @@ namespace ModListBackup.Handlers
         private static string GenBackupStateFile(int state)
         {
             if (Globals.SYNC_TO_STEAM)
-                return Path.Combine(Globals.DIR_BACKUPs, state.ToString() + Globals.XML_FILE_PREFIX + Globals.RWS_FILE_PREFIX);
+                return Path.Combine(Globals.DIR_BACKUPS, state.ToString() + Globals.XML_FILE_PREFIX + Globals.RWS_FILE_PREFIX);
             else
-                return Path.Combine(Globals.DIR_BACKUPs, state.ToString() + Globals.XML_FILE_PREFIX);
+                return Path.Combine(Globals.DIR_BACKUPS, state.ToString() + Globals.XML_FILE_PREFIX);
         }
 
         /// <summary>
