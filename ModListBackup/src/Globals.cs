@@ -1,4 +1,5 @@
 ﻿using ModListBackup.Settings;
+using RimWorldHandler;
 using System.IO;
 using System.Reflection;
 using Verse;
@@ -8,12 +9,15 @@ namespace ModListBackup
     /// <summary>
     /// Class to store common, static and const global variables
     /// </summary>
+
     internal static class Globals
     {
         /// <summary>
         /// This mods identifier
         /// </summary>
         internal const string MOD_IDENTIFIER = "ModListBackup";
+
+        private static ModContentPack modContent = ModsConfigAPI.GetModContentPack(MOD_IDENTIFIER);
 
         /// <summary>
         /// Set true to use debug mode, mainly used for logging purposes
@@ -66,7 +70,7 @@ namespace ModListBackup
         /// </summary>
         internal static string DIR_BACKUPS = (string)typeof(GenFilePaths).GetMethod("FolderUnderSaveData", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { "ModListBackup" });
 
-        internal static string DIR_IMAGES = Path.Combine(Path.Combine(GenFilePaths.CoreModsFolderPath, MOD_IDENTIFIER), "img");
+        internal static string DIR_IMAGES = Path.Combine(modContent.RootDir, "img");
 
         /// <summary>
         /// Holds the filename of RimWorld's ModsConfig file

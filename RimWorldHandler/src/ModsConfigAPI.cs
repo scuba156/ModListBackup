@@ -54,5 +54,17 @@ namespace RimWorldHandler
         {
             return ModsConfig.ActiveModsInLoadOrder;
         }
+
+        public static ModContentPack GetModContentPack(string modIdentifier)
+        {
+            foreach (ModContentPack mod in LoadedModManager.RunningMods)
+            {
+                if (mod.Identifier == modIdentifier || mod.Name.Replace(" ", "") == modIdentifier)
+                {
+                    return mod;
+                }
+            }
+            return null;
+        }
     }
 }
