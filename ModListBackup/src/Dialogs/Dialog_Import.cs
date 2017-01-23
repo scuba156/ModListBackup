@@ -31,13 +31,7 @@ namespace ModListBackup.Dialogs
         /// <summary>
         /// The windows initial size
         /// </summary>
-        public override Vector2 InitialSize
-        {
-            get
-            {
-                return new Vector2(650f, 700f);
-            }
-        }
+        public override Vector2 InitialSize { get { return new Vector2(650f, 700f); } }
 
         /// <summary>
         /// Constructor
@@ -56,10 +50,7 @@ namespace ModListBackup.Dialogs
         /// </summary>
         /// <param name="sfi"></param>
         /// <returns></returns>
-        private Color FileNameColor(SaveFileInfo sfi)
-        {
-            return Dialog_Import.DefaultFileTextColor;
-        }
+        private Color FileNameColor(SaveFileInfo sfi) { return Dialog_Import.DefaultFileTextColor; }
 
         /// <summary>
         /// Reload the list of save files

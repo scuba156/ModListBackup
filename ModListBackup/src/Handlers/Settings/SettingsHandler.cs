@@ -1,17 +1,23 @@
-﻿using HugsLib.Settings;
+﻿using ExtraWidgets;
+using HugsLib.Settings;
 using ModListBackup.Detours;
 using ModListBackup.Handlers;
 using System;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Settings
+namespace ModListBackup.Handlers.Settings
 {
     /// <summary>
     /// Class to handle our settings
     /// </summary>
     internal static class SettingsHandler
     {
+        /// <summary>
+        /// The limit for how may states are available
+        /// </summary>
+        internal const int STATE_LIMIT = 20;
+
         private static bool ShowNamesList { get; set; }
         internal static SettingHandle<bool> LastRestartOnClose { get; set; }
 
@@ -34,13 +40,13 @@ namespace ModListBackup.Settings
         /// </summary>
         internal static void Update()
         {
-            SteamSyncSetting = Main.GetSettings.GetHandle<bool>("SteamSync", "Settings_Steam_Sync_Title".Translate(), "Settings_Steam_Sync_Desc".Translate(), true);
+            SteamSyncSetting = Main.GetSettingsPack.GetHandle<bool>("SteamSync", "Settings_Steam_Sync_Title".Translate(), "Settings_Steam_Sync_Desc".Translate(), true);
 
-            SettingHandle revertButtonHandle = Main.GetSettings.GetHandle<bool>("RevertButton", "Settings_State_Revert_Title".Translate(), "Settings_State_Revert_Desc".Translate());
+            SettingHandle revertButtonHandle = Main.GetSettingsPack.GetHandle<bool>("RevertButton", "Settings_State_Revert_Title".Translate(), "Settings_State_Revert_Desc".Translate());
 
-            StateNamesSetting = Main.GetSettings.GetHandle<StateNamesHandleType>("StateNames", "Settings_State_Names_Title".Translate(), "Settings_State_Names_Desc".Translate(), null);
+            StateNamesSetting = Main.GetSettingsPack.GetHandle<StateNamesHandleType>("StateNames", "Settings_State_Names_Title".Translate(), "Settings_State_Names_Desc".Translate(), null);
 
-            LastRestartOnClose = Main.GetSettings.GetHandle<bool>("LastRestartOnExit", "", "", false);
+            LastRestartOnClose = Main.GetSettingsPack.GetHandle<bool>("LastRestartOnExit", "", "", false);
 
             LastRestartOnClose.NeverVisible = true;
 
@@ -66,7 +72,7 @@ namespace ModListBackup.Settings
                 if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, showNamesListButtonHeight), buttonText))
                 {
                     ShowNamesList = !ShowNamesList;
-                    StateNamesSetting.CustomDrawerHeight = !ShowNamesList ? 30f : Globals.STATE_LIMIT * 42f;//400f;
+                    StateNamesSetting.CustomDrawerHeight = !ShowNamesList ? 30f : SettingsHandler.STATE_LIMIT * 42f;//400f;
                 }
 
                 if (ShowNamesList)
@@ -78,7 +84,7 @@ namespace ModListBackup.Settings
 
         internal static void RefreshStateNameSettings()
         {
-            StateNamesSetting = Main.GetSettings.GetHandle<StateNamesHandleType>("StateNames", "Settings_State_Names_Title".Translate(), "Settings_State_Names_Desc".Translate(), null);
+            StateNamesSetting = Main.GetSettingsPack.GetHandle<StateNamesHandleType>("StateNames", "Settings_State_Names_Title".Translate(), "Settings_State_Names_Desc".Translate(), null);
         }
 
         /// <summary>
@@ -91,7 +97,7 @@ namespace ModListBackup.Settings
             if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, 30f), "Button_Revert_Text".Translate()))
             {
                 Handlers.ModsConfigHandler.RestoreCurrent();
-                showRevertTick = Globals.STATUS_DELAY_TICKS_SHORT;
+                showRevertTick = CustomWidgets.STATUS_DELAY_TICKS_SHORT;
             }
 
             string label = "";
@@ -124,7 +130,7 @@ namespace ModListBackup.Settings
 
             Listing_Standard listing_Standard = new Listing_Standard(inRect);
 
-            for (int i = 0; i <= Globals.STATE_LIMIT - 1; i++)
+            for (int i = 0; i <= SettingsHandler.STATE_LIMIT - 1; i++)
             {
                 string label = String.Format("{2}{0} {1}: ", "Settings_Label_State_Name".Translate(), i + 1, (ModsConfigHandler.StateIsSet(i)) ? null : "* ");
                 string oldName = StateNamesSetting.Value.StateNames[i];

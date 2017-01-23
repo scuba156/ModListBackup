@@ -1,7 +1,6 @@
-﻿using ModListBackup.Settings;
+﻿using ModListBackup.Handlers.Settings;
 using RimWorldHandler;
 using System.Collections.Generic;
-using System.IO;
 using Verse;
 
 namespace ModListBackup.Handlers
@@ -9,7 +8,7 @@ namespace ModListBackup.Handlers
     /// <summary>
     /// Class for handling ModsConfig
     /// </summary>
-    static class ModsConfigHandler
+    internal static class ModsConfigHandler
     {
         /// <summary>
         /// Holds the config handler mode
@@ -23,6 +22,15 @@ namespace ModListBackup.Handlers
 
         internal static bool CanUndo = false;
         private static UndoActionType UndoAction { get; set; }
+
+        /// <summary>
+        /// Check if a state is empty
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        internal static bool StateIsSet(int state) {
+            return PathHandler.FileExists(PathHandler.GenBackupStateFile(state));
+        }
 
         static ModsConfigHandler()
         {
@@ -41,7 +49,7 @@ namespace ModListBackup.Handlers
             }
             else
             {
-                Main.Log.Message("DoUndoAction was called but no UndoAction was set");
+                Main.Log.Error("DoUndoAction was called but no UndoAction was set");
                 return false;
             }
         }
@@ -53,11 +61,9 @@ namespace ModListBackup.Handlers
         internal static void SaveState(int state)
         {
             CurrentMode = Mode.Saving;
-
             UndoAction = new UndoActionType(state, LastActionType.backup);
             CanUndo = true;
-
-            ExposeData(GenBackupStateFile(state));
+            ExposeData(PathHandler.GenBackupStateFile(state));
         }
 
         /// <summary>
@@ -68,21 +74,8 @@ namespace ModListBackup.Handlers
         {
             ClearLoadedMods(true);
             foreach (string modID in modsToActivate)
-            {
                 ModsConfigAPI.SetActive(modID, true);
-            }
             ModsConfigAPI.Save();
-        }
-
-        /// <summary>
-        /// Check if a state is empty
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        internal static bool StateIsSet(int state)
-        {
-
-            return File.Exists(GenBackupStateFile(state));
         }
 
         internal static string GetStateNamePretty(int state)
@@ -98,7 +91,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void BackupCurrent()
         {
-            File.Copy(GenFilePaths.ModsConfigFilePath, Path.Combine(Globals.DIR_BACKUPS, Globals.FILE_MODSCONFIG_NAME), true);
+            PathHandler.FileCopy(GenFilePathsAPI.ModsConfigFilePath, PathHandler.PathCombine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), true);
         }
 
         /// <summary>
@@ -106,7 +99,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void RestoreCurrent()
         {
-            File.Copy(Path.Combine(Globals.DIR_BACKUPS, Globals.FILE_MODSCONFIG_NAME), GenFilePaths.ModsConfigFilePath, true);
+            PathHandler.FileCopy(PathHandler.PathCombine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), GenFilePathsAPI.ModsConfigFilePath, true);
         }
 
         /// <summary>
@@ -117,24 +110,9 @@ namespace ModListBackup.Handlers
         {
             //TODO: check if no mods were loaded
             CurrentMode = Mode.Loading;
-
             UndoAction = new UndoActionType(state, LastActionType.restore);
             CanUndo = true;
-
-            ExposeData(GenBackupStateFile(state));
-        }
-
-        /// <summary>
-        /// Generates a filename for a state
-        /// </summary>
-        /// <param name="state">The state to generate a filename for</param>
-        /// <returns>The filename for the state</returns>
-        private static string GenBackupStateFile(int state)
-        {
-            if (Globals.SYNC_TO_STEAM)
-                return Path.Combine(Globals.DIR_BACKUPS, state.ToString() + Globals.XML_FILE_PREFIX + Globals.RWS_FILE_PREFIX);
-            else
-                return Path.Combine(Globals.DIR_BACKUPS, state.ToString() + Globals.XML_FILE_PREFIX);
+            ExposeData(PathHandler.GenBackupStateFile(state));
         }
 
         /// <summary>
@@ -175,7 +153,7 @@ namespace ModListBackup.Handlers
             {
                 if (CurrentMode == Mode.Saving)
                 {
-                    Main.LogDebug("Saving state to {0}", filepath);
+                    Main.DebugMessage("Saving state to {0}", filepath);
 
                     Data = new ModsConfigData
                     {
@@ -186,7 +164,7 @@ namespace ModListBackup.Handlers
                 }
                 else if (CurrentMode == Mode.Loading)
                 {
-                    Main.LogDebug("Loading state from {0}", filepath);
+                    Main.DebugMessage("Loading state from {0}", filepath);
 
                     List<string> current = new List<string>();
 
@@ -200,7 +178,7 @@ namespace ModListBackup.Handlers
             catch (System.Exception e)
             {
                 //An error occurred, output to log and reset loaded mods
-                Main.Log.ReportException(e, Globals.MOD_IDENTIFIER, true, "ExposeData");
+                Main.Log.ReportException(e, Main.GetModIdentifier, true, "ExposeData");
                 ClearLoadedMods();
             }
         }
@@ -222,7 +200,7 @@ namespace ModListBackup.Handlers
 
             public UndoActionType(int state, LastActionType lastAction = LastActionType.none)
             {
-                Main.LogDebug("Creating last action type {1} for state {0}", state, lastAction.ToString());
+                Main.DebugMessage("Creating last action type {1} for state {0}", state, lastAction.ToString());
                 State = state;
                 LastAction = lastAction;
                 switch (LastAction)
@@ -236,13 +214,9 @@ namespace ModListBackup.Handlers
                         break;
                     case LastActionType.backup:
                         if (!StateIsSet(state))
-                        {
                             ModData = null;
-                        }
                         else
-                        {
-                            ModData = ReadState(GenBackupStateFile(state));
-                        }
+                            ModData = ReadState(PathHandler.GenBackupStateFile(state));
                         break;
                     case LastActionType.none:
                     default:
@@ -251,25 +225,23 @@ namespace ModListBackup.Handlers
                 }
             }
 
-            public bool UndoLastAction()
+            internal bool UndoLastAction()
             {
-                Main.LogDebug("Undoing last action type {1} for state {0}", State, LastAction.ToString());
+                Main.DebugMessage("Undoing last action type {1} for state {0}", State, LastAction.ToString());
                 switch (LastAction)
                 {
                     case LastActionType.restore:
-                        Main.LogDebug("Restoring {0} active mods", ModData.activeMods.Count);
+                        Main.DebugMessage("Restoring {0} active mods", ModData.activeMods.Count);
                         SetActiveMods(ModData.activeMods);
                         return true;
                     case LastActionType.backup:
                         if (ModData != null)
                         {
-                            Main.LogDebug("Restored {0}'s last state", State);
-                            XmlSaverAPI.SaveDataObject((object)ModData, GenBackupStateFile(State));
+                            Main.DebugMessage("Restored {0}'s last state", State);
+                            XmlSaverAPI.SaveDataObject((object)ModData, PathHandler.GenBackupStateFile(State));
                         }
-                        else {
-                            Main.LogDebug("Attempting to delete {0}", State);
-                            File.Delete(GenBackupStateFile(State));
-                        }
+                        else
+                            PathHandler.FileDelete(PathHandler.GenBackupStateFile(State));
                         return true;
                     case LastActionType.none:
                     default:

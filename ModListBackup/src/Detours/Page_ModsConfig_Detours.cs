@@ -3,7 +3,7 @@ using HugsLib;
 using HugsLib.GuiInject;
 using HugsLib.Source.Detour;
 using ModListBackup.Handlers;
-using ModListBackup.Settings;
+using ModListBackup.Handlers.Settings;
 using RimWorld;
 using RimWorld.Planet;
 using System;
@@ -64,35 +64,23 @@ namespace ModListBackup.Detours
             DoBottomRightWindowContents(rect);
         }
 
-        [DetourMethod(typeof(Page_ModsConfig), "ExtraOnGUI")]
-        private static void _ExtraOnGUI()
-        {
-            //Log.Message("Hey GUI!");
-            if (Event.current.isMouse && Mouse.IsOver(GetModRect()))
-            {
-                Main.Log.Message("mouse was button {0}", Event.current.button);
-            }
-        }
-
         [DetourMethod(typeof(Page_ModsConfig), "PostClose")]
-        private static void _PostClose(this Page_ModsConfig self)
+        private static void PostCloseDetour(this Page_ModsConfig self)
         {
             if (SettingsHandler.LastRestartOnClose.Value != RestartOnClose)
             {
                 SettingsHandler.LastRestartOnClose.Value = RestartOnClose;
                 HugsLibController.Instance.Settings.SaveChanges();
             }
-            int a = (int)typeof(Page_ModsConfig).GetField("activeModsWhenOpenedHash", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
-            int b = ModLister.InstalledModsListHash(true);
+
             ModsConfig.Save();
-            PlatformID current = Globals.GetCurrentPlatform();
-            if (a != b)
+            int activeModsWhenOpenedHash = (int)typeof(Page_ModsConfig).GetField("activeModsWhenOpenedHash", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
+            if (activeModsWhenOpenedHash != ModLister.InstalledModsListHash(true))
             {
                 if (RestartOnClose)
-                {
-                    Main.RestartRimWorld();
-                }
+                    PlatformHandler.RestartRimWorld();
 
+                //Copy of source from here
                 bool assemblyWasLoaded = LoadedModManager.RunningMods.Any((ModContentPack m) => m.LoadedAnyAssembly);
                 LongEventHandler.QueueLongEvent(delegate
                 {
@@ -107,11 +95,6 @@ namespace ModListBackup.Detours
                     }
                 }, "LoadingLongEvent", true, null);
             }
-        }
-
-        private static Rect GetModRect()
-        {
-            return new Rect();//rect.GetInnerRect().GetInnerRect(wind);
         }
 
         /// <summary>
@@ -138,7 +121,7 @@ namespace ModListBackup.Detours
             {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
 
-                for (int i = 1; i <= Globals.STATE_LIMIT; i++)
+                for (int i = 1; i <= SettingsHandler.STATE_LIMIT; i++)
                 {
                     //set a new variable here, otherwise the selected state and button text will change when int i next iterates
                     int n = i;
@@ -164,13 +147,9 @@ namespace ModListBackup.Detours
             Rect UndoRect = new Rect(RestoreRect.xMax + Padding, RestoreRect.y, ButtonSmallWidth, BottomHeight);
             TooltipHandler.TipRegion(UndoRect, "Button_Undo_Tooltip".Translate());
             if (CustomWidgets.ButtonImage(UndoRect, Textures.Undo))
-            {
                 if (ModsConfigHandler.CanUndo)
-                {
                     if (ModsConfigHandler.DoUndoAction())
                         SetStatus("Status_Message_Undone".Translate());
-                }
-            }
 
             // Status Label
             UpdateStatus();
@@ -206,7 +185,7 @@ namespace ModListBackup.Detours
         }
 
         /// <summary>
-        /// Gets the formated name of a state
+        /// Gets the formatted name of a state
         /// </summary>
         /// <param name="state">The state to get</param>
         /// <returns>The name of the state</returns>
@@ -250,9 +229,9 @@ namespace ModListBackup.Detours
         {
             StatusMessage = message;
             if (delay == Status_Delay.longDelay)
-                StatusMessageDelay = Globals.STATUS_DELAY_TICKS_LONG;
+                StatusMessageDelay = CustomWidgets.STATUS_DELAY_TICKS_LONG;
             else
-                StatusMessageDelay = Globals.STATUS_DELAY_TICKS_SHORT;
+                StatusMessageDelay = CustomWidgets.STATUS_DELAY_TICKS_SHORT;
         }
 
         /// <summary>

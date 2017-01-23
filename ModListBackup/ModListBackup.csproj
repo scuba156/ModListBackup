@@ -58,14 +58,15 @@
     <Compile Include="src\Detours\Page_ModsConfig_Detours.cs" />
     <Compile Include="src\Dialogs\Dialog_EditNames.cs" />
     <Compile Include="src\Dialogs\Dialog_Import.cs" />
-    <Compile Include="src\Globals.cs" />
+    <Compile Include="src\Handlers\PathHandler.cs" />
     <Compile Include="src\Handlers\ModsConfigHandler.cs" />
+    <Compile Include="src\Handlers\PlatformHandler.cs" />
     <Compile Include="src\Handlers\SaveFileHandler.cs" />
-    <Compile Include="src\Settings\SettingsHandler.cs" />
+    <Compile Include="src\Handlers\Settings\SettingsHandler.cs" />
     <Compile Include="src\Handlers\SteamSyncHandler.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Settings\StateNamesHandleType.cs" />
+    <Compile Include="src\Handlers\Settings\StateNamesHandleType.cs" />
     <Compile Include="src\Textures.cs" />
   </ItemGroup>
   <ItemGroup>
