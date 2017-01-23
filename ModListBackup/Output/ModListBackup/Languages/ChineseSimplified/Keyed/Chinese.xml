@@ -18,6 +18,10 @@
 
   <Button_State_Select_Tooltip>选择要备份/恢复的插槽。\n带*号的表示尚未配置的插槽。</Button_State_Select_Tooltip>
 
+  <Checkbox_Restart_Label>立即新启动RimWorld</Checkbox_Restart_Label>
+
+  <Checkbox_Restart_Tooltip>立即重新启动RimWorld，而不是在更改后返回主选单。\n\n这将节省时间，因为您应该在更改mod后重新启动RimWorld。</Checkbox_Restart_Tooltip>
+
   <Default_State_Name>[未命名]</Default_State_Name>
 
   <Status_Message_Restore>加载MOD中</Status_Message_Restore>
