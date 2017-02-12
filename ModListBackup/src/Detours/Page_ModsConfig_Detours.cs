@@ -1,11 +1,15 @@
-﻿using HugsLib.GuiInject;
+﻿using ExtraWidgets;
+using HugsLib;
+using HugsLib.GuiInject;
+using HugsLib.Source.Detour;
 using ModListBackup.Handlers;
-using ModListBackup.Settings;
+using ModListBackup.Handlers.Settings;
 using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 
@@ -14,7 +18,7 @@ namespace ModListBackup.Detours
     /// <summary>
     /// Class to Handle our code injection
     /// </summary>
-    class Page_ModsConfig_Detours : Page_ModsConfig
+    static class Page_ModsConfig_Detours
     {
         private static float ButtonBigWidth = 110f;
         private static float ButtonSmallWidth = 50f;
@@ -31,6 +35,7 @@ namespace ModListBackup.Detours
 
         private static float BottomHeight = 40f;
 
+        internal static bool RestartOnClose = false;
 
         /// <summary>
         /// Holds the currently selected save state, default to 1
@@ -59,6 +64,39 @@ namespace ModListBackup.Detours
             DoBottomRightWindowContents(rect);
         }
 
+        [DetourMethod(typeof(Page_ModsConfig), "PostClose")]
+        private static void PostCloseDetour(this Page_ModsConfig self)
+        {
+            if (SettingsHandler.LastRestartOnClose.Value != RestartOnClose)
+            {
+                SettingsHandler.LastRestartOnClose.Value = RestartOnClose;
+                HugsLibController.Instance.Settings.SaveChanges();
+            }
+
+            ModsConfig.Save();
+            int activeModsWhenOpenedHash = (int)typeof(Page_ModsConfig).GetField("activeModsWhenOpenedHash", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
+            if (activeModsWhenOpenedHash != ModLister.InstalledModsListHash(true))
+            {
+                if (RestartOnClose)
+                    PlatformHandler.RestartRimWorld();
+
+                //Copy of source from here
+                bool assemblyWasLoaded = LoadedModManager.RunningMods.Any((ModContentPack m) => m.LoadedAnyAssembly);
+                LongEventHandler.QueueLongEvent(delegate
+                {
+                    PlayDataLoader.ClearAllPlayData();
+                    PlayDataLoader.LoadAllPlayData(false);
+                    if (assemblyWasLoaded)
+                    {
+                        LongEventHandler.ExecuteWhenFinished(delegate
+                        {
+                            Find.WindowStack.Add(new Dialog_MessageBox("ModWithAssemblyWasUnloaded".Translate(), null, null, null, null, null, false));
+                        });
+                    }
+                }, "LoadingLongEvent", true, null);
+            }
+        }
+
         /// <summary>
         /// Fills the bottom left corner of the window
         /// </summary>
@@ -83,7 +121,7 @@ namespace ModListBackup.Detours
             {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
 
-                for (int i = 1; i <= Globals.STATE_LIMIT; i++)
+                for (int i = 1; i <= SettingsHandler.STATE_LIMIT; i++)
                 {
                     //set a new variable here, otherwise the selected state and button text will change when int i next iterates
                     int n = i;
@@ -105,6 +143,14 @@ namespace ModListBackup.Detours
             if (Widgets.ButtonText(RestoreRect, "Button_Restore_Text".Translate()))
                 RestoreModList();
 
+            // Undo Button
+            Rect UndoRect = new Rect(RestoreRect.xMax + Padding, RestoreRect.y, ButtonSmallWidth, BottomHeight);
+            TooltipHandler.TipRegion(UndoRect, "Button_Undo_Tooltip".Translate());
+            if (CustomWidgets.ButtonImage(UndoRect, Textures.Undo))
+                if (ModsConfigHandler.CanUndo)
+                    if (ModsConfigHandler.DoUndoAction())
+                        SetStatus("Status_Message_Undone".Translate());
+
             // Status Label
             UpdateStatus();
             Text.Font = GameFont.Tiny;
@@ -122,6 +168,11 @@ namespace ModListBackup.Detours
         /// <param name="rect">The rect to draw into</param>
         private static void DoBottomRightWindowContents(Rect rect)
         {
+            // Restart checkbox
+            Rect RestartCheckbox = new Rect((rect.xMax - (rect.width /2)) + 65f, rect.yMax - 29f, 150f, BottomHeight);
+            TooltipHandler.TipRegion(RestartCheckbox, "Checkbox_Restart_Tooltip".Translate());
+            CustomWidgets.CheckboxLabeledInverse(RestartCheckbox, "Checkbox_Restart_Label".Translate(), ref RestartOnClose);
+
             // Import Button
             Rect ImportRect = new Rect(rect.xMax - BottomRightContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(ImportRect, "Button_Import_Tooltip".Translate());
@@ -130,10 +181,11 @@ namespace ModListBackup.Detours
                 Dialogs.Dialog_Import importWindow = new Dialogs.Dialog_Import();
                 Find.WindowStack.Add(importWindow);
             }
+
         }
 
         /// <summary>
-        /// Gets the formated name of a state
+        /// Gets the formatted name of a state
         /// </summary>
         /// <param name="state">The state to get</param>
         /// <returns>The name of the state</returns>
@@ -177,9 +229,9 @@ namespace ModListBackup.Detours
         {
             StatusMessage = message;
             if (delay == Status_Delay.longDelay)
-                StatusMessageDelay = Globals.STATUS_DELAY_TICKS_LONG;
+                StatusMessageDelay = CustomWidgets.STATUS_DELAY_TICKS_LONG;
             else
-                StatusMessageDelay = Globals.STATUS_DELAY_TICKS_SHORT;
+                StatusMessageDelay = CustomWidgets.STATUS_DELAY_TICKS_SHORT;
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <Button_Restore_Text>恢復</Button_Restore_Text>
   <Button_Restore_Tooltip>從所選插槽恢復mod列表。</Button_Restore_Tooltip>
@@ -18,12 +18,17 @@
 
   <Button_State_Select_Tooltip>選擇要備份/恢復的插槽。\n帶*號表示尚未配置插槽。</Button_State_Select_Tooltip>
 
+  <Checkbox_Restart_Label>立即重新啟動RimWorld</Checkbox_Restart_Label>
+
+  <Checkbox_Restart_Tooltip>立即重新啟動RimWorld，而不是在更改後返回主選單。\n\n這將節省時間，因為您應該在更改mod後重新啟動RimWorld。</Checkbox_Restart_Tooltip>
+
   <Default_State_Name>[未命名]</Default_State_Name>
 
   <Status_Message_Restore>加載MOD中</Status_Message_Restore>
   <Status_Message_Backup>已保存MOD狀態</Status_Message_Backup>
   <Status_Message_Restored>已恢復</Status_Message_Restored>
   <Status_Message_Imported>已導入</Status_Message_Imported>
+  <Status_Message_Undone>撤銷</Status_Message_Undone>
   <Status_Message_Null>尚未配置</Status_Message_Null>
 
   <Dialog_Import_Title>導入MOD</Dialog_Import_Title>
@@ -45,5 +50,4 @@
   <Settings_Button_Hide_Text>隱藏</Settings_Button_Hide_Text>
 
   <Settings_Label_State_Name>插槽</Settings_Label_State_Name>
-
 </LanguageData>

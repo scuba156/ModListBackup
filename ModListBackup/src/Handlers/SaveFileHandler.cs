@@ -44,7 +44,7 @@ namespace ModListBackup.Handlers
         /// <param name="filepath">The path to the savefile</param>
         private static void Read(string filepath)
         {
-            Main.Log.Message("reading {0}", filepath);
+            Main.DebugMessage("reading {0}", filepath);
 
             Scribe.SaveState();
             Scribe.InitLoadingMetaHeaderOnly(filepath);

@@ -1,13 +1,17 @@
 ﻿using HugsLib.Settings;
 using System.Collections.Generic;
 using System.Linq;
-using Verse;
 
-namespace ModListBackup.Settings
+namespace ModListBackup.Handlers.Settings
 {
     class StateNamesHandleType : SettingHandleConvertible
     {
         internal List<string> StateNames { get; set; }
+
+        /// <summary>
+        /// The separator to split settings list with
+        /// </summary>
+        private const char Separator = '|';
 
         public StateNamesHandleType()
         {
@@ -16,13 +20,13 @@ namespace ModListBackup.Settings
 
         public override void FromString(string settingValue)
         {
-            StateNames = settingValue.Split(Globals.SETTINGS_LIST_SEPARATOR).ToList();
+            StateNames = settingValue.Split(Separator).ToList();
             FillNames();
         }
 
         public override string ToString()
         {
-            return StateNames != null ? string.Join(Globals.SETTINGS_LIST_SEPARATOR.ToString(), StateNames.ToArray()) : "";
+            return StateNames != null ? string.Join(Separator.ToString(), StateNames.ToArray()) : "";
         }
 
         internal string GetStateName(int state)
@@ -33,9 +37,9 @@ namespace ModListBackup.Settings
         internal void FillNames()
         {
             if (StateNames == null)
-                StateNames = new List<string>(Globals.STATE_LIMIT);
+                StateNames = new List<string>(SettingsHandler.STATE_LIMIT);
 
-            for (int i = 0; i < Globals.STATE_LIMIT; i++)
+            for (int i = 0; i < SettingsHandler.STATE_LIMIT; i++)
             {
                 if (StateNames.Count == i)
                     StateNames.Add("");

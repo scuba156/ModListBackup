@@ -1,7 +1,6 @@
-﻿using ModListBackup.Settings;
+﻿using ModListBackup.Handlers.Settings;
 using RimWorldHandler;
 using System.Collections.Generic;
-using System.IO;
 using Verse;
 
 namespace ModListBackup.Handlers
@@ -9,7 +8,7 @@ namespace ModListBackup.Handlers
     /// <summary>
     /// Class for handling ModsConfig
     /// </summary>
-    class ModsConfigHandler
+    internal static class ModsConfigHandler
     {
         /// <summary>
         /// Holds the config handler mode
@@ -21,6 +20,40 @@ namespace ModListBackup.Handlers
         /// </summary>
         private static ModsConfigData Data { get; set; }
 
+        internal static bool CanUndo = false;
+        private static UndoActionType UndoAction { get; set; }
+
+        /// <summary>
+        /// Check if a state is empty
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        internal static bool StateIsSet(int state) {
+            return PathHandler.FileExists(PathHandler.GenBackupStateFile(state));
+        }
+
+        static ModsConfigHandler()
+        {
+            Data = new ModsConfigData
+            {
+                buildNumber = RimWorld.VersionControl.CurrentBuild,
+                activeMods = GetActiveMods()
+            };
+        }
+
+        internal static bool DoUndoAction()
+        {
+            if (UndoAction != null && CanUndo)
+            {
+                return UndoAction.UndoLastAction();
+            }
+            else
+            {
+                Main.Log.Error("DoUndoAction was called but no UndoAction was set");
+                return false;
+            }
+        }
+
         /// <summary>
         /// Save a state
         /// </summary>
@@ -28,10 +61,9 @@ namespace ModListBackup.Handlers
         internal static void SaveState(int state)
         {
             CurrentMode = Mode.Saving;
-            if (Globals.SYNC_TO_STEAM)
-                ExposeData(GenBackupStateFileSteamSync(state));
-            else
-                ExposeData(GenBackupStateFile(state));
+            UndoAction = new UndoActionType(state, LastActionType.backup);
+            CanUndo = true;
+            ExposeData(PathHandler.GenBackupStateFile(state));
         }
 
         /// <summary>
@@ -42,23 +74,8 @@ namespace ModListBackup.Handlers
         {
             ClearLoadedMods(true);
             foreach (string modID in modsToActivate)
-            {
                 ModsConfigAPI.SetActive(modID, true);
-            }
             ModsConfigAPI.Save();
-        }
-
-        /// <summary>
-        /// Check if a state is empty
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        internal static bool StateIsSet(int state)
-        {
-            if (Globals.SYNC_TO_STEAM)
-                return File.Exists(GenBackupStateFileSteamSync(state));
-            else
-                return File.Exists(GenBackupStateFile(state));
         }
 
         internal static string GetStateNamePretty(int state)
@@ -74,7 +91,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void BackupCurrent()
         {
-            File.Copy(GenFilePaths.ModsConfigFilePath, Path.Combine(Globals.DIR_BACKUPs, Globals.FILE_MODSCONFIG_NAME), true);
+            PathHandler.FileCopy(GenFilePathsAPI.ModsConfigFilePath, PathHandler.PathCombine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), true);
         }
 
         /// <summary>
@@ -82,7 +99,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void RestoreCurrent()
         {
-            File.Copy(Path.Combine(Globals.DIR_BACKUPs, Globals.FILE_MODSCONFIG_NAME), GenFilePaths.ModsConfigFilePath, true);
+            PathHandler.FileCopy(PathHandler.PathCombine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), GenFilePathsAPI.ModsConfigFilePath, true);
         }
 
         /// <summary>
@@ -93,30 +110,9 @@ namespace ModListBackup.Handlers
         {
             //TODO: check if no mods were loaded
             CurrentMode = Mode.Loading;
-            if(Globals.SYNC_TO_STEAM)
-                ExposeData(GenBackupStateFileSteamSync(state));
-            else
-                ExposeData(GenBackupStateFile(state));
-        }
-
-        /// <summary>
-        /// Generates a filename for a state
-        /// </summary>
-        /// <param name="state">The state to generate a filename for</param>
-        /// <returns>The filename for the state</returns>
-        private static string GenBackupStateFile(int state)
-        {
-            return Path.Combine(Globals.DIR_BACKUPs, state.ToString() + Globals.XML_FILE_PREFIX);
-        }
-
-        /// <summary>
-        /// Generates a filename for a state to sync with steam
-        /// </summary>
-        /// <param name="state">The state to generate a filename for</param>
-        /// <returns>The filename for the state</returns>
-        private static string GenBackupStateFileSteamSync(int state)
-        {
-            return Path.Combine(Globals.DIR_BACKUPs, state.ToString() + Globals.XML_FILE_PREFIX + Globals.RWS_FILE_PREFIX);
+            UndoAction = new UndoActionType(state, LastActionType.restore);
+            CanUndo = true;
+            ExposeData(PathHandler.GenBackupStateFile(state));
         }
 
         /// <summary>
@@ -142,17 +138,23 @@ namespace ModListBackup.Handlers
                 ModsConfigAPI.SetActive(ModContentPack.CoreModIdentifier, false);
         }
 
+        private static ModsConfigData ReadState(string filepath)
+        {
+            return XmlLoaderAPI.ItemFromXmlFile<ModsConfigData>(filepath, true);
+        }
+
         /// <summary>
         /// Saves or Loads the state
         /// </summary>
         /// <param name="filepath">The filepath to the state</param>
-        private static void ExposeData(string filepath)
+        private static void ExposeData(string filepath, bool useUndoAction = false)
         {
             try
             {
                 if (CurrentMode == Mode.Saving)
                 {
-                    Main.LogDebug("Saving state to {0}", filepath);
+                    Main.DebugMessage("Saving state to {0}", filepath);
+
                     Data = new ModsConfigData
                     {
                         buildNumber = RimWorld.VersionControl.CurrentBuild,
@@ -162,8 +164,12 @@ namespace ModListBackup.Handlers
                 }
                 else if (CurrentMode == Mode.Loading)
                 {
-                    Main.LogDebug("Loading state from {0}", filepath);
-                    Data = XmlLoaderAPI.ItemFromXmlFile<ModsConfigData>(filepath, true);
+                    Main.DebugMessage("Loading state from {0}", filepath);
+
+                    List<string> current = new List<string>();
+
+                    Data = ReadState(filepath);
+
                     ClearLoadedMods(true);
                     foreach (string modID in Data.activeMods)
                         ModsConfigAPI.SetActive(modID, true);
@@ -172,7 +178,7 @@ namespace ModListBackup.Handlers
             catch (System.Exception e)
             {
                 //An error occurred, output to log and reset loaded mods
-                Main.Log.ReportException(e, Globals.MOD_IDENTIFIER, true, "ExposeData");
+                Main.Log.ReportException(e, Main.GetModIdentifier, true, "ExposeData");
                 ClearLoadedMods();
             }
         }
@@ -186,9 +192,70 @@ namespace ModListBackup.Handlers
             public List<string> activeMods = new List<string>();
         }
 
+        private class UndoActionType
+        {
+            private int State { get; set; }
+            private ModsConfigData ModData { get; set;}
+            private LastActionType LastAction { get; set; }
+
+            public UndoActionType(int state, LastActionType lastAction = LastActionType.none)
+            {
+                Main.DebugMessage("Creating last action type {1} for state {0}", state, lastAction.ToString());
+                State = state;
+                LastAction = lastAction;
+                switch (LastAction)
+                {
+                    case LastActionType.restore:
+                        ModData = new ModsConfigData
+                        {
+                            buildNumber = RimWorld.VersionControl.CurrentBuild,
+                            activeMods = GetActiveMods()
+                        };
+                        break;
+                    case LastActionType.backup:
+                        if (!StateIsSet(state))
+                            ModData = null;
+                        else
+                            ModData = ReadState(PathHandler.GenBackupStateFile(state));
+                        break;
+                    case LastActionType.none:
+                    default:
+                        Main.Log.Warning("Last Undo Action was not set with a type");
+                        break;
+                }
+            }
+
+            internal bool UndoLastAction()
+            {
+                Main.DebugMessage("Undoing last action type {1} for state {0}", State, LastAction.ToString());
+                switch (LastAction)
+                {
+                    case LastActionType.restore:
+                        Main.DebugMessage("Restoring {0} active mods", ModData.activeMods.Count);
+                        SetActiveMods(ModData.activeMods);
+                        return true;
+                    case LastActionType.backup:
+                        if (ModData != null)
+                        {
+                            Main.DebugMessage("Restored {0}'s last state", State);
+                            XmlSaverAPI.SaveDataObject((object)ModData, PathHandler.GenBackupStateFile(State));
+                        }
+                        else
+                            PathHandler.FileDelete(PathHandler.GenBackupStateFile(State));
+                        return true;
+                    case LastActionType.none:
+                    default:
+                        Main.Log.Warning("Last Undo Action was not set with a type, cannot undo last action");
+                        return false;
+                }
+            }
+        }
+
         /// <summary>
         /// Enum for easily setting current mode
         /// </summary>
         private enum Mode { Saving, Loading, Inactive }
+
+        private enum LastActionType { restore, backup, none }
     }
 }
