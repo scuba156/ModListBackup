@@ -14,7 +14,7 @@ namespace RimWorldHandler
         /// <param name="filepath">The xml file path</param>
         public static void SaveDataObject(object obj, string filepath)
         {
-            XmlSaver.SaveDataObject(obj, filepath);
+            DirectXmlSaver.SaveDataObject(obj, filepath);
         }
     }
 }

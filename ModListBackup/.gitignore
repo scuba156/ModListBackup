@@ -260,4 +260,9 @@ paket-files/
 __pycache__/
 *.pyc
 
+# macOS hidden files
+.DS_Store
+.AppleDouble
+.LSOverride
+
 Output/ModListBackup/About/PublishedFileId.txt

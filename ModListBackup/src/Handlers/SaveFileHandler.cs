@@ -35,7 +35,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         private static void ExposeData()
         {
-            Scribe_Collections.LookList<string>(ref importList, "modIds", LookMode.Undefined);
+            Scribe_Collections.Look<string>(ref importList, "modIds", LookMode.Undefined);
         }
 
         /// <summary>
@@ -46,12 +46,12 @@ namespace ModListBackup.Handlers
         {
             Main.DebugMessage("reading {0}", filepath);
 
-            Scribe.SaveState();
-            Scribe.InitLoadingMetaHeaderOnly(filepath);
+            //Scribe.SaveState();
+            Scribe.loader.InitLoadingMetaHeaderOnly(filepath);
             ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.Map, false);
             importList = ScribeMetaHeaderUtility.loadedModIdsList;
-            Scribe.FinalizeLoading();
-            Scribe.RestoreState();
+            Scribe.loader.FinalizeLoading();
+            //Scribe.RestoreState();
         }
     }
 }

@@ -128,7 +128,8 @@ namespace ModListBackup.Handlers.Settings
 
             Rect inRect = new Rect(rect.x - 18f, rect.y + 40f, rect.width, rect.height - 30);
 
-            Listing_Standard listing_Standard = new Listing_Standard(inRect);
+            Listing_Standard listing_Standard = new Listing_Standard();
+            listing_Standard.Begin(inRect);
 
             for (int i = 0; i <= SettingsHandler.STATE_LIMIT - 1; i++)
             {

@@ -16,7 +16,7 @@ namespace RimWorldHandler
         /// <returns></returns>
         public static T ItemFromXmlFile<T>(string filepath, bool resolveCrossRefs = false) where T : new()
         {
-            return XmlLoader.ItemFromXmlFile<T>(filepath, resolveCrossRefs);
+            return DirectXmlLoader.ItemFromXmlFile<T>(filepath, resolveCrossRefs);
         }
     }
 }
