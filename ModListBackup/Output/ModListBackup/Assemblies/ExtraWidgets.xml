@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ExtraWidgets</name>
+    </assembly>
+    <members>
+        <member name="T:ExtraWidgets.ButtonWidgets">
+            <summary>
+            A collection of Button Widgets.
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.ButtonWidgets.ButtonDropDown(UnityEngine.Rect,System.String)">
+            <summary>
+            Draws a button with a black gradient background, and a dropdown caret
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.ButtonWidgets.ButtonDropDown(UnityEngine.Rect,System.String,UnityEngine.TextAnchor)">
+            <summary>
+            Draws a button with a black gradient background, and a dropdown caret
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.ButtonWidgets.ButtonImage(UnityEngine.Rect,UnityEngine.Texture2D,System.Boolean)">
+            <summary>
+            Creates a button with a Texture. Will scale the image to fit inside the button
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.ButtonWidgets.ButtonImage(UnityEngine.Rect,UnityEngine.Texture2D,UnityEngine.Color,System.Boolean)">
+            <summary>
+            Creates a button with a Texture. Will scale the image to fit inside the button
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.ButtonWidgets.ButtonImage(UnityEngine.Rect,UnityEngine.Texture2D,UnityEngine.Color,UnityEngine.Color,System.Boolean,UnityEngine.Color,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a button with a Texture. Will scale the image to fit inside the button
+            </summary>
+        </member>
+        <member name="T:ExtraWidgets.CheckboxWidgets">
+            <summary>
+            A collection of Check box Widgets.
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.CheckboxWidgets.CheckboxLabeledInverse(UnityEngine.Rect,System.String,System.Boolean@,System.Boolean)">
+            <summary>
+            A standard checkbox with the label on the right side
+            </summary>
+        </member>
+        <member name="T:ExtraWidgets.FloatMenu.FloatMenuOptionColorPicker">
+            <summary>
+            Provides a FloatMenuOption with a simple color picker.
+            Only Supports up to 5 colors.
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.FloatMenu.FloatMenuOptionColorPicker.#ctor(System.Action{UnityEngine.Color},Verse.MenuOptionPriority,UnityEngine.Color[])">
+             <summary>
+             Creates a simple color picker with a maximum of 5 colors. The selected color is passed to the action.
+            
+             If colors is null, it will display the default colors:
+             White, Red, Green, Blue, Yellow
+             </summary>
+        </member>
+        <member name="M:ExtraWidgets.FloatMenu.FloatMenuOptionColorPicker.Chosen(UnityEngine.Color)">
+            <summary>
+            Called when a user makes a selection. Invokes the action passed to this FloatMenuOption
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.FloatMenu.FloatMenuOptionColorPicker.DoGUI(UnityEngine.Rect,System.Boolean)">
+            <summary>
+            Called every OnGUI.
+            Draws the FloatMenu contents.
+            </summary>
+        </member>
+        <member name="T:ExtraWidgets.TextEntryWidgets">
+            <summary>
+            A collection of Text Entry Widgets.
+            </summary>
+        </member>
+        <member name="M:ExtraWidgets.TextEntryWidgets.TextEntryWithPlaceHolder(UnityEngine.Rect,System.String,System.String)">
+            <summary>
+            Creates a standard text entry field with placeholder text when the field is empty.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,5 +1,5 @@
-﻿using ModListBackup.Detours;
-using ModListBackup.Handlers;
+﻿using ModListBackup.Handlers;
+using ModListBackup.UI;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -7,37 +7,26 @@ using System.IO;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Dialogs
-{
+namespace ModListBackup.Dialogs {
+
     /// <summary>
     /// Class for the import save dialog
     /// </summary>
-    class Dialog_Import : Window
-    {
+    internal class Dialog_Import : Window {
         private static readonly Color DefaultFileTextColor = new Color(1f, 1f, 0.6f);
-        private string interactButLabel = "Button_Select_Text".Translate();
         private List<SaveFileInfo> files = new List<SaveFileInfo>();
         private List<int> filesModCount = new List<int>();
-
-        private Vector2 scrollPosition = Vector2.zero;
-
-        private float paddingSize = 5f;
+        private string interactButLabel = "Button_Select_Text".Translate();
         private float labelDescriptionHeight = 60f;
-        private float titleHeight = 45f;
         private float listViewHeight = 500f;
-
-        internal string SelectedFile { get; private set; }
-
-        /// <summary>
-        /// The windows initial size
-        /// </summary>
-        public override Vector2 InitialSize { get { return new Vector2(650f, 700f); } }
+        private float paddingSize = 5f;
+        private Vector2 scrollPosition = Vector2.zero;
+        private float titleHeight = 45f;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Dialog_Import()
-        {
+        public Dialog_Import() {
             this.closeOnEscapeKey = true;
             this.doCloseButton = true;
             this.doCloseX = true;
@@ -46,53 +35,21 @@ namespace ModListBackup.Dialogs
         }
 
         /// <summary>
-        /// Gets the Default file text colour
+        /// The windows initial size
         /// </summary>
-        /// <param name="sfi"></param>
-        /// <returns></returns>
-        private Color FileNameColor(SaveFileInfo sfi) { return Dialog_Import.DefaultFileTextColor; }
+        public override Vector2 InitialSize { get { return new Vector2(650f, 700f); } }
 
-        /// <summary>
-        /// Reload the list of save files
-        /// </summary>
-        private void ReloadFiles()
-        {
-            this.files.Clear();
-            foreach (FileInfo saveFile in GenFilePaths.AllSavedGameFiles)
-            {
-                try
-                {
-                    this.files.Add(new SaveFileInfo(saveFile));
-                    this.filesModCount.Add(SaveFileHandler.GetModCount(Path.GetFileNameWithoutExtension(saveFile.Name)));
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Exception loading " + saveFile.Name + ": " + ex.ToString());
-                }
-            }
-        }
-
-        /// <summary>
-        /// Before the Dialog has opened
-        /// </summary>
-        public override void PreOpen()
-        {
-            base.PreOpen();
-            SelectedFile = "";
-            ReloadFiles();
-        }
+        internal string SelectedFile { get; private set; }
 
         /// <summary>
         /// Draws the window contents
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
-        public override void DoWindowContents(Rect rect)
-        {
+        public override void DoWindowContents(Rect rect) {
             // Title
             Text.Font = GameFont.Medium;
             Widgets.Label(new Rect(0f, 0f, rect.width, titleHeight), "Dialog_Import_Title".Translate());
             Text.Font = GameFont.Small;
-
 
             Rect inRect = rect;
 
@@ -114,10 +71,8 @@ namespace ModListBackup.Dialogs
             Widgets.BeginScrollView(outRect, ref this.scrollPosition, viewRect);
             float y = 0.0f;
             int num = 0;
-            using (List<SaveFileInfo>.Enumerator enumerator = this.files.GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                {
+            using (List<SaveFileInfo>.Enumerator enumerator = this.files.GetEnumerator()) {
+                while (enumerator.MoveNext()) {
                     SaveFileInfo current = enumerator.Current;
                     Rect rect1 = new Rect(0.0f, y, vector2_1.x, vector2_1.y);
                     if (num % 2 == 0)
@@ -155,24 +110,53 @@ namespace ModListBackup.Dialogs
         }
 
         /// <summary>
+        /// Before the Dialog has opened
+        /// </summary>
+        public override void PreOpen() {
+            base.PreOpen();
+            SelectedFile = "";
+            ReloadFiles();
+        }
+
+        /// <summary>
         /// Import selected file
         /// </summary>
         /// <param name="file">The save file that was selected</param>
-        private void DoFileInteraction(string file)
-        {
+        private void DoFileInteraction(string file) {
             SelectedFile = file;
 
             SaveFileHandler.ImportMods(file);
-            Page_ModsConfig_Detours.SetStatus("Status_Message_Imported".Translate());
+            Page_ModsConfig_Controller.SetStatus("Status_Message_Imported".Translate());
             this.Close(true);
         }
 
-        private string GetModsCountString(SaveFileInfo saveFile)
-        {
+        /// <summary>
+        /// Gets the Default file text colour
+        /// </summary>
+        /// <param name="sfi"></param>
+        /// <returns></returns>
+        private Color FileNameColor(SaveFileInfo sfi) { return Dialog_Import.DefaultFileTextColor; }
+
+        private string GetModsCountString(SaveFileInfo saveFile) {
             int index = files.FindIndex(name => saveFile.FileInfo.Name == name.FileInfo.Name);
 
             return String.Format("{0} {1}", filesModCount[index], "Dialog_EditNames_ModCount_Label".Translate());
         }
 
+        /// <summary>
+        /// Reload the list of save files
+        /// </summary>
+        private void ReloadFiles() {
+            this.files.Clear();
+            foreach (FileInfo saveFile in GenFilePaths.AllSavedGameFiles) {
+                try {
+                    this.files.Add(new SaveFileInfo(saveFile));
+                    this.filesModCount.Add(SaveFileHandler.GetModCount(Path.GetFileNameWithoutExtension(saveFile.Name)));
+                }
+                catch (Exception ex) {
+                    Log.Error("Exception loading " + saveFile.Name + ": " + ex.ToString());
+                }
+            }
+        }
     }
 }
