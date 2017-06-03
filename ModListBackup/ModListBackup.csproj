@@ -100,7 +100,6 @@
     <Content Include="Output\ModListBackup\Assemblies\%24HugsLibChecker.dll" />
     <Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
     <Content Include="Output\ModListBackup\Assemblies\RimWorldHandler.dll" />
-    <Content Include="Output\ModListBackup\img\undo-icon.png" />
     <Content Include="Output\ModListBackup\Languages\ChineseSimplified\Keyed\Chinese.xml" />
     <Content Include="Output\ModListBackup\Languages\ChineseSimplified\LanguageInfo.xml" />
     <Content Include="Output\ModListBackup\Languages\ChineseTraditional\Keyed\Chinese.xml" />

@@ -17,7 +17,7 @@ namespace ModListBackup.UI {
         public const int STATUS_DELAY_TICKS_SHORT = 250;
 
         private static float BottomHeight = 40f;
-        private static float BottomLeftContentOffset = (350f - BottomLeftContentWidth) / 2;
+        private static float BottomLeftContentOffset = 0f;//(350f - BottomLeftContentWidth) / 2;
         private static float BottomLeftContentWidth = 330;
         private static float BottomRightContentOffset = 109f;
         private static float ButtonBigWidth = 110f;
@@ -91,6 +91,7 @@ namespace ModListBackup.UI {
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
         private static void DoBottomLeftWindowContents(Rect rect) {
+            Main.Log.Message("Rect pos is {0}", rect.ToString());
             // Backup Button
             Rect BackupRect = new Rect((rect.xMin - 1) + BottomLeftContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(BackupRect, "Button_Backup_Tooltip".Translate());
