@@ -26,6 +26,7 @@ namespace ModListBackup.UI {
         private static float LabelStatusWidth = 100f;
         private static float LabelWidth = 20f;
         private static float Padding = 5f;
+
         /// <summary>
         /// Holds the currently selected save state, default to 1
         /// </summary>
@@ -169,6 +170,7 @@ namespace ModListBackup.UI {
         private static string GetStateName(int state) {
             return String.Format("{0}. {1}{2}", state, ModsConfigHandler.GetStateNamePretty(state), (ModsConfigHandler.StateIsSet(state)) ? null : " [*]");
         }
+
         /// <summary>
         /// Calls the ModHandler LoadState function
         /// </summary>
@@ -182,6 +184,7 @@ namespace ModListBackup.UI {
                 SetStatus("Status_Message_Restore".Translate());
             }
         }
+
         /// <summary>
         /// Updates status message delay ticks
         /// </summary>
