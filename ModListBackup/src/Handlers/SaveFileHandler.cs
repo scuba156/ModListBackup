@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Verse;
 
-namespace ModListBackup.Handlers
-{
+namespace ModListBackup.Handlers {
+
     /// <summary>
     /// Class for loading mod ids from a save file
     /// </summary>
-    internal static class SaveFileHandler
-    {
+    internal static class SaveFileHandler {
+
         /// <summary>
         /// Holds a list of modIds when a file is read from
         /// </summary>
@@ -17,15 +17,13 @@ namespace ModListBackup.Handlers
         /// Import mods from a save file into the current game
         /// </summary>
         /// <param name="filename"></param>
-        internal static void ImportMods(string filename)
-        {
+        internal static void ImportMods(string filename) {
             Read(GenFilePaths.FilePathForSavedGame(filename));
 
             ModsConfigHandler.SetActiveMods(importList);
         }
 
-        internal static int GetModCount(string filename)
-        {
+        internal static int GetModCount(string filename) {
             Read(GenFilePaths.FilePathForSavedGame(filename));
             return importList.Count;
         }
@@ -33,8 +31,7 @@ namespace ModListBackup.Handlers
         /// <summary>
         /// Expose the modIds
         /// </summary>
-        private static void ExposeData()
-        {
+        private static void ExposeData() {
             Scribe_Collections.LookList<string>(ref importList, "modIds", LookMode.Undefined);
         }
 
@@ -42,8 +39,7 @@ namespace ModListBackup.Handlers
         /// Read a save file
         /// </summary>
         /// <param name="filepath">The path to the savefile</param>
-        private static void Read(string filepath)
-        {
+        private static void Read(string filepath) {
             Main.DebugMessage("reading {0}", filepath);
 
             Scribe.SaveState();

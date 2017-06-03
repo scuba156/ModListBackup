@@ -6,17 +6,17 @@ using ModListBackup.Handlers.Settings;
 using RimWorldHandler;
 using Verse;
 
-namespace ModListBackup
-{
+namespace ModListBackup {
+
     /// <summary>
     /// Holds HugsLib ModBase information and mod initialization
     /// </summary>
-    public class Main : ModBase
-    {
+    public class Main : ModBase {
+
         /// <summary>
         /// This mods identifier
         /// </summary>
-        private const string MOD_IDENTIFIER = "ModListBackup";
+        private const string MOD_IDENTIFIER = "ModListBackupA16";
 
         /// <summary>
         /// Set true to use debug mode, mainly used for logging purposes
@@ -64,14 +64,12 @@ namespace ModListBackup
         /// </summary>
         public override void Initialize() { ModsConfigHandler.BackupCurrent(); }
 
-
         /// <summary>
         /// Log a message only when DEBUG_MODE is true
         /// </summary>
         /// <param name="message">The message to log (will be prefixed with "Debug:")</param>
         /// <param name="substitutions">The string substitions [Optional]</param>
-        internal static void DebugMessage(string message, params object[] substitutions)
-        {
+        internal static void DebugMessage(string message, params object[] substitutions) {
             if (DEBUG_MODE)
                 Log.Message(string.Format("Debug:{0}", message), substitutions);
         }
@@ -79,8 +77,7 @@ namespace ModListBackup
         /// <summary>
         /// Gets called after all defs are loaded
         /// </summary>
-        public override void DefsLoaded()
-        {
+        public override void DefsLoaded() {
             SettingsHandler.Update();
             SteamSyncHandler.UpdateAllStates();
         }

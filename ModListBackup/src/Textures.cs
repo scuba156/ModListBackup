@@ -1,12 +1,10 @@
-﻿using ModListBackup.Handlers;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
-namespace ModListBackup
-{
+namespace ModListBackup {
+
     [StaticConstructorOnStartup]
-    internal static class Textures
-    {
-        public static readonly Texture2D Undo = PathHandler.LoadPNG(PathHandler.PathCombine(PathHandler.DIR_IMAGES, "undo-icon.png"));
+    internal static class Textures {
+        public static readonly Texture2D Undo = ContentFinder<Texture2D>.Get("undo-icon");
     }
 }

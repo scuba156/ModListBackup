@@ -7,13 +7,12 @@ using System.IO;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Dialogs
-{
+namespace ModListBackup.Dialogs {
+
     /// <summary>
     /// Class for the import save dialog
     /// </summary>
-    class Dialog_Import : Window
-    {
+    internal class Dialog_Import : Window {
         private static readonly Color DefaultFileTextColor = new Color(1f, 1f, 0.6f);
         private string interactButLabel = "Button_Select_Text".Translate();
         private List<SaveFileInfo> files = new List<SaveFileInfo>();
@@ -36,8 +35,7 @@ namespace ModListBackup.Dialogs
         /// <summary>
         /// Constructor
         /// </summary>
-        public Dialog_Import()
-        {
+        public Dialog_Import() {
             this.closeOnEscapeKey = true;
             this.doCloseButton = true;
             this.doCloseX = true;
@@ -55,18 +53,14 @@ namespace ModListBackup.Dialogs
         /// <summary>
         /// Reload the list of save files
         /// </summary>
-        private void ReloadFiles()
-        {
+        private void ReloadFiles() {
             this.files.Clear();
-            foreach (FileInfo saveFile in GenFilePaths.AllSavedGameFiles)
-            {
-                try
-                {
+            foreach (FileInfo saveFile in GenFilePaths.AllSavedGameFiles) {
+                try {
                     this.files.Add(new SaveFileInfo(saveFile));
                     this.filesModCount.Add(SaveFileHandler.GetModCount(Path.GetFileNameWithoutExtension(saveFile.Name)));
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     Log.Error("Exception loading " + saveFile.Name + ": " + ex.ToString());
                 }
             }
@@ -75,8 +69,7 @@ namespace ModListBackup.Dialogs
         /// <summary>
         /// Before the Dialog has opened
         /// </summary>
-        public override void PreOpen()
-        {
+        public override void PreOpen() {
             base.PreOpen();
             SelectedFile = "";
             ReloadFiles();
@@ -86,13 +79,11 @@ namespace ModListBackup.Dialogs
         /// Draws the window contents
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
-        public override void DoWindowContents(Rect rect)
-        {
+        public override void DoWindowContents(Rect rect) {
             // Title
             Text.Font = GameFont.Medium;
             Widgets.Label(new Rect(0f, 0f, rect.width, titleHeight), "Dialog_Import_Title".Translate());
             Text.Font = GameFont.Small;
-
 
             Rect inRect = rect;
 
@@ -114,10 +105,8 @@ namespace ModListBackup.Dialogs
             Widgets.BeginScrollView(outRect, ref this.scrollPosition, viewRect);
             float y = 0.0f;
             int num = 0;
-            using (List<SaveFileInfo>.Enumerator enumerator = this.files.GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                {
+            using (List<SaveFileInfo>.Enumerator enumerator = this.files.GetEnumerator()) {
+                while (enumerator.MoveNext()) {
                     SaveFileInfo current = enumerator.Current;
                     Rect rect1 = new Rect(0.0f, y, vector2_1.x, vector2_1.y);
                     if (num % 2 == 0)
@@ -158,8 +147,7 @@ namespace ModListBackup.Dialogs
         /// Import selected file
         /// </summary>
         /// <param name="file">The save file that was selected</param>
-        private void DoFileInteraction(string file)
-        {
+        private void DoFileInteraction(string file) {
             SelectedFile = file;
 
             SaveFileHandler.ImportMods(file);
@@ -167,12 +155,10 @@ namespace ModListBackup.Dialogs
             this.Close(true);
         }
 
-        private string GetModsCountString(SaveFileInfo saveFile)
-        {
+        private string GetModsCountString(SaveFileInfo saveFile) {
             int index = files.FindIndex(name => saveFile.FileInfo.Name == name.FileInfo.Name);
 
             return String.Format("{0} {1}", filesModCount[index], "Dialog_EditNames_ModCount_Label".Translate());
         }
-
     }
 }

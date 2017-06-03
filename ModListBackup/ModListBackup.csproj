@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ModListBackup</RootNamespace>
-    <AssemblyName>ModListBackup</AssemblyName>
+    <AssemblyName>ModListBackupA16</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -17,7 +17,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
+    <OutputPath>Output\ModListBackupA16\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,14 +25,18 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
+    <OutputPath>Output\ModListBackupA16\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="%24HugsLibChecker, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RimworldHugsLibChecker\Mods\HugsLibChecker\Assemblies\$HugsLibChecker.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="ExtraWidgets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -40,7 +44,7 @@
       <HintPath>..\..\ExtraWidgets\ExtraWidgets\Output\ExtraWidgets\Assemblies\ExtraWidgets.dll</HintPath>
     </Reference>
     <Reference Include="HugsLib">
-      <HintPath>..\..\..\..\GitHub\RimworldHugsLib\Mods\HugsLib\Assemblies\HugsLib.dll</HintPath>
+      <HintPath>..\..\RimworldHugsLib\Mods\HugsLib\Assemblies\HugsLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -50,7 +54,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -60,7 +64,6 @@
     <Compile Include="src\Dialogs\Dialog_Import.cs" />
     <Compile Include="src\Handlers\PathHandler.cs" />
     <Compile Include="src\Handlers\ModsConfigHandler.cs" />
-    <Compile Include="src\Handlers\PlatformHandler.cs" />
     <Compile Include="src\Handlers\SaveFileHandler.cs" />
     <Compile Include="src\Handlers\Settings\SettingsHandler.cs" />
     <Compile Include="src\Handlers\SteamSyncHandler.cs" />
@@ -84,25 +87,22 @@
     <Content Include="lib\%24HugsLibChecker.dll" />
     <Content Include="lib\ExtraWidgets.dll" />
     <Content Include="lib\RimWorldHandler.dll" />
-    <Content Include="Output\ModListBackup\About\About.xml">
+    <Content Include="Output\ModListBackupA16\About\About.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Output\ModListBackup\About\Preview.png" />
-    <Content Include="Output\ModListBackup\About\Version.xml">
+    <Content Include="Output\ModListBackupA16\About\Preview.png" />
+    <Content Include="Output\ModListBackupA16\About\Version.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Output\ModListBackup\Assemblies\%24HugsLibChecker.dll" />
-    <Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
-    <Content Include="Output\ModListBackup\Assemblies\RimWorldHandler.dll" />
-    <Content Include="Output\ModListBackup\img\undo-icon.png" />
-    <Content Include="Output\ModListBackup\Languages\ChineseSimplified\Keyed\Chinese.xml" />
-    <Content Include="Output\ModListBackup\Languages\ChineseSimplified\LanguageInfo.xml" />
-    <Content Include="Output\ModListBackup\Languages\ChineseTraditional\Keyed\Chinese.xml" />
-    <Content Include="Output\ModListBackup\Languages\ChineseTraditional\LanguageInfo.xml" />
-    <Content Include="Output\ModListBackup\Languages\English\Keyed\English.xml">
+    <Content Include="Output\ModListBackupA16\Textures\undo-icon.png" />
+    <Content Include="Output\ModListBackupA16\Languages\ChineseSimplified\Keyed\Chinese.xml" />
+    <Content Include="Output\ModListBackupA16\Languages\ChineseSimplified\LanguageInfo.xml" />
+    <Content Include="Output\ModListBackupA16\Languages\ChineseTraditional\Keyed\Chinese.xml" />
+    <Content Include="Output\ModListBackupA16\Languages\ChineseTraditional\LanguageInfo.xml" />
+    <Content Include="Output\ModListBackupA16\Languages\English\Keyed\English.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Output\ModListBackup\Languages\English\LanguageInfo.xml" />
+    <Content Include="Output\ModListBackupA16\Languages\English\LanguageInfo.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

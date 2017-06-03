@@ -13,13 +13,12 @@ using System.Reflection;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Detours
-{
+namespace ModListBackup.Detours {
+
     /// <summary>
     /// Class to Handle our code injection
     /// </summary>
-    static class Page_ModsConfig_Detours
-    {
+    internal static class Page_ModsConfig_Detours {
         private static float ButtonBigWidth = 110f;
         private static float ButtonSmallWidth = 50f;
 
@@ -58,38 +57,31 @@ namespace ModListBackup.Detours
         /// <param name="window">Page_ModsConfig's Window</param>
         /// <param name="rect">Page_ModConfig's Rect</param>
         [WindowInjection(typeof(Page_ModsConfig))]
-        private static void DoWindowContents(Window window, Rect rect)
-        {
+        private static void DoWindowContents(Window window, Rect rect) {
             DoBottomLeftWindowContents(rect);
             DoBottomRightWindowContents(rect);
         }
 
         [DetourMethod(typeof(Page_ModsConfig), "PostClose")]
-        private static void PostCloseDetour(this Page_ModsConfig self)
-        {
-            if (SettingsHandler.LastRestartOnClose.Value != RestartOnClose)
-            {
+        private static void PostCloseDetour(this Page_ModsConfig self) {
+            if (SettingsHandler.LastRestartOnClose.Value != RestartOnClose) {
                 SettingsHandler.LastRestartOnClose.Value = RestartOnClose;
                 HugsLibController.Instance.Settings.SaveChanges();
             }
 
             ModsConfig.Save();
             int activeModsWhenOpenedHash = (int)typeof(Page_ModsConfig).GetField("activeModsWhenOpenedHash", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
-            if (activeModsWhenOpenedHash != ModLister.InstalledModsListHash(true))
-            {
+            if (activeModsWhenOpenedHash != ModLister.InstalledModsListHash(true)) {
                 if (RestartOnClose)
-                    PlatformHandler.RestartRimWorld();
+                    HugsLib.Shell.ShellRestartRimWorld.Execute();
 
                 //Copy of source from here
                 bool assemblyWasLoaded = LoadedModManager.RunningMods.Any((ModContentPack m) => m.LoadedAnyAssembly);
-                LongEventHandler.QueueLongEvent(delegate
-                {
+                LongEventHandler.QueueLongEvent(delegate {
                     PlayDataLoader.ClearAllPlayData();
                     PlayDataLoader.LoadAllPlayData(false);
-                    if (assemblyWasLoaded)
-                    {
-                        LongEventHandler.ExecuteWhenFinished(delegate
-                        {
+                    if (assemblyWasLoaded) {
+                        LongEventHandler.ExecuteWhenFinished(delegate {
                             Find.WindowStack.Add(new Dialog_MessageBox("ModWithAssemblyWasUnloaded".Translate(), null, null, null, null, null, false));
                         });
                     }
@@ -101,8 +93,7 @@ namespace ModListBackup.Detours
         /// Fills the bottom left corner of the window
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
-        private static void DoBottomLeftWindowContents(Rect rect)
-        {
+        private static void DoBottomLeftWindowContents(Rect rect) {
             // Backup Button
             Rect BackupRect = new Rect((rect.xMin - 1) + BottomLeftContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(BackupRect, "Button_Backup_Tooltip".Translate());
@@ -117,12 +108,10 @@ namespace ModListBackup.Detours
             // State button and Float menu
             Rect StateRect = new Rect(toRect.xMax + Padding, BackupRect.y, ButtonSmallWidth, BottomHeight);
             TooltipHandler.TipRegion(StateRect, "Button_State_Select_Tooltip".Translate());
-            if (Widgets.ButtonText(StateRect, string.Format("{0}{1}", selectedState.ToString(), (ModsConfigHandler.StateIsSet(selectedState)) ? null : "*")))
-            {
+            if (Widgets.ButtonText(StateRect, string.Format("{0}{1}", selectedState.ToString(), (ModsConfigHandler.StateIsSet(selectedState)) ? null : "*"))) {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
 
-                for (int i = 1; i <= SettingsHandler.STATE_LIMIT; i++)
-                {
+                for (int i = 1; i <= SettingsHandler.STATE_LIMIT; i++) {
                     //set a new variable here, otherwise the selected state and button text will change when int i next iterates
                     int n = i;
                     options.Add(new FloatMenuOption(GetStateName(i), (Action)(() => { selectedState = n; }), MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null));
@@ -166,22 +155,19 @@ namespace ModListBackup.Detours
         /// Fills the bottom right corner of the window
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
-        private static void DoBottomRightWindowContents(Rect rect)
-        {
+        private static void DoBottomRightWindowContents(Rect rect) {
             // Restart checkbox
-            Rect RestartCheckbox = new Rect((rect.xMax - (rect.width /2)) + 65f, rect.yMax - 29f, 150f, BottomHeight);
+            Rect RestartCheckbox = new Rect((rect.xMax - (rect.width / 2)) + 65f, rect.yMax - 29f, 150f, BottomHeight);
             TooltipHandler.TipRegion(RestartCheckbox, "Checkbox_Restart_Tooltip".Translate());
             CustomWidgets.CheckboxLabeledInverse(RestartCheckbox, "Checkbox_Restart_Label".Translate(), ref RestartOnClose);
 
             // Import Button
             Rect ImportRect = new Rect(rect.xMax - BottomRightContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(ImportRect, "Button_Import_Tooltip".Translate());
-            if (Widgets.ButtonText(ImportRect, "Button_Import_Text".Translate()))
-            {
+            if (Widgets.ButtonText(ImportRect, "Button_Import_Text".Translate())) {
                 Dialogs.Dialog_Import importWindow = new Dialogs.Dialog_Import();
                 Find.WindowStack.Add(importWindow);
             }
-
         }
 
         /// <summary>
@@ -189,16 +175,14 @@ namespace ModListBackup.Detours
         /// </summary>
         /// <param name="state">The state to get</param>
         /// <returns>The name of the state</returns>
-        private static string GetStateName(int state)
-        {
+        private static string GetStateName(int state) {
             return String.Format("{0}. {1}{2}", state, ModsConfigHandler.GetStateNamePretty(state), (ModsConfigHandler.StateIsSet(state)) ? null : " [*]");
         }
 
         /// <summary>
         /// Calls the ModHandler SaveState function
         /// </summary>
-        private static void BackupModList()
-        {
+        private static void BackupModList() {
             ModsConfigHandler.SaveState(selectedState);
             SetStatus("Status_Message_Backup".Translate());
         }
@@ -206,15 +190,12 @@ namespace ModListBackup.Detours
         /// <summary>
         /// Calls the ModHandler LoadState function
         /// </summary>
-        private static void RestoreModList()
-        {
-            if (!ModsConfigHandler.StateIsSet(selectedState))
-            {
+        private static void RestoreModList() {
+            if (!ModsConfigHandler.StateIsSet(selectedState)) {
                 Main.Log.Message("state not set");
                 SetStatus("Status_Message_Null".Translate());
             }
-            else
-            {
+            else {
                 ModsConfigHandler.LoadState(selectedState);
                 SetStatus("Status_Message_Restore".Translate());
             }
@@ -225,8 +206,7 @@ namespace ModListBackup.Detours
         /// </summary>
         /// <param name="message">The messge to display</param>
         /// <param name="delay">How long the message should stay visable (Default:longDelay)</param>
-        internal static void SetStatus(string message, Status_Delay delay = Status_Delay.longDelay)
-        {
+        internal static void SetStatus(string message, Status_Delay delay = Status_Delay.longDelay) {
             StatusMessage = message;
             if (delay == Status_Delay.longDelay)
                 StatusMessageDelay = CustomWidgets.STATUS_DELAY_TICKS_LONG;
@@ -237,8 +217,7 @@ namespace ModListBackup.Detours
         /// <summary>
         /// Updates status message delay ticks
         /// </summary>
-        private static void UpdateStatus()
-        {
+        private static void UpdateStatus() {
             if (StatusMessageDelay > 0)
                 StatusMessageDelay--;
             if (StatusMessageDelay == 0)
@@ -253,8 +232,7 @@ namespace ModListBackup.Detours
         /// <summary>
         /// Clears the status message
         /// </summary>
-        private static void ClearStatus()
-        {
+        private static void ClearStatus() {
             StatusMessage = "";
             StatusMessageDelay = -1;
         }
