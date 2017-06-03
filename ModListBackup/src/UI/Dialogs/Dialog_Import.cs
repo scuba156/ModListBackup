@@ -1,5 +1,5 @@
-﻿using ModListBackup.Detours;
-using ModListBackup.Handlers;
+﻿using ModListBackup.Handlers;
+using ModListBackup.Patches;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -163,7 +163,7 @@ namespace ModListBackup.Dialogs
             SelectedFile = file;
 
             SaveFileHandler.ImportMods(file);
-            Page_ModsConfig_Detours.SetStatus("Status_Message_Imported".Translate());
+            Page_ModsConfig_Controller.SetStatus("Status_Message_Imported".Translate());
             this.Close(true);
         }
 

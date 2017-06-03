@@ -1,13 +1,14 @@
 ﻿using ModListBackup.Handlers.Settings;
 using RimWorldHandler;
+using System.IO;
 
-namespace ModListBackup.Handlers
-{
+namespace ModListBackup.Handlers {
+
     /// <summary>
     /// Class to handle syncing to steam cloud
     /// </summary>
-    internal static class SteamSyncHandler
-    {
+    internal static class SteamSyncHandler {
+
         /// <summary>
         /// Gets the steam sync setting
         /// </summary>
@@ -16,37 +17,29 @@ namespace ModListBackup.Handlers
         /// <summary>
         /// Sets all state files to use steam sync or not, depending on what setting is selected
         /// </summary>
-        internal static void UpdateAllStates()
-        {
-            if (SYNC_TO_STEAM)
-            {
-                foreach (string stateFilepath in PathHandler.GetFiles(PathHandler.DIR_BACKUPS, "*" + PathHandler.XML_FILE_PREFIX))
-                {
-                    if (PathHandler.GetFileName(stateFilepath) != PathHandler.FILE_MODSCONFIG_NAME)
-                    {
+        internal static void UpdateAllStates() {
+            if (SYNC_TO_STEAM) {
+                foreach (string stateFilepath in Directory.GetFiles(PathHandler.DIR_BACKUPS, "*" + PathHandler.XML_FILE_PREFIX)) {
+                    if (new FileInfo(stateFilepath).Name != PathHandler.FILE_MODSCONFIG_NAME) {
                         string newFilepath = stateFilepath + GenFilePathsAPI.SavedGameExtension;
-                        if (PathHandler.FileExists(newFilepath))
-                        {
-                            if (PathHandler.GetFileName(stateFilepath).Length != PathHandler.GetFileName(newFilepath).Length)
-                            {
-                                PathHandler.FileCopy(stateFilepath, newFilepath, true);
-                                PathHandler.FileDelete(stateFilepath);
+                        if (File.Exists(newFilepath)) {
+                            if (new FileInfo(stateFilepath).Name.Length != new FileInfo(newFilepath).Name.Length) {
+                                File.Copy(stateFilepath, newFilepath, true);
+                                File.Delete(stateFilepath);
                             }
                         }
                         else
-                            PathHandler.FileCopy(stateFilepath, newFilepath, true);
+                            File.Copy(stateFilepath, newFilepath, true);
                     }
                 }
             }
-            else
-            {
-                foreach (string syncFilepath in PathHandler.GetFiles(PathHandler.DIR_BACKUPS, "*" + GenFilePathsAPI.SavedGameExtension))
-                {
+            else {
+                foreach (string syncFilepath in Directory.GetFiles(PathHandler.DIR_BACKUPS, "*" + GenFilePathsAPI.SavedGameExtension)) {
                     string newFilepath = syncFilepath.Replace(GenFilePathsAPI.SavedGameExtension, "");
 
-                    PathHandler.FileCopy(syncFilepath, newFilepath, true);
-                    if (PathHandler.FileExists(syncFilepath))
-                        PathHandler.FileDelete(syncFilepath);
+                    File.Copy(syncFilepath, newFilepath, true);
+                    if (File.Exists(syncFilepath))
+                        File.Delete(syncFilepath);
                 }
             }
         }

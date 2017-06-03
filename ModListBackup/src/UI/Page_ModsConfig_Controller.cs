@@ -1,46 +1,40 @@
 ﻿using ExtraWidgets;
-using HugsLib;
-using HugsLib.GuiInject;
-using HugsLib.Source.Detour;
 using ModListBackup.Handlers;
 using ModListBackup.Handlers.Settings;
-using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Detours
-{
+namespace ModListBackup.UI {
+
     /// <summary>
     /// Class to Handle our code injection
     /// </summary>
-    static class Page_ModsConfig_Detours
-    {
-        private static float ButtonBigWidth = 110f;
-        private static float ButtonSmallWidth = 50f;
-
-        private static float BottomLeftContentWidth = 330;
-        private static float BottomLeftContentOffset = (350f - BottomLeftContentWidth) / 2;
-        private static float BottomRightContentOffset = 109f;
-
-        private static float LabelWidth = 20f;
-        private static float Padding = 5f;
-
-        private static float LabelStatusWidth = 100f;
-        private static float LabelStatusHeight = 18f;
+    internal static class Page_ModsConfig_Controller {
+        public const int STATUS_DELAY_TICKS_LONG = 500;
+        public const int STATUS_DELAY_TICKS_SHORT = 250;
 
         private static float BottomHeight = 40f;
-
-        internal static bool RestartOnClose = false;
-
+        private static float BottomLeftContentOffset = (350f - BottomLeftContentWidth) / 2;
+        private static float BottomLeftContentWidth = 330;
+        private static float BottomRightContentOffset = 109f;
+        private static float ButtonBigWidth = 110f;
+        private static float ButtonSmallWidth = 50f;
+        private static float LabelStatusHeight = 18f;
+        private static float LabelStatusWidth = 100f;
+        private static float LabelWidth = 20f;
+        private static float Padding = 5f;
         /// <summary>
         /// Holds the currently selected save state, default to 1
         /// </summary>
         private static int selectedState = 1;
+
+        /// <summary>
+        /// Enum for easily setting status message delay
+        /// </summary>
+        internal enum Status_Delay { longDelay, shortDelay }
 
         /// <summary>
         /// Holds the status message to display
@@ -57,52 +51,45 @@ namespace ModListBackup.Detours
         /// </summary>
         /// <param name="window">Page_ModsConfig's Window</param>
         /// <param name="rect">Page_ModConfig's Rect</param>
-        [WindowInjection(typeof(Page_ModsConfig))]
-        private static void DoWindowContents(Window window, Rect rect)
-        {
-            DoBottomLeftWindowContents(rect);
-            DoBottomRightWindowContents(rect);
+        internal static void DoWindowContents(Rect inRect) {
+            DoBottomLeftWindowContents(inRect);
+            DoBottomRightWindowContents(inRect);
         }
 
-        [DetourMethod(typeof(Page_ModsConfig), "PostClose")]
-        private static void PostCloseDetour(this Page_ModsConfig self)
-        {
-            if (SettingsHandler.LastRestartOnClose.Value != RestartOnClose)
-            {
-                SettingsHandler.LastRestartOnClose.Value = RestartOnClose;
-                HugsLibController.Instance.Settings.SaveChanges();
-            }
+        /// <summary>
+        /// Sets a status message to be displayed
+        /// </summary>
+        /// <param name="message">The messge to display</param>
+        /// <param name="delay">How long the message should stay visable (Default:longDelay)</param>
+        internal static void SetStatus(string message, Status_Delay delay = Status_Delay.longDelay) {
+            StatusMessage = message;
+            if (delay == Status_Delay.longDelay)
+                StatusMessageDelay = STATUS_DELAY_TICKS_LONG;
+            else
+                StatusMessageDelay = STATUS_DELAY_TICKS_SHORT;
+        }
 
-            ModsConfig.Save();
-            int activeModsWhenOpenedHash = (int)typeof(Page_ModsConfig).GetField("activeModsWhenOpenedHash", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
-            if (activeModsWhenOpenedHash != ModLister.InstalledModsListHash(true))
-            {
-                if (RestartOnClose)
-                    PlatformHandler.RestartRimWorld();
+        /// <summary>
+        /// Calls the ModHandler SaveState function
+        /// </summary>
+        private static void BackupModList() {
+            ModsConfigHandler.SaveState(selectedState);
+            SetStatus("Status_Message_Backup".Translate());
+        }
 
-                //Copy of source from here
-                bool assemblyWasLoaded = LoadedModManager.RunningMods.Any((ModContentPack m) => m.LoadedAnyAssembly);
-                LongEventHandler.QueueLongEvent(delegate
-                {
-                    PlayDataLoader.ClearAllPlayData();
-                    PlayDataLoader.LoadAllPlayData(false);
-                    if (assemblyWasLoaded)
-                    {
-                        LongEventHandler.ExecuteWhenFinished(delegate
-                        {
-                            Find.WindowStack.Add(new Dialog_MessageBox("ModWithAssemblyWasUnloaded".Translate(), null, null, null, null, null, false));
-                        });
-                    }
-                }, "LoadingLongEvent", true, null);
-            }
+        /// <summary>
+        /// Clears the status message
+        /// </summary>
+        private static void ClearStatus() {
+            StatusMessage = "";
+            StatusMessageDelay = -1;
         }
 
         /// <summary>
         /// Fills the bottom left corner of the window
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
-        private static void DoBottomLeftWindowContents(Rect rect)
-        {
+        private static void DoBottomLeftWindowContents(Rect rect) {
             // Backup Button
             Rect BackupRect = new Rect((rect.xMin - 1) + BottomLeftContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(BackupRect, "Button_Backup_Tooltip".Translate());
@@ -117,12 +104,10 @@ namespace ModListBackup.Detours
             // State button and Float menu
             Rect StateRect = new Rect(toRect.xMax + Padding, BackupRect.y, ButtonSmallWidth, BottomHeight);
             TooltipHandler.TipRegion(StateRect, "Button_State_Select_Tooltip".Translate());
-            if (Widgets.ButtonText(StateRect, string.Format("{0}{1}", selectedState.ToString(), (ModsConfigHandler.StateIsSet(selectedState)) ? null : "*")))
-            {
+            if (Widgets.ButtonText(StateRect, string.Format("{0}{1}", selectedState.ToString(), (ModsConfigHandler.StateIsSet(selectedState)) ? null : "*"))) {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
 
-                for (int i = 1; i <= SettingsHandler.STATE_LIMIT; i++)
-                {
+                for (int i = 1; i <= SettingsHandler.STATE_LIMIT; i++) {
                     //set a new variable here, otherwise the selected state and button text will change when int i next iterates
                     int n = i;
                     options.Add(new FloatMenuOption(GetStateName(i), (Action)(() => { selectedState = n; }), MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null));
@@ -146,7 +131,7 @@ namespace ModListBackup.Detours
             // Undo Button
             Rect UndoRect = new Rect(RestoreRect.xMax + Padding, RestoreRect.y, ButtonSmallWidth, BottomHeight);
             TooltipHandler.TipRegion(UndoRect, "Button_Undo_Tooltip".Translate());
-            if (CustomWidgets.ButtonImage(UndoRect, Textures.Undo))
+            if (ButtonWidgets.ButtonImage(UndoRect, Textures.Undo))
                 if (ModsConfigHandler.CanUndo)
                     if (ModsConfigHandler.DoUndoAction())
                         SetStatus("Status_Message_Undone".Translate());
@@ -166,22 +151,14 @@ namespace ModListBackup.Detours
         /// Fills the bottom right corner of the window
         /// </summary>
         /// <param name="rect">The rect to draw into</param>
-        private static void DoBottomRightWindowContents(Rect rect)
-        {
-            // Restart checkbox
-            Rect RestartCheckbox = new Rect((rect.xMax - (rect.width /2)) + 65f, rect.yMax - 29f, 150f, BottomHeight);
-            TooltipHandler.TipRegion(RestartCheckbox, "Checkbox_Restart_Tooltip".Translate());
-            CustomWidgets.CheckboxLabeledInverse(RestartCheckbox, "Checkbox_Restart_Label".Translate(), ref RestartOnClose);
-
+        private static void DoBottomRightWindowContents(Rect rect) {
             // Import Button
             Rect ImportRect = new Rect(rect.xMax - BottomRightContentOffset, rect.yMax - 37f, ButtonBigWidth, BottomHeight);
             TooltipHandler.TipRegion(ImportRect, "Button_Import_Tooltip".Translate());
-            if (Widgets.ButtonText(ImportRect, "Button_Import_Text".Translate()))
-            {
+            if (Widgets.ButtonText(ImportRect, "Button_Import_Text".Translate())) {
                 Dialogs.Dialog_Import importWindow = new Dialogs.Dialog_Import();
                 Find.WindowStack.Add(importWindow);
             }
-
         }
 
         /// <summary>
@@ -189,74 +166,30 @@ namespace ModListBackup.Detours
         /// </summary>
         /// <param name="state">The state to get</param>
         /// <returns>The name of the state</returns>
-        private static string GetStateName(int state)
-        {
+        private static string GetStateName(int state) {
             return String.Format("{0}. {1}{2}", state, ModsConfigHandler.GetStateNamePretty(state), (ModsConfigHandler.StateIsSet(state)) ? null : " [*]");
         }
-
-        /// <summary>
-        /// Calls the ModHandler SaveState function
-        /// </summary>
-        private static void BackupModList()
-        {
-            ModsConfigHandler.SaveState(selectedState);
-            SetStatus("Status_Message_Backup".Translate());
-        }
-
         /// <summary>
         /// Calls the ModHandler LoadState function
         /// </summary>
-        private static void RestoreModList()
-        {
-            if (!ModsConfigHandler.StateIsSet(selectedState))
-            {
+        private static void RestoreModList() {
+            if (!ModsConfigHandler.StateIsSet(selectedState)) {
                 Main.Log.Message("state not set");
                 SetStatus("Status_Message_Null".Translate());
             }
-            else
-            {
+            else {
                 ModsConfigHandler.LoadState(selectedState);
                 SetStatus("Status_Message_Restore".Translate());
             }
         }
-
-        /// <summary>
-        /// Sets a status message to be displayed
-        /// </summary>
-        /// <param name="message">The messge to display</param>
-        /// <param name="delay">How long the message should stay visable (Default:longDelay)</param>
-        internal static void SetStatus(string message, Status_Delay delay = Status_Delay.longDelay)
-        {
-            StatusMessage = message;
-            if (delay == Status_Delay.longDelay)
-                StatusMessageDelay = CustomWidgets.STATUS_DELAY_TICKS_LONG;
-            else
-                StatusMessageDelay = CustomWidgets.STATUS_DELAY_TICKS_SHORT;
-        }
-
         /// <summary>
         /// Updates status message delay ticks
         /// </summary>
-        private static void UpdateStatus()
-        {
+        private static void UpdateStatus() {
             if (StatusMessageDelay > 0)
                 StatusMessageDelay--;
             if (StatusMessageDelay == 0)
                 ClearStatus();
-        }
-
-        /// <summary>
-        /// Enum for easily setting status message delay
-        /// </summary>
-        internal enum Status_Delay { longDelay, shortDelay }
-
-        /// <summary>
-        /// Clears the status message
-        /// </summary>
-        private static void ClearStatus()
-        {
-            StatusMessage = "";
-            StatusMessageDelay = -1;
         }
     }
 }

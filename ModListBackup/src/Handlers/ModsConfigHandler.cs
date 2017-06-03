@@ -1,6 +1,7 @@
 ﻿using ModListBackup.Handlers.Settings;
 using RimWorldHandler;
 using System.Collections.Generic;
+using System.IO;
 using Verse;
 
 namespace ModListBackup.Handlers
@@ -29,7 +30,7 @@ namespace ModListBackup.Handlers
         /// <param name="state"></param>
         /// <returns></returns>
         internal static bool StateIsSet(int state) {
-            return PathHandler.FileExists(PathHandler.GenBackupStateFile(state));
+            return File.Exists(PathHandler.GenBackupStateFile(state));
         }
 
         static ModsConfigHandler()
@@ -91,7 +92,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void BackupCurrent()
         {
-            PathHandler.FileCopy(GenFilePathsAPI.ModsConfigFilePath, PathHandler.PathCombine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), true);
+            File.Copy(GenFilePathsAPI.ModsConfigFilePath, Path.Combine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), true);
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace ModListBackup.Handlers
         /// </summary>
         internal static void RestoreCurrent()
         {
-            PathHandler.FileCopy(PathHandler.PathCombine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), GenFilePathsAPI.ModsConfigFilePath, true);
+            File.Copy(Path.Combine(PathHandler.DIR_BACKUPS, PathHandler.FILE_MODSCONFIG_NAME), GenFilePathsAPI.ModsConfigFilePath, true);
         }
 
         /// <summary>
@@ -241,7 +242,7 @@ namespace ModListBackup.Handlers
                             XmlSaverAPI.SaveDataObject((object)ModData, PathHandler.GenBackupStateFile(State));
                         }
                         else
-                            PathHandler.FileDelete(PathHandler.GenBackupStateFile(State));
+                            File.Delete(PathHandler.GenBackupStateFile(State));
                         return true;
                     case LastActionType.none:
                     default:

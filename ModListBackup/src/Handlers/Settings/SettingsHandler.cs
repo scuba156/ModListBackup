@@ -1,7 +1,6 @@
 ﻿using ExtraWidgets;
 using HugsLib.Settings;
-using ModListBackup.Detours;
-using ModListBackup.Handlers;
+using ModListBackup.Patches;
 using System;
 using UnityEngine;
 using Verse;
@@ -19,7 +18,6 @@ namespace ModListBackup.Handlers.Settings
         internal const int STATE_LIMIT = 20;
 
         private static bool ShowNamesList { get; set; }
-        internal static SettingHandle<bool> LastRestartOnClose { get; set; }
 
         private static float showNamesListButtonHeight = 30f;
         private static int showRevertTick = 0;
@@ -45,12 +43,6 @@ namespace ModListBackup.Handlers.Settings
             SettingHandle revertButtonHandle = Main.GetSettingsPack.GetHandle<bool>("RevertButton", "Settings_State_Revert_Title".Translate(), "Settings_State_Revert_Desc".Translate());
 
             StateNamesSetting = Main.GetSettingsPack.GetHandle<StateNamesHandleType>("StateNames", "Settings_State_Names_Title".Translate(), "Settings_State_Names_Desc".Translate(), null);
-
-            LastRestartOnClose = Main.GetSettingsPack.GetHandle<bool>("LastRestartOnExit", "", "", false);
-
-            LastRestartOnClose.NeverVisible = true;
-
-            Page_ModsConfig_Detours.RestartOnClose = LastRestartOnClose;
 
             StateNamesSetting.CustomDrawerHeight = 30f;
             revertButtonHandle.CustomDrawerHeight = 50f;
@@ -96,8 +88,8 @@ namespace ModListBackup.Handlers.Settings
         {
             if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, 30f), "Button_Revert_Text".Translate()))
             {
-                Handlers.ModsConfigHandler.RestoreCurrent();
-                showRevertTick = CustomWidgets.STATUS_DELAY_TICKS_SHORT;
+                ModsConfigHandler.RestoreCurrent();
+                showRevertTick = Page_ModsConfig_Controller.STATUS_DELAY_TICKS_SHORT;
             }
 
             string label = "";
@@ -128,7 +120,8 @@ namespace ModListBackup.Handlers.Settings
 
             Rect inRect = new Rect(rect.x - 18f, rect.y + 40f, rect.width, rect.height - 30);
 
-            Listing_Standard listing_Standard = new Listing_Standard(inRect);
+            Listing_Standard listing_Standard = new Listing_Standard();
+            listing_Standard.Begin(inRect);
 
             for (int i = 0; i <= SettingsHandler.STATE_LIMIT - 1; i++)
             {
