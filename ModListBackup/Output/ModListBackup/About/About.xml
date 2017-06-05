@@ -5,7 +5,7 @@
   <targetVersion>0.17.0</targetVersion>
   <description>
     Backup and restore the currently loaded mods into 20 different nameable slots! Import a mod list from a save file! Never have to lose your mod order again!
-    
+
     Features:
     -Search
     -Rename Mods
@@ -17,6 +17,6 @@
     Requires:
     HugsLib 3.1.0+
 
-    Version: 1.5
+    Version: 1.5.1
   </description>
 </ModMetaData>

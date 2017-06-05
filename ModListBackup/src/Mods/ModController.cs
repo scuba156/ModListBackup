@@ -15,6 +15,8 @@ namespace ModListBackup.Mods {
             CopyMod(mod, dest);
 
             ModMetaData newMod = new ModMetaData(dest);
+            ModMetaDataEnhanced mmde = new ModMetaDataEnhanced(newMod);
+            mmde.InstallName = newName;
 
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
             Find.WindowStack.WindowOfType<Page_ModsConfig>().Notify_ModsListChanged();
