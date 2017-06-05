@@ -1,10 +1,8 @@
 ﻿using HugsLib;
 using HugsLib.Settings;
 using HugsLib.Utils;
-using ModListBackup.Handlers;
-using ModListBackup.Handlers.Settings;
-using RimWorldHandler;
-using Verse;
+using ModListBackup.Controllers;
+using ModListBackup.Controllers.Settings;
 
 namespace ModListBackup {
 
@@ -38,13 +36,6 @@ namespace ModListBackup {
         public override string ModIdentifier { get { return MOD_IDENTIFIER; } }
 
         /// <summary>
-        /// Gets mod identifier without needing the instance
-        /// </summary>
-        public static string GetModIdentifier { get { return MOD_IDENTIFIER; } }
-
-        public static ModContentPack GetModContentPack { get { return ModsConfigAPI.GetModContentPack(MOD_IDENTIFIER); } }
-
-        /// <summary>
         /// An easy way to access the logger
         /// </summary>
         internal static ModLogger Log { get { return Instance.Logger; } }
@@ -62,7 +53,11 @@ namespace ModListBackup {
         /// <summary>
         /// Add our own Initialization for HugsLib
         /// </summary>
-        public override void Initialize() { ModsConfigHandler.BackupCurrent(); }
+        public override void Initialize() {
+            ModsConfigHandler.BackupCurrent();
+            SettingsHandler.Update();
+            SteamSyncHandler.UpdateAllStates();
+        }
 
         /// <summary>
         /// Log a message only when DEBUG_MODE is true
@@ -72,14 +67,6 @@ namespace ModListBackup {
         internal static void DebugMessage(string message, params object[] substitutions) {
             if (DEBUG_MODE)
                 Log.Message(string.Format("Debug:{0}", message), substitutions);
-        }
-
-        /// <summary>
-        /// Gets called after all defs are loaded
-        /// </summary>
-        public override void DefsLoaded() {
-            SettingsHandler.Update();
-            SteamSyncHandler.UpdateAllStates();
         }
     }
 }

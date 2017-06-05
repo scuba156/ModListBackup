@@ -1,9 +1,9 @@
 ﻿using HugsLib;
-using ModListBackup.Handlers.Settings;
+using ModListBackup.Controllers.Settings;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Dialogs {
+namespace ModListBackup.UI.Dialogs {
 
     internal class Dialog_EditNames : Window {
         private bool settingsHaveChanged;

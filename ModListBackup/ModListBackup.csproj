@@ -42,6 +42,11 @@
       <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="ExtraWidgets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ExtraWidgets\ExtraWidgets\output\ExtraWidgets\Assemblies\ExtraWidgets.dll</HintPath>
@@ -62,34 +67,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Mods\ModController.cs" />
+    <Compile Include="src\Mods\ModListController.cs" />
+    <Compile Include="src\Mods\ModMetaDataEnhanced.cs" />
+    <Compile Include="src\Mods\ModSettingsController.cs" />
+    <Compile Include="src\Mods\Notifications\NotificationActiveDuplicate.cs" />
+    <Compile Include="src\Mods\Notifications\NotificationBase.cs" />
+    <Compile Include="src\Mods\Notifications\NotificationVersionIncompatible.cs" />
+    <Compile Include="src\Mods\UndoAction.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\DoWindowContents_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_ModsListChanged_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_SteamItemUnsubscribed_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\PreOpen_Patch.cs" />
+    <Compile Include="src\UI\Common.cs" />
+    <Compile Include="src\UI\Dialogs\ConfirmCancelResetDialog.cs" />
+    <Compile Include="src\UI\Dialogs\InstallModDialog.cs" />
     <Compile Include="src\UI\Page_ModsConfig_Controller.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_EditNames.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_Import.cs" />
-    <Compile Include="src\Handlers\PathHandler.cs" />
-    <Compile Include="src\Handlers\ModsConfigHandler.cs" />
-    <Compile Include="src\Handlers\SaveFileHandler.cs" />
-    <Compile Include="src\Handlers\Settings\SettingsHandler.cs" />
-    <Compile Include="src\Handlers\SteamSyncHandler.cs" />
+    <Compile Include="src\Controllers\PathHandler.cs" />
+    <Compile Include="src\Mods\ModsConfigHandler.cs" />
+    <Compile Include="src\Controllers\SaveFileHandler.cs" />
+    <Compile Include="src\Controllers\Settings\SettingsHandler.cs" />
+    <Compile Include="src\Controllers\SteamSyncHandler.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Handlers\Settings\StateNamesHandleType.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches.cs" />
+    <Compile Include="src\Controllers\Settings\StateNamesHandleType.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\ExtraOnGUI_Patch.cs" />
     <Compile Include="src\UI\Textures.cs" />
+    <Compile Include="src\Utils\HarmonyUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="img\Preview.xcf" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RimWorldHandler\RimWorldHandler.csproj">
-      <Project>{5cef0407-c649-43e2-8df0-2adf0238ebd2}</Project>
-      <Name>RimWorldHandler</Name>
-    </ProjectReference>
+    <None Include="Output\ModListBackup\Textures\Thumbs.db" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\%24HugsLibChecker.dll" />
-    <Content Include="lib\RimWorldHandler.dll" />
     <Content Include="Output\ModListBackup\About\About.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -108,6 +123,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Output\ModListBackup\Languages\English\LanguageInfo.xml" />
+    <Content Include="Output\ModListBackup\Textures\undo-icon.png" />
+    <Content Include="Output\ModListBackup\Textures\whiteBG.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

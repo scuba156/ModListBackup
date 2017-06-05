@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Verse;
 
-namespace ModListBackup.Handlers {
+namespace ModListBackup.Controllers {
 
     /// <summary>
     /// Class for loading mod ids from a save file

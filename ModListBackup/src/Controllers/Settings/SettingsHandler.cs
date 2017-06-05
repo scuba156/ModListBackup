@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Handlers.Settings {
+namespace ModListBackup.Controllers.Settings {
 
     /// <summary>
     /// Class to handle our settings
@@ -46,7 +46,7 @@ namespace ModListBackup.Handlers.Settings {
             listing_Standard.Begin(inRect);
 
             for (int i = 0; i <= SettingsHandler.STATE_LIMIT - 1; i++) {
-                string label = String.Format("{2}{0} {1}: ", "Settings_Label_State_Name".Translate(), i + 1, (ModsConfigHandler.StateIsSet(i)) ? null : "* ");
+                string label = String.Format("{2}{0} {1}: ", "Settings_Label_State_Name".Translate(), i + 1, (ModListController.ModListIsSet(i)) ? null : "* ");
                 string oldName = StateNamesSetting.Value.StateNames[i];
                 string newName = listing_Standard.TextEntryLabeled(label, oldName);
 
@@ -112,8 +112,8 @@ namespace ModListBackup.Handlers.Settings {
         /// <returns>True if value changed(will always be false)</returns>
         private static bool DoRevertButtonDrawerContents(Rect rect) {
             if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, 30f), "Button_Revert_Text".Translate())) {
-                ModsConfigHandler.RestoreCurrent();
-                showRevertTick = Page_ModsConfig_Controller.STATUS_DELAY_TICKS_SHORT;
+                ModsConfigHandler.RestoreBackup();
+                showRevertTick = Common.STATUS_DELAY_TICKS_SHORT;
             }
 
             string label = "";

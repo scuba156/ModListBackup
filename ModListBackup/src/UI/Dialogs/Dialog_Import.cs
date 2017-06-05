@@ -1,5 +1,4 @@
-﻿using ModListBackup.Handlers;
-using ModListBackup.UI;
+﻿using ModListBackup.Controllers;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.IO;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Dialogs {
+namespace ModListBackup.UI.Dialogs {
 
     /// <summary>
     /// Class for the import save dialog

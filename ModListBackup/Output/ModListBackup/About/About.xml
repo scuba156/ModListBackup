@@ -3,7 +3,20 @@
   <name>Mod List Backup</name>
   <author>scuba156</author>
   <targetVersion>0.17.0</targetVersion>
-  <description>Backup and restore the currently loaded mods into 20 different nameable slots! Import a mod list from a save file! Never have to lose your mod order again!
-Version: 1.4
+  <description>
+    Backup and restore the currently loaded mods into 20 different nameable slots! Import a mod list from a save file! Never have to lose your mod order again!
+    
+    Features:
+    -Search
+    -Rename Mods
+    -Colorize Mod Names
+    -Multiple Mod Lists
+    -Install Steam Mods for offline use
+    -Import Active Mods From Save File
+
+    Requires:
+    HugsLib 3.1.0+
+
+    Version: 1.5
   </description>
 </ModMetaData>

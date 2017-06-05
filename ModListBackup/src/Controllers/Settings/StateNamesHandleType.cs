@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ModListBackup.Handlers.Settings {
+namespace ModListBackup.Controllers.Settings {
 
     internal class StateNamesHandleType : SettingHandleConvertible {
         internal List<string> StateNames { get; set; }

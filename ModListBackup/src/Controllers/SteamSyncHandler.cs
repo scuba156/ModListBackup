@@ -1,8 +1,8 @@
-﻿using ModListBackup.Handlers.Settings;
-using RimWorldHandler;
+﻿using ModListBackup.Controllers.Settings;
 using System.IO;
+using Verse;
 
-namespace ModListBackup.Handlers {
+namespace ModListBackup.Controllers {
 
     /// <summary>
     /// Class to handle syncing to steam cloud
@@ -19,9 +19,9 @@ namespace ModListBackup.Handlers {
         /// </summary>
         internal static void UpdateAllStates() {
             if (SYNC_TO_STEAM) {
-                foreach (string stateFilepath in Directory.GetFiles(PathHandler.DIR_BACKUPS, "*" + PathHandler.XML_FILE_PREFIX)) {
+                foreach (string stateFilepath in Directory.GetFiles(PathHandler.DirHome, "*" + PathHandler.FileExtensionXML)) {
                     if (new FileInfo(stateFilepath).Name != PathHandler.FILE_MODSCONFIG_NAME) {
-                        string newFilepath = stateFilepath + GenFilePathsAPI.SavedGameExtension;
+                        string newFilepath = stateFilepath + GenFilePaths.SavedGameExtension;
                         if (File.Exists(newFilepath)) {
                             if (new FileInfo(stateFilepath).Name.Length != new FileInfo(newFilepath).Name.Length) {
                                 File.Copy(stateFilepath, newFilepath, true);
@@ -34,8 +34,8 @@ namespace ModListBackup.Handlers {
                 }
             }
             else {
-                foreach (string syncFilepath in Directory.GetFiles(PathHandler.DIR_BACKUPS, "*" + GenFilePathsAPI.SavedGameExtension)) {
-                    string newFilepath = syncFilepath.Replace(GenFilePathsAPI.SavedGameExtension, "");
+                foreach (string syncFilepath in Directory.GetFiles(PathHandler.DirHome, "*" + GenFilePaths.SavedGameExtension)) {
+                    string newFilepath = syncFilepath.Replace(GenFilePaths.SavedGameExtension, "");
 
                     File.Copy(syncFilepath, newFilepath, true);
                     if (File.Exists(syncFilepath))
