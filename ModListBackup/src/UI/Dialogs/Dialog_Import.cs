@@ -1,4 +1,4 @@
-﻿using ModListBackup.Controllers;
+﻿using ModListBackup.Utils;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -13,8 +13,8 @@ namespace ModListBackup.UI.Dialogs {
     /// </summary>
     internal class Dialog_Import : Window {
         private static readonly Color DefaultFileTextColor = new Color(1f, 1f, 0.6f);
-        private List<SaveFileInfo> files = new List<SaveFileInfo>();
-        private List<int> filesModCount = new List<int>();
+        private readonly List<SaveFileInfo> files = new List<SaveFileInfo>();
+        private readonly List<int> filesModCount = new List<int>();
         private string interactButLabel = "Button_Select_Text".Translate();
         private float labelDescriptionHeight = 60f;
         private float listViewHeight = 500f;
@@ -125,7 +125,7 @@ namespace ModListBackup.UI.Dialogs {
             SelectedFile = file;
 
             SaveFileHandler.ImportMods(file);
-            Page_ModsConfig_Controller.SetStatus("Status_Message_Imported".Translate());
+            //Page_ModsConfig_Controller.SetStatus("Status_Message_Imported".Translate());
             this.Close(true);
         }
 

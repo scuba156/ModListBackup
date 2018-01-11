@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ModListBackup.Controllers.Settings {
+namespace ModListBackup.Settings {
 
     internal class StateNamesHandleType : SettingHandleConvertible {
         internal List<string> StateNames { get; set; }
@@ -31,9 +31,9 @@ namespace ModListBackup.Controllers.Settings {
 
         internal void FillNames() {
             if (StateNames == null)
-                StateNames = new List<string>(SettingsHandler.STATE_LIMIT);
+                StateNames = new List<string>(SettingsHandler.ModListStateLimit);
 
-            for (int i = 0; i < SettingsHandler.STATE_LIMIT; i++) {
+            for (int i = 0; i < SettingsHandler.ModListStateLimit; i++) {
                 if (StateNames.Count == i)
                     StateNames.Add("");
             }

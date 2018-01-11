@@ -1,8 +1,8 @@
-﻿using ModListBackup.Controllers.Settings;
+﻿using ModListBackup.Settings;
 using System.IO;
 using Verse;
 
-namespace ModListBackup.Controllers {
+namespace ModListBackup.Utils {
 
     /// <summary>
     /// Class to handle syncing to steam cloud
@@ -19,8 +19,8 @@ namespace ModListBackup.Controllers {
         /// </summary>
         internal static void UpdateAllStates() {
             if (SYNC_TO_STEAM) {
-                foreach (string stateFilepath in Directory.GetFiles(PathHandler.DirHome, "*" + PathHandler.FileExtensionXML)) {
-                    if (new FileInfo(stateFilepath).Name != PathHandler.FILE_MODSCONFIG_NAME) {
+                foreach (string stateFilepath in Directory.GetFiles(PathUtils.DirModSettings, "*" + PathUtils.FileExtensionXML, SearchOption.AllDirectories)) {
+                    if (new FileInfo(stateFilepath).Name != PathUtils.Filename_ModsConfig) {
                         string newFilepath = stateFilepath + GenFilePaths.SavedGameExtension;
                         if (File.Exists(newFilepath)) {
                             if (new FileInfo(stateFilepath).Name.Length != new FileInfo(newFilepath).Name.Length) {
@@ -34,7 +34,7 @@ namespace ModListBackup.Controllers {
                 }
             }
             else {
-                foreach (string syncFilepath in Directory.GetFiles(PathHandler.DirHome, "*" + GenFilePaths.SavedGameExtension)) {
+                foreach (string syncFilepath in Directory.GetFiles(PathUtils.DirModSettings, "*" + GenFilePaths.SavedGameExtension, SearchOption.AllDirectories)) {
                     string newFilepath = syncFilepath.Replace(GenFilePaths.SavedGameExtension, "");
 
                     File.Copy(syncFilepath, newFilepath, true);

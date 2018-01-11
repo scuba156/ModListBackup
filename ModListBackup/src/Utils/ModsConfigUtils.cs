@@ -1,19 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using ModListBackup.Mods;
+using ModListBackup.Utils;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Verse;
 
-namespace ModListBackup.Controllers {
+namespace ModListBackup.Utils {
 
     /// <summary>
     /// Class for handling ModsConfig
     /// </summary>
-    internal static class ModsConfigHandler {
+    internal static class ModsConfigUtils {
 
         /// <summary>
         /// Backup the current ModsConfig.xml for safekeeping
         /// </summary>
         internal static void BackupCurrent() {
-            File.Copy(GenFilePaths.ModsConfigFilePath, Path.Combine(PathHandler.DirHome, PathHandler.FILE_MODSCONFIG_NAME), true);
+            if (!Directory.Exists(PathUtils.DirBackupsDefault)) {
+                Directory.CreateDirectory(PathUtils.DirBackupsDefault);
+            }
+            File.Copy(GenFilePaths.ModsConfigFilePath, Path.Combine(PathUtils.DirBackupsDefault, PathUtils.Filename_ModsConfigBackup), true);
         }
 
         /// <summary>
@@ -27,11 +33,18 @@ namespace ModListBackup.Controllers {
             return result;
         }
 
+        public static List<string> ConvertModListToActiveList(List<ModMetaDataEnhanced> mods) {
+            List<string> result = new List<string>();
+            foreach (ModMetaDataEnhanced mod in mods.Where(m=>m.Active == true))
+                result.Add(mod.Identifier);
+            return result;
+        }
+
         /// <summary>
         /// Restores the ModsConfig.xml Backup
         /// </summary>
         internal static void RestoreBackup() {
-            File.Copy(Path.Combine(PathHandler.DirHome, PathHandler.FILE_MODSCONFIG_NAME), GenFilePaths.ModsConfigFilePath, true);
+            File.Copy(Path.Combine(PathUtils.DirBackupsDefault, PathUtils.Filename_ModsConfigBackup), GenFilePaths.ModsConfigFilePath, true);
         }
 
         /// <summary>

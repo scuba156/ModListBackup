@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Verse;
 
-namespace ModListBackup.Controllers {
+namespace ModListBackup.Utils {
 
     /// <summary>
     /// Class for loading mod ids from a save file
@@ -21,7 +21,7 @@ namespace ModListBackup.Controllers {
         internal static void ImportMods(string filename) {
             Read(GenFilePaths.FilePathForSavedGame(filename));
 
-            ModsConfigHandler.SetActiveMods(importList);
+            ModsConfigUtils.SetActiveMods(importList);
         }
 
         private static void ExposeData() {

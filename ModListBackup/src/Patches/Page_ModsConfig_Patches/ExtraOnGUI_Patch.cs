@@ -12,7 +12,7 @@ namespace ModListBackup.Patches.Page_ModsConfig_Patches {
 
         public static void Prefix(this Window __instance) {
             if (__instance.GetType() == typeof(Page_ModsConfig)) {
-                Page_ModsConfig_Controller.ExtraOnGUI((Page_ModsConfig)__instance);
+                Page_ModsConfig_Controller.ExtraOnGUI();
             }
         }
     }

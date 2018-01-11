@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using Verse;
+using ExtraWidgets.Dialogs;
+using ModListBackup.Core;
+using ModListBackup.Utils;
 
 namespace ModListBackup.UI.Dialogs {
 
-    internal class InstallModDialog : ConfirmCancelResetDialog {
+    internal class Dialog_InstallMod : Dialog_CancelResetAccept {
         private const int MaxNameLength = 42;
 
         private readonly string DefaultNameSuffix = "DefaultModlistNameSuffix".Translate();
@@ -22,14 +25,14 @@ namespace ModListBackup.UI.Dialogs {
 
         public override Vector2 InitialSize { get { return new Vector2(320f, 380f); } }
 
-        public InstallModDialog(ModMetaDataEnhanced mod) {
+        public Dialog_InstallMod(ModMetaDataEnhanced mod) {
             this.curMod = mod;
             this.OnReset();
         }
 
-        public override void DoWindowContents(Rect inRect) {
+        public override void DoWindowContents(Rect rect) {
             //Title
-            Rect TitleRect = new Rect(0f, 0f, inRect.width, 48f);
+            Rect TitleRect = new Rect(0f, 0f, rect.width, 48f);
             Text.Font = GameFont.Medium;
             Text.Anchor = TextAnchor.MiddleCenter;
             Widgets.Label(TitleRect, "InstallModDialog_Title".Translate(curMod.Name));
@@ -38,20 +41,20 @@ namespace ModListBackup.UI.Dialogs {
 
             float contentWidth = 200f;
 
-            Rect DescRect = new Rect(inRect.xMin, TitleRect.yMax + 20f, inRect.width, 100f);
+            Rect DescRect = new Rect(rect.xMin, TitleRect.yMax + 20f, rect.width, 100f);
             Widgets.Label(DescRect, "InstallModDesc".Translate(curMod.Name));
 
             //Name
             if (selNameType != NameType.Custom) {
                 GUI.color = Color.gray;
             }
-            Rect NameRect = new Rect((inRect.width - contentWidth - 440f) / 2f, DescRect.yMax + 10f, contentWidth + 240f, 26f);
+            Rect NameRect = new Rect((rect.width - contentWidth - 440f) / 2f, DescRect.yMax + 10f, contentWidth + 240f, 26f);
             curName = Widgets.TextEntryLabeled(NameRect, "Name".Translate(), curName);
             GUI.color = Color.white;
 
             //Options
             Listing_Standard listing = new Listing_Standard();
-            listing.Begin(new Rect((inRect.width - contentWidth) / 2f, NameRect.yMax + 10f, contentWidth, inRect.height));
+            listing.Begin(new Rect((rect.width - contentWidth) / 2f, NameRect.yMax + 10f, contentWidth, rect.height));
             if (listing.RadioButton("Custom".Translate(), SelNameType == NameType.Custom)) {
                 SelNameType = NameType.Custom;
             }
@@ -67,17 +70,17 @@ namespace ModListBackup.UI.Dialogs {
             //}
 
             listing.End();
-            DrawBottomButtons(inRect);
+            DrawBottomButtons(rect);
         }
 
-        public override void OnAccept() {
+        protected override void OnAccept() {
             if (VerifyInput()) {
-                LongEventHandler.QueueLongEvent(() => { ModController.InstallMod(curMod, curName); }, "Installing", true, null);
+                LongEventHandler.QueueLongEvent(() => { ModUtils.InstallMod(curMod, curName); }, "Installing", true, null);
                 this.Close();
             }
         }
 
-        public override void OnReset() {
+        protected override void OnReset() {
             this.SelNameType = NameType.Custom;
             string name = curMod.Name;
 

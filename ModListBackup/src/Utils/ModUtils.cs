@@ -1,13 +1,16 @@
 ﻿using Harmony;
+using ModListBackup.Mods;
+using ModListBackup.UI;
 using RimWorld;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Verse;
 using Verse.Steam;
 
-namespace ModListBackup.Mods {
+namespace ModListBackup.Utils {
 
-    internal static class ModController {
+    internal static class ModUtils {
 
         internal static void InstallMod(ModMetaDataEnhanced mod, string newName) {
             string dest = Path.Combine(GenFilePaths.CoreModsFolderPath, newName.Replace(" ", ""));
@@ -15,14 +18,15 @@ namespace ModListBackup.Mods {
             CopyMod(mod, dest);
 
             ModMetaData newMod = new ModMetaData(dest);
-            ModMetaDataEnhanced mmde = new ModMetaDataEnhanced(newMod);
-            mmde.InstallName = newName;
+            ModMetaDataEnhanced mmde = new ModMetaDataEnhanced(newMod) {
+                InstallName = newName
+            };
 
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
             Find.WindowStack.WindowOfType<Page_ModsConfig>().Notify_ModsListChanged();
         }
 
-        public static void UnInstallMod(ModMetaDataEnhanced mod) {
+        internal static void UnInstallMod(ModMetaDataEnhanced mod) {
             mod.OriginalMetaData.enabled = false;
             if (mod.RootDir.Exists) {
                 mod.RootDir.Delete(true);
@@ -31,10 +35,10 @@ namespace ModListBackup.Mods {
                 Unsubscribe(mod);
             }
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
-            Find.WindowStack.WindowOfType<Page_ModsConfig>().Notify_ModsListChanged();
+            Page_ModsConfig_Controller.Notify_ModsListChanged();
         }
 
-        private static void CopyMod(ModMetaDataEnhanced mod, string DestinationPath) {
+        internal static void CopyMod(ModMetaDataEnhanced mod, string DestinationPath) {
             foreach (string dirPath in Directory.GetDirectories(mod.RootDir.FullName, "*", SearchOption.AllDirectories))
                 Directory.CreateDirectory(dirPath.Replace(mod.RootDir.FullName, DestinationPath));
 
@@ -44,6 +48,11 @@ namespace ModListBackup.Mods {
 
         private static void Unsubscribe(ModMetaDataEnhanced mod) {
             typeof(Workshop).GetMethod("Unsubscribe", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { mod.OriginalMetaData });
+            Page_ModsConfig_Controller.Notify_SteamItemUnsubscribed(mod.OriginalMetaData.GetPublishedFileId());
+        }
+
+        internal static bool VerifyModFiles(string hash) {
+            return true;
         }
     }
 }

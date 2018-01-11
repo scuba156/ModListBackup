@@ -7,11 +7,11 @@ namespace ModListBackup.Patches.Page_ModsConfig_Patches {
 
     [HarmonyPatch]
     [HarmonyPatch(typeof(Page_ModsConfig))]
-    [HarmonyPatch("PreOpen")]
-    public static class PreOpen_Patch {
+    [HarmonyPatch("PreClose")]
+    public static class PreClose_Patch {
 
-        public static void Postfix(this Page_ModsConfig __instance) {
-            Page_ModsConfig_Controller.PreOpen(__instance);
+        public static void Postfix() {
+            Page_ModsConfig_Controller.PreClose();
         }
     }
 }

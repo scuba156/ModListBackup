@@ -2,7 +2,7 @@
 <ModMetaData>
   <name>Mod List Backup</name>
   <author>scuba156</author>
-  <targetVersion>0.17.0</targetVersion>
+  <targetVersion>0.18.0</targetVersion>
   <description>
     Backup and restore the currently loaded mods into 20 different nameable slots! Import a mod list from a save file! Never have to lose your mod order again!
 
@@ -15,8 +15,8 @@
     -Import Active Mods From Save File
 
     Requires:
-    HugsLib 3.1.0+
+    HugsLib 4.0+
 
-    Version: 1.5.1
+    Version: 2.0
   </description>
 </ModMetaData>

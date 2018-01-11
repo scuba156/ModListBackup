@@ -1,10 +1,11 @@
 ﻿using HugsLib.Settings;
-using ModListBackup.UI;
+using ModListBackup.Core;
+using ModListBackup.Utils;
 using System;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Controllers.Settings {
+namespace ModListBackup.Settings {
 
     /// <summary>
     /// Class to handle our settings
@@ -14,15 +15,30 @@ namespace ModListBackup.Controllers.Settings {
         /// <summary>
         /// The limit for how may states are available
         /// </summary>
-        internal const int STATE_LIMIT = 20;
+        internal const int ModListStateLimit = 20;
 
         private static float showNamesListButtonHeight = 30f;
-        private static int showRevertTick = 0;
+        private static int showRevertTick;
+
+        internal static int ModBackupLimit = 3;
 
         /// <summary>
         /// Holds the State Names setting
         /// </summary>
         internal static SettingHandle<StateNamesHandleType> StateNamesSetting { get; set; }
+
+        private static SettingHandle<string> modBackupDir;
+        internal static SettingHandle<string> ModBackupDirectory {
+            get {
+                if (modBackupDir.Value.NullOrEmpty()) {
+                    modBackupDir.Value = PathUtils.GenModBackupsFile();
+                }
+                return modBackupDir;
+            }
+            set {
+                modBackupDir = value;
+            }
+        }
 
         /// <summary>
         /// Holds the steam sync setting for HugsLib
@@ -45,7 +61,7 @@ namespace ModListBackup.Controllers.Settings {
             Listing_Standard listing_Standard = new Listing_Standard();
             listing_Standard.Begin(inRect);
 
-            for (int i = 0; i <= SettingsHandler.STATE_LIMIT - 1; i++) {
+            for (int i = 0; i <= SettingsHandler.ModListStateLimit - 1; i++) {
                 string label = String.Format("{2}{0} {1}: ", "Settings_Label_State_Name".Translate(), i + 1, (ModListController.ModListIsSet(i)) ? null : "* ");
                 string oldName = StateNamesSetting.Value.StateNames[i];
                 string newName = listing_Standard.TextEntryLabeled(label, oldName);
@@ -81,9 +97,7 @@ namespace ModListBackup.Controllers.Settings {
             StateNamesSetting.CustomDrawerHeight = 30f;
             revertButtonHandle.CustomDrawerHeight = 50f;
 
-            revertButtonHandle.CustomDrawer = rect => {
-                return DoRevertButtonDrawerContents(rect);
-            };
+            revertButtonHandle.CustomDrawer = DoRevertButtonDrawerContents;
 
             StateNamesSetting.CustomDrawer = rect => {
                 string buttonText;
@@ -95,7 +109,7 @@ namespace ModListBackup.Controllers.Settings {
 
                 if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, showNamesListButtonHeight), buttonText)) {
                     ShowNamesList = !ShowNamesList;
-                    StateNamesSetting.CustomDrawerHeight = !ShowNamesList ? 30f : SettingsHandler.STATE_LIMIT * 42f;//400f;
+                    StateNamesSetting.CustomDrawerHeight = !ShowNamesList ? 30f : SettingsHandler.ModListStateLimit * 42f;//400f;
                 }
 
                 if (ShowNamesList)
@@ -103,6 +117,8 @@ namespace ModListBackup.Controllers.Settings {
                 else
                     return false;
             };
+
+            ModBackupDirectory = Main.GetSettingsPack.GetHandle<string>("BackupDir", "Backup Directory", "", PathUtils.DirBackupsDefault);
         }
 
         /// <summary>
@@ -112,8 +128,8 @@ namespace ModListBackup.Controllers.Settings {
         /// <returns>True if value changed(will always be false)</returns>
         private static bool DoRevertButtonDrawerContents(Rect rect) {
             if (Widgets.ButtonText(new Rect(rect.x, rect.y, rect.width, 30f), "Button_Revert_Text".Translate())) {
-                ModsConfigHandler.RestoreBackup();
-                showRevertTick = Common.STATUS_DELAY_TICKS_SHORT;
+                ModsConfigUtils.RestoreBackup();
+                showRevertTick = 220;
             }
 
             string label = "";
