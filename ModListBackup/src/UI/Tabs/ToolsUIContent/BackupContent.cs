@@ -8,7 +8,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "BackupActiveModsButtonText".Translate();
         internal override string Description => "BackupActiveModsDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "BackupActiveModsSuccessMessage".Translate();
+        internal override string OnFinishMessage => "BackupActiveModsSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.Backups;
     }
 
@@ -20,7 +20,7 @@ namespace ModListBackup.UI.Tools {
             Core.BackupController.Instance.BackupAll(false, false, false);
         };
 
-        internal override string SuccessMessage => "BackupAllSuccessMessage".Translate();
+        internal override string OnFinishMessage => "BackupAllSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.Backups;
     }
 
@@ -28,7 +28,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "DeleteAllBackupsButtonText".Translate();
         internal override string Description => "DeleteAllBackupsDescription".Translate();
         internal override Action OnStartAction => BackupController.Instance.ShowDeleteAllDialog;
-        internal override string SuccessMessage => "DeleteAllBackupsSuccessMessage".Translate();
+        internal override string OnFinishMessage => "DeleteAllBackupsSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.Backups;
 
     }
@@ -43,7 +43,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "DeleteBackupsOlderThanButtonText".Translate(Month);
         internal override string Description => "DeleteBackupsOlderThanDescription".Translate(Month);
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "DeleteBackupsOlderThanSuccessMessage".Translate(Month);
+        internal override string OnFinishMessage => "DeleteBackupsOlderThanSuccessMessage".Translate(Month);
         internal override ToolCategory Category => ToolCategory.Backups;
 
     }
@@ -52,7 +52,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "MoveBackupsToDefaultPathButtonText".Translate();
         internal override string Description => "MoveBackupsToDefaultPathDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "MoveBackupsToDefaultPathSuccessMessage".Translate();
+        internal override string OnFinishMessage => "MoveBackupsToDefaultPathSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.Backups;
     }
 }

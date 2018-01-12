@@ -9,7 +9,6 @@ using UnityEngine;
 using Verse;
 
 namespace ModListBackup.UI {
-    //TODO: Make skinable
 
     internal static class Page_ModsConfig_Controller {
         private static readonly TabBackups BackupsTab = new TabBackups();
@@ -76,6 +75,7 @@ namespace ModListBackup.UI {
                 closeText = "RestartButton".Translate();
             }
             if (Widgets.ButtonText(closeRect, closeText)) {
+                OnClose();
                 _instance.Close();
             }
 
@@ -95,7 +95,7 @@ namespace ModListBackup.UI {
             ModListTab.Notify_SteamItemUnsubscribed(pfid);
         }
 
-        internal static void PreClose() {
+        internal static void OnClose() {
             StopAllThreads();
         }
 

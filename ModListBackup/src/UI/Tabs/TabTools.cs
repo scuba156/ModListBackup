@@ -52,6 +52,7 @@ namespace ModListBackup.UI.Tabs {
             DebugRelatedTools = new List<ToolUIContentBase> {
 #if DEBUG
                 new DebugRestartRimWorld(),
+                new DebugRefreshModList(),
                 new DebugToggleRectLines()
 #endif
             };

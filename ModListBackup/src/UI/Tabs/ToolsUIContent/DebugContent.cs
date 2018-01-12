@@ -18,5 +18,13 @@ namespace ModListBackup.UI.Tools {
         internal override Action OnStartAction => () => { DebugHelper.BoxesVisible = !DebugHelper.BoxesVisible; };
         internal override ToolCategory Category => ToolCategory.Debug;
     }
+
+    internal class DebugRefreshModList : ToolUIContentBase {
+        internal override string ButtonText => "Refresh Modlist";
+        internal override bool InstantStart => true;
+        internal override Action OnStartAction => Core.ModListController.Refresh;
+        internal override string OnFinishMessage => "Modlist Updated";
+        internal override ToolCategory Category => ToolCategory.Debug;
+    }
 }
 #endif

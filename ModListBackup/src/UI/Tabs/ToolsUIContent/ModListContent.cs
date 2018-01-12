@@ -7,7 +7,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "CleanUninstalledFromSaveButtonText".Translate();
         internal override string Description => "CleanUninstalledFromSaveDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "CleanUninstalledFromSaveSuccessMessage".Translate();
+        internal override string OnFinishMessage => "CleanUninstalledFromSaveSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.ModList;
     }
 
@@ -15,7 +15,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "DeleteAllModsButtonText".Translate();
         internal override string Description => "DeleteAllModsDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "DeleteAllModsSuccessMessage".Translate();
+        internal override string OnFinishMessage => "DeleteAllModsSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.ModList;
     }
 
@@ -23,7 +23,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "EditColorsButtonText".Translate();
         internal override string Description => "EditColorsDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "EditColorsSuccessMessage".Translate();
+        internal override string OnFinishMessage => "EditColorsSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.ModList;
     }
 
@@ -31,7 +31,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "EnableOnlyCoreButtonText".Translate();
         internal override string Description => "EnableOnlyCoreDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "EnableOnlyCoreSuccessMessage".Translate();
+        internal override string OnFinishMessage => "EnableOnlyCoreSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.ModList;
     }
 
@@ -39,7 +39,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "EnableOnlyCoreWithModListButtonText".Translate();
         internal override string Description => "EnableOnlyCoreWithModListDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "EnableOnlyCoreWithModListSuccessMessage".Translate();
+        internal override string OnFinishMessage => "EnableOnlyCoreWithModListSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.ModList;
     }
 
@@ -52,7 +52,7 @@ namespace ModListBackup.UI.Tools {
             Find.WindowStack.Add(importWindow);
         };
 
-        internal override string SuccessMessage => "ImportFromSaveSuccessMessage".Translate();
+        internal override string OnFinishMessage => "ImportFromSaveSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.ModList;
     }
 
@@ -60,7 +60,7 @@ namespace ModListBackup.UI.Tools {
         internal override string ButtonText => "RemoveAllColorsButtonText".Translate();
         internal override string Description => "RemoveAllColorsDescription".Translate();
         internal override Action OnStartAction => () => { };
-        internal override string SuccessMessage => "RemoveAllColorsSuccessMessage".Translate();
+        internal override string OnFinishMessage => "RemoveAllColorsSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.ModList;
     }
 }

@@ -199,14 +199,13 @@ namespace ModListBackup.UI.Tabs {
         }
 
         internal void Notify_ModsListChanged() {
-            Log.Message("Notify modlist changed");
             UpdateVisibleModList();
             UpdateTotalSize();
         }
 
         internal void Notify_SteamItemUnsubscribed(PublishedFileId_t pfid) {
             if (selectedMod != null && selectedMod.Identifier == pfid.ToString()) {
-                selectedMod = null;
+                selectedMod = visibleModList.FirstOrDefault();
             }
         }
 
@@ -539,6 +538,7 @@ namespace ModListBackup.UI.Tabs {
         private void RemoveMod(ModMetaDataEnhanced mod) {
             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmUninstall".Translate(mod.Name), (Action)(() => {
                 ModUtils.UnInstallMod(mod);
+                //Notify_ModsListChanged();
             }), true, "AreYouSure".Translate()));
         }
 
@@ -549,7 +549,6 @@ namespace ModListBackup.UI.Tabs {
         }
 
         private void UpdateTotalSize() {
-            Log.Message("updating total size");
             if (FileSizeUpdateThread != null && FileSizeUpdateThread.ThreadState == ThreadState.Running) {
                 FileSizeUpdateThread.Abort();
                 FileSizeUpdateThread.Interrupt();
@@ -559,7 +558,7 @@ namespace ModListBackup.UI.Tabs {
                 long size = 0;
                 foreach (var item in visibleModList) {
                     if (threadStop || FileSizeUpdateThread.ThreadState == ThreadState.AbortRequested || FileSizeUpdateThread.ThreadState == ThreadState.StopRequested) {
-                        Log.Message("aborted");
+                        DebugHelper.DebugMessage("FileSizeUpdate thread aborted");
                         threadStop = false;
                         return;
                     }
@@ -571,7 +570,7 @@ namespace ModListBackup.UI.Tabs {
         }
 
         private void UpdateVisibleModList() {
-            Log.Message("updating visible");
+            DebugHelper.DebugMessage("Updating visible modlist");
             visibleModList = ModListController.Instance.ModsInSortedOrder((ModListSearchBarOptions)SearchBarOptions).ToList();
             if (selectedMod == null || !visibleModList.Contains(selectedMod)) {
                 selectedMod = visibleModList.FirstOrDefault();

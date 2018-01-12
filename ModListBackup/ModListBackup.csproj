@@ -18,9 +18,9 @@
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -69,20 +69,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\PreClose_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\DoWindowContents_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\ExtraOnGUI_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_ModsListChanged_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\PreOpen_Patch.cs" />
+    <Compile Include="src\Patches\Patcher.cs" />
     <Compile Include="src\SearchBars\BackupsSearchBarOptions.cs" />
     <Compile Include="src\Core\BackupController.cs" />
     <Compile Include="src\Core\ModListController.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\PreOpen_Patch.cs" />
     <Compile Include="src\SearchBars\ConfigSearchBarOptions.cs" />
     <Compile Include="src\SearchBars\SearchBarOptionsBase.cs" />
     <Compile Include="src\SearchBars\ToolsSearchBarOptions.cs" />
     <Compile Include="src\StorageContainers\BackupDataStorageContainer.cs" />
-    <Compile Include="src\Test\Tests.cs" />
-    <Compile Include="src\Threads\CheckUpdatedModsTask.cs" />
-    <Compile Include="src\Threads\GetDirectorySizeTask.cs" />
-    <Compile Include="src\Threads\ThreadBase.cs" />
-    <Compile Include="src\Threads\ThreadFactory.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_BackupReport.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_RestoreBackup.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_StartBackup.cs" />
@@ -101,10 +99,7 @@
     <Compile Include="src\Mods\Notifications\NotificationNoBackup.cs" />
     <Compile Include="src\Mods\Notifications\NotificationVersionIncompatible.cs" />
     <Compile Include="src\SearchBars\ModListSearchBarOptions.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\DoWindowContents_Patch.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_ModsListChanged_Patch.cs" />
     <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_SteamItemUnsubscribed_Patch.cs" />
-    <Compile Include="src\UI\Dialogs\Dialog_MaliciousModsWarning.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_InstallMod.cs" />
     <Compile Include="src\UI\Page_ModsConfig_Controller.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_EditNames.cs" />
@@ -118,7 +113,6 @@
     <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Settings\StateNamesHandleType.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\ExtraOnGUI_Patch.cs" />
     <Compile Include="src\UI\Tabs\TabBackups.cs" />
     <Compile Include="src\UI\Tabs\TabConfig.cs" />
     <Compile Include="src\UI\Tabs\TabModList.cs" />

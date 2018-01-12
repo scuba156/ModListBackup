@@ -1,8 +1,9 @@
-﻿using HugsLib;
+﻿using Harmony;
+using HugsLib;
 using HugsLib.Settings;
 using HugsLib.Utils;
-using ModListBackup.Settings;
 using ModListBackup.Core;
+using ModListBackup.Settings;
 using ModListBackup.Utils;
 
 namespace ModListBackup {
@@ -17,14 +18,18 @@ namespace ModListBackup {
         /// </summary>
         private const string MOD_IDENTIFIER = "ModListBackup";
 
+        public Main() {
+            Instance = this;
+        }
+
         /// <summary>
-        /// Set true to use debug mode, mainly used for logging purposes
+        /// Identifies the mod to HugsLib
         /// </summary>
-#if DEBUG
-        private static bool DEBUG_MODE = true;
-#else
-        private static bool DEBUG_MODE = false;
-#endif
+        public override string ModIdentifier { get { return MOD_IDENTIFIER; } }
+
+        internal static HarmonyInstance GetHarmonyInstance { get { return Instance.HarmonyInst; } }
+
+        internal static ModSettingsPack GetSettingsPack { get { return Instance.Settings; } }
 
         /// <summary>
         /// An Instance of this class
@@ -32,24 +37,12 @@ namespace ModListBackup {
         internal static Main Instance { get; private set; }
 
         /// <summary>
-        /// Identifies the mod to HugsLib
-        /// </summary>
-        public override string ModIdentifier { get { return MOD_IDENTIFIER; } }
-
-        /// <summary>
         /// An easy way to access the logger
         /// </summary>
         internal static ModLogger Log { get { return Instance.Logger; } }
 
-        /// <summary>
-        /// Returns the ModBase settings
-        /// </summary>
-        internal static ModSettingsPack GetSettingsPack { get { return Instance.Settings; } }
-
-        /// <summary>
-        /// Constructor, sets the current Instance
-        /// </summary>
-        public Main() { Instance = this; if (DEBUG_MODE) { Log.Message("Debug mode"); } }
-
+        public override void Initialize() {
+            Patches.Patcher.ApplyPlatformPatches();
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace ModListBackup.UI.Dialogs {
             this.doCloseButton = false;
             this.doCloseX = false;
             this.onlyOneOfTypeAllowed = true;
-            foreach (var mod in ModListController.Instance.CurrentModList) {
+            foreach (var mod in ModListController.Instance.ActiveModList) {
                 currentList.Add(new ListItem(mod));
             }
         }

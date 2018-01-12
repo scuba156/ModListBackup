@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using ModListBackup.Core;
 using ModListBackup.Mods;
 using ModListBackup.UI;
 using RimWorld;
@@ -23,18 +24,22 @@ namespace ModListBackup.Utils {
             };
 
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
-            Find.WindowStack.WindowOfType<Page_ModsConfig>().Notify_ModsListChanged();
+            ModListController.Refresh();
+            Page_ModsConfig_Controller.Notify_ModsListChanged();
         }
 
         internal static void UnInstallMod(ModMetaDataEnhanced mod) {
             mod.OriginalMetaData.enabled = false;
+
             if (mod.RootDir.Exists) {
                 mod.RootDir.Delete(true);
             }
             if (mod.OriginalMetaData.OnSteamWorkshop) {
                 Unsubscribe(mod);
             }
+
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
+            ModListController.Refresh();
             Page_ModsConfig_Controller.Notify_ModsListChanged();
         }
 
@@ -48,6 +53,8 @@ namespace ModListBackup.Utils {
 
         private static void Unsubscribe(ModMetaDataEnhanced mod) {
             typeof(Workshop).GetMethod("Unsubscribe", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { mod.OriginalMetaData });
+
+            ModListController.Refresh();
             Page_ModsConfig_Controller.Notify_SteamItemUnsubscribed(mod.OriginalMetaData.GetPublishedFileId());
         }
 

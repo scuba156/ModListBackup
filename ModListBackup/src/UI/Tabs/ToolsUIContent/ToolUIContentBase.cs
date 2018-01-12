@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RimWorld;
+using System;
+using Verse;
 
 namespace ModListBackup.UI {
 
@@ -10,7 +12,7 @@ namespace ModListBackup.UI {
         internal virtual bool InstantStart { get; }
         internal string Name { get { return ButtonText; } }
         internal abstract Action OnStartAction { get; }
-        internal virtual string SuccessMessage { get; }
+        internal virtual string OnFinishMessage { get; }
         internal bool IsVisible { get; set; }
         internal abstract ToolCategory Category { get; }
 
@@ -20,6 +22,7 @@ namespace ModListBackup.UI {
 
         internal void Start() {
             OnStartAction.Invoke();
+            Verse.Messages.Message(OnFinishMessage, MessageTypeDefOf.NeutralEvent);
         }
     }
 }

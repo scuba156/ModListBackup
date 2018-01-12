@@ -116,7 +116,7 @@ namespace ModListBackup.Core {
         }
 
         internal void BackupAll(bool verifyOnFinish, bool includeCore = false, bool activeonly = true) {
-            List<ModMetaDataEnhanced> mods = ModListController.Instance.CurrentModList;
+            List<ModMetaDataEnhanced> mods = ModListController.Instance.ActiveModList;
 
             if (activeonly) {
                 mods.RemoveAll(m => !m.Active);
