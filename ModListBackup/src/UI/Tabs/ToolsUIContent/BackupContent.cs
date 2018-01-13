@@ -27,7 +27,7 @@ namespace ModListBackup.UI.Tools {
     internal class DeleteAllBackups : ToolUIContentBase {
         internal override string ButtonText => "DeleteAllBackupsButtonText".Translate();
         internal override string Description => "DeleteAllBackupsDescription".Translate();
-        internal override Action OnStartAction => BackupController.Instance.ShowDeleteAllDialog;
+        internal override Action OnStartAction => BackupController.Instance.ShowDeleteAllBackupsDialog;
         internal override string OnFinishMessage => "DeleteAllBackupsSuccessMessage".Translate();
         internal override ToolCategory Category => ToolCategory.Backups;
 

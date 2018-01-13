@@ -6,7 +6,7 @@ using System.IO;
 using UnityEngine;
 using Verse;
 
-namespace ModListBackup.Mods {
+namespace ModListBackup.Core {
 
     public class ModMetaDataEnhanced {
         private ModListSettingsStorageData ModSettings { get; set; }

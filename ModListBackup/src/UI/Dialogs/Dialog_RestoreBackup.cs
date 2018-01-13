@@ -1,5 +1,5 @@
 ﻿using ExtraWidgets;
-using ModListBackup.Mods;
+using ModListBackup.Core;
 using ModListBackup.StorageContainers;
 using ModListBackup.Utils;
 using RimWorld;
@@ -68,7 +68,7 @@ namespace ModListBackup.UI.Dialogs {
             Text.Font = GameFont.Tiny;
 
             detailsListing.Label("Name: " + BackupData.Name);
-            detailsListing.Label(String.Format("Created: {0} | Size: {1}", BackupData.ModBackupsList[SelectedBackup].CreationDate.ToLongDateString(), PathUtils.GetBytesReadable(BackupData.ModBackupsList[SelectedBackup].Size)));
+            detailsListing.Label("Size: " + BackupData.ModBackupsList[SelectedBackup].CreationDate.ToLongDateString());
             //detailsListing.Label("Location: " + BackupData.Location);
             detailsListing.Label("MD5: " + BackupData.ModBackupsList[SelectedBackup].ModHash);
 
@@ -80,7 +80,7 @@ namespace ModListBackup.UI.Dialogs {
                 verifiedLabel = verifiedFiles.ToString();
             }
 
-            detailsListing.Label("Files Verified: " + verifiedLabel);
+            detailsListing.Label(String.Format("Size: {0} | Verified: {1}", PathUtils.GetBytesReadable(BackupData.ModBackupsList[SelectedBackup].Size), verifiedLabel));
             detailsListing.GapLine();
             detailsListing.End();
             Text.Font = GameFont.Small;

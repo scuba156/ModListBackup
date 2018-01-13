@@ -1,4 +1,4 @@
-﻿using ModListBackup.Mods;
+﻿using ModListBackup.Core;
 using ModListBackup.Utils;
 using System.Collections.Generic;
 using System.IO;

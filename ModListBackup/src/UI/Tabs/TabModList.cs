@@ -2,12 +2,11 @@
 using ExtraWidgets.FloatMenu;
 using Harmony;
 using ModListBackup.Core;
-using ModListBackup.Mods;
 using ModListBackup.Mods.Notifications;
-using ModListBackup.SearchBars;
 using ModListBackup.Settings;
 using ModListBackup.StorageContainers;
 using ModListBackup.UI.Dialogs;
+using ModListBackup.UI.SearchBars;
 using ModListBackup.Utils;
 using RimWorld;
 using Steamworks;
@@ -163,9 +162,9 @@ namespace ModListBackup.UI.Tabs {
             } else {
                 if (Event.current.isMouse && Event.current.button == 1) {
                     if (selectedMod.OriginalMetaData.Source == ContentSource.SteamWorkshop) {
-                        CreateModRowActionSteam(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
+                        CreateContextFloatMenuSteam(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
                     } else {
-                        CreateModRowActionLocal(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
+                        CreateContextFloatMenuLocal(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
                     }
                 }
 
@@ -213,8 +212,6 @@ namespace ModListBackup.UI.Tabs {
             SearchBarOptions = new ModListSearchBarOptions();
             UpdateVisibleModList();
             UpdateTotalSize();
-
-            //Test.Tests.HashAllModsPerformance();
         }
 
         internal override void OnSearchBarChanged() {
@@ -227,7 +224,14 @@ namespace ModListBackup.UI.Tabs {
             Page_ModsConfig_Controller.SetMessage("Status_Message_Backup".Translate(), MessageTypeDefOf.PositiveEvent);
         }
 
-        private Action CreateModRowActionLocal(ModMetaDataEnhanced mod) {
+        private void DrawModRowDownloading(Listing_Standard listing) {
+            Rect rect = listing.GetRect(26f);
+            ContentSourceUtility.DrawContentSource(rect, ContentSource.SteamWorkshop, null);
+            rect.xMin += 28f;
+            Widgets.Label(rect, "Downloading".Translate() + GenText.MarchingEllipsis(0f));
+        }
+
+        private Action CreateContextFloatMenuLocal(ModMetaDataEnhanced mod) {
             return new Action(() => {
                 List<FloatMenuOption> options = new List<FloatMenuOption> {
                     new FloatMenuOption("Rename".Translate(), () => StartRename(mod) ),
@@ -246,7 +250,7 @@ namespace ModListBackup.UI.Tabs {
             });
         }
 
-        private Action CreateModRowActionSteam(ModMetaDataEnhanced mod) {
+        private Action CreateContextFloatMenuSteam(ModMetaDataEnhanced mod) {
             return new Action(() => {
                 List<FloatMenuOption> options = new List<FloatMenuOption> {
                     new FloatMenuOption("InstallLocal".Translate(), () => Find.WindowStack.Add(new Dialog_InstallMod(mod))),
@@ -259,13 +263,6 @@ namespace ModListBackup.UI.Tabs {
 
                 Find.WindowStack.Add((Window)new FloatMenu(options));
             });
-        }
-
-        private void DoModRowDownloading(Listing_Standard listing) {
-            Rect rect = listing.GetRect(26f);
-            ContentSourceUtility.DrawContentSource(rect, ContentSource.SteamWorkshop, null);
-            rect.xMin += 28f;
-            Widgets.Label(rect, "Downloading".Translate() + GenText.MarchingEllipsis(0f));
         }
 
         private void DrawModDetails(Rect rect) {
@@ -356,7 +353,6 @@ namespace ModListBackup.UI.Tabs {
         }
 
         private void DrawModList(Rect rect) {
-            // List
             float height = (float)(visibleModList.Count + 1) * 26;
             float padding = (height > rect.height) ? 16f : 4f;
 
@@ -394,11 +390,8 @@ namespace ModListBackup.UI.Tabs {
                     }
                 }
                 for (int i = 0; i < WorkshopItems.DownloadingItemsCount; i++) {
-                    DoModRowDownloading(listing_Standard);
+                    DrawModRowDownloading(listing_Standard);
                 }
-
-                //Log.Message("Bounds is " + innerRect.yMin + ":" + innerRect.yMax);
-                //Log.Message("Scroll Position is " + mainContentScrollPosition.y);
             }
 
             listing_Standard.End();
@@ -406,6 +399,7 @@ namespace ModListBackup.UI.Tabs {
 
             Text.Font = GameFont.Tiny;
             Text.Anchor = TextAnchor.LowerLeft;
+
             // Active Count label
             Rect activeCountRect = new Rect(rect.xMin + 4f, rect.yMax, 120f, 18f);
             DebugHelper.DrawBoxAroundRect(activeCountRect);
@@ -443,17 +437,14 @@ namespace ModListBackup.UI.Tabs {
             }
             Action clickAction = null;
             if (mod.Source == ContentSource.SteamWorkshop) {
-                clickAction = CreateModRowActionSteam(mod);
+                clickAction = CreateContextFloatMenuSteam(mod);
             } else {
-                clickAction = CreateModRowActionLocal(mod);
+                clickAction = CreateContextFloatMenuLocal(mod);
             }
 
             ContentSourceUtility.DrawContentSource(rect, mod.Source, clickAction);
             rect.xMin += 28f;
             bool active = mod.Active;
-            if (selectedMod == null) {
-                Log.Message("selected mod is null");
-            }
             bool isSelected = mod.Identifier == selectedMod.Identifier;
             Rect rect2 = rect;
 
@@ -538,7 +529,6 @@ namespace ModListBackup.UI.Tabs {
         private void RemoveMod(ModMetaDataEnhanced mod) {
             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmUninstall".Translate(mod.Name), (Action)(() => {
                 ModUtils.UnInstallMod(mod);
-                //Notify_ModsListChanged();
             }), true, "AreYouSure".Translate()));
         }
 
@@ -570,7 +560,6 @@ namespace ModListBackup.UI.Tabs {
         }
 
         private void UpdateVisibleModList() {
-            DebugHelper.DebugMessage("Updating visible modlist");
             visibleModList = ModListController.Instance.ModsInSortedOrder((ModListSearchBarOptions)SearchBarOptions).ToList();
             if (selectedMod == null || !visibleModList.Contains(selectedMod)) {
                 selectedMod = visibleModList.FirstOrDefault();

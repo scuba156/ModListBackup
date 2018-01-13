@@ -1,7 +1,7 @@
 ﻿using ExtraWidgets;
 using Harmony;
-using ModListBackup.SearchBars;
 using ModListBackup.Settings;
+using ModListBackup.UI.SearchBars;
 using ModListBackup.UI.Tabs;
 using RimWorld;
 using System;
@@ -13,19 +13,17 @@ using Verse;
 using Verse.Sound;
 
 namespace ModListBackup.UI.Tabs {
-    internal class TabConfig : TabBase {
 
+    internal class TabConfig : TabBase {
         // Settings Needed
         // - BackupDirectory with paste clipboard button
         // - Edit colours button
         // - Backups count/storage limit
         // - Auto backup new/updated mods
         // - Steam sync states
-        // - 
-        // - 
-        // - 
-
-
+        // -
+        // -
+        // -
 
         private string _backupDirectory = string.Empty;
         private int _storageSizeLimit = 0;
@@ -34,8 +32,6 @@ namespace ModListBackup.UI.Tabs {
         private string _stateSizeLimitBuffer = string.Empty;
         private bool _storageSizeUseGb = false;
         private bool _autoBackupOnBoot = false;
-
-
 
         internal override void OnInit() {
             base.OnInit();
@@ -94,14 +90,11 @@ namespace ModListBackup.UI.Tabs {
             Rect dirPasteClipboardRect = new Rect(dirEntryRect.xMax, dirRowRect.yMin, dirRowRect.height, dirRowRect.height);
             Rect dirOpenFolderRect = new Rect(dirPasteClipboardRect.xMax, dirRowRect.yMin, dirRowRect.height, dirRowRect.height);
 
-
             _backupDirectory = Widgets.TextArea(dirEntryRect, _backupDirectory);
             if (Widgets.ButtonText(dirPasteClipboardRect, "C")) {
-
             }
 
             if (Widgets.ButtonText(dirOpenFolderRect, "D")) {
-
             }
 
             Text.Anchor = TextAnchor.UpperRight;
@@ -111,7 +104,6 @@ namespace ModListBackup.UI.Tabs {
             Rect storageLimitValueRect = new Rect(storageLimitRow.xMin, storageLimitRow.yMin, 40f, storageLimitRow.height);
             Rect storageLimitTypeMbRect = new Rect(storageLimitValueRect.xMax, storageLimitRow.yMin, 50f, storageLimitRow.height);
             Rect storageLimitTypeGbRect = new Rect(storageLimitTypeMbRect.xMax, storageLimitRow.yMin, 50f, storageLimitRow.height);
-
 
             Widgets.TextFieldNumeric(storageLimitValueRect, ref _storageSizeLimit, ref _storageSizeLimitBuffer, 0, 1024);
 
@@ -131,6 +123,5 @@ namespace ModListBackup.UI.Tabs {
 
             listing.GapLine();
         }
-
     }
 }

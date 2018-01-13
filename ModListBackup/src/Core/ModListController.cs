@@ -1,14 +1,13 @@
 ﻿using ModListBackup.Mods;
-using ModListBackup.SearchBars;
 using ModListBackup.Settings;
 using ModListBackup.StorageContainers;
 using ModListBackup.UI;
+using ModListBackup.UI.SearchBars;
 using ModListBackup.Utils;
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
-using ModListBackup.Utils;
 
 namespace ModListBackup.Core {
 
@@ -30,12 +29,15 @@ namespace ModListBackup.Core {
 
         public List<ModMetaDataEnhanced> ActiveModList { get; internal set; }
 
+        internal bool CanRestorePreviousState { get { return PreviousStateMetaData != null; } }
         private static ModListController _instance { get; set; }
 
         private ModListStateStorageData CurrentStateMetaData { get; set; }
         private ModListStateStorageData PreviousStateMetaData { get; set; }
 
-        internal bool CanRestorePreviousState { get { return PreviousStateMetaData != null; } }
+        public static void Refresh() {
+            Instance.UpdateLoadedMods();
+        }
 
         public ModMetaDataEnhanced GetModEnhanced(ModMetaData mod) {
             return ActiveModList.First(m => m.OriginalMetaData == mod);
@@ -53,8 +55,41 @@ namespace ModListBackup.Core {
             return ActiveModList;
         }
 
-        public static void Refresh() {
-            Instance.UpdateLoadedMods();
+        public void RestorePreviousState() {
+            DebugHelper.DebugMessage("Trying to restore previous state");
+            DebugHelper.DebugMessage("Undo:There are currently {0} active mods, previously there was {1} active.", CurrentStateMetaData.ActiveMods.Count, PreviousStateMetaData.ActiveMods.Count);
+            SetActiveMods(PreviousStateMetaData);
+            Page_ModsConfig_Controller.SetMessage("Status_Message_Undone".Translate(), MessageTypeDefOf.NeutralEvent);
+        }
+
+        public void SaveState(int stateId, List<string> mods = null) {
+            if (mods == null) {
+                DebugHelper.DebugMessage("mods to save was null, setting default");
+                mods = CurrentStateMetaData.ActiveMods;
+            }
+            ModListStateStorageContainer file = new ModListStateStorageContainer(stateId) {
+                Data = new ModListStateStorageData {
+                    ActiveMods = mods,
+                    BuildNumber = VersionControl.CurrentBuild
+                }
+            };
+            file.Save();
+            Page_ModsConfig_Controller.SetMessage("Saved Modlist to state " + stateId, MessageTypeDefOf.PositiveEvent);
+        }
+
+        internal static string GetFormattedModListName(int state) {
+            return string.Format("{0}. {1}{2}", state, GetModListNamePretty(state), (ModListIsSet(state)) ? null : " [*]");
+        }
+
+        internal static string GetModListNamePretty(int state) {
+            if (SettingsHandler.StateNamesSetting.Value == null || SettingsHandler.StateNamesSetting.Value.StateNames[state - 1].Trim() == "")
+                return "Default_State_Name".Translate();
+            else
+                return SettingsHandler.StateNamesSetting.Value.GetStateName(state).Trim();
+        }
+
+        internal static bool ModListIsSet(int state) {
+            return false;//File.Exists(PathUtils.GenModListFile(state));
         }
 
         internal List<ModMetaDataEnhanced> ModsInSortedOrder(ModListSearchBarOptions options) {
@@ -126,28 +161,6 @@ namespace ModListBackup.Core {
             return result;
         }
 
-        public void SaveState(int stateId, List<string> mods = null) {
-            if (mods == null) {
-                DebugHelper.DebugMessage("mods to save was null, setting default");
-                mods = CurrentStateMetaData.ActiveMods;
-            }
-            ModListStateStorageContainer file = new ModListStateStorageContainer(stateId) {
-                Data = new ModListStateStorageData {
-                    ActiveMods = mods,
-                    BuildNumber = VersionControl.CurrentBuild
-                }
-            };
-            file.Save();
-            Page_ModsConfig_Controller.SetMessage("Saved Modlist to state " + stateId, MessageTypeDefOf.PositiveEvent);
-        }
-
-        public void RestorePreviousState() {
-            DebugHelper.DebugMessage("Trying to restore previous state");
-            DebugHelper.DebugMessage("Undo:There are currently {0} active mods, previously there was {1} active.", CurrentStateMetaData.ActiveMods.Count, PreviousStateMetaData.ActiveMods.Count);
-            SetActiveMods(PreviousStateMetaData);
-            Page_ModsConfig_Controller.SetMessage("Status_Message_Undone".Translate(), MessageTypeDefOf.NeutralEvent);
-        }
-
         private void SetActiveMods(ModListStateStorageData data) {
             foreach (var item in ActiveModList) {
                 item.Active = data.ActiveMods.Contains(item.Identifier);
@@ -159,27 +172,12 @@ namespace ModListBackup.Core {
             Page_ModsConfig_Controller.Notify_ModsListChanged();
         }
 
-        internal static string GetFormattedModListName(int state) {
-            return string.Format("{0}. {1}{2}", state, GetModListNamePretty(state), (ModListIsSet(state)) ? null : " [*]");
-        }
-
-        internal static string GetModListNamePretty(int state) {
-            if (SettingsHandler.StateNamesSetting.Value == null || SettingsHandler.StateNamesSetting.Value.StateNames[state - 1].Trim() == "")
-                return "Default_State_Name".Translate();
-            else
-                return SettingsHandler.StateNamesSetting.Value.GetStateName(state).Trim();
-        }
-
-        internal static bool ModListIsSet(int state) {
-            return false;//File.Exists(PathUtils.GenModListFile(state));
-        }
-
         private void UpdateLoadedMods() {
             ActiveModList.Clear();
-            foreach (var mod in ModLister.AllInstalledMods.Where(m=>m.enabled)) {
+            foreach (var mod in ModLister.AllInstalledMods.Where(m => m.enabled)) {
                 ActiveModList.Add(new ModMetaDataEnhanced(mod));
             }
-            
+
             DebugHelper.DebugMessage("Updated with {0} loaded mods from {1} mods.", ActiveModList.Count, ModLister.AllInstalledMods.Count());
         }
     }

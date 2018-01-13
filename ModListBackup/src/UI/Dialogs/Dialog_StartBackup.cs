@@ -20,6 +20,8 @@ namespace ModListBackup.UI.Dialogs {
         private Thread FileSizeUpdateThread;
         private volatile bool threadStop = false;
         public override Vector2 InitialSize => new Vector2(500f, 700f);
+        private Dictionary<string, string> truncatedModNamesCache = new Dictionary<string, string>();
+
 
         internal Dialog_StartBackup() {
             this.absorbInputAroundWindow = true;
@@ -143,7 +145,11 @@ namespace ModListBackup.UI.Dialogs {
 
         private void DrawModItem(Listing_Standard listing, ListItem item) {
             bool isChecked = item.Checked;
-            listing.CheckboxLabeled(item.Mod.Name, ref isChecked, null);
+
+            float num = listing.ColumnWidth - 24f;
+            string label = item.Mod.Name.Truncate(num, this.truncatedModNamesCache);
+
+            listing.CheckboxLabeled(label, ref isChecked, null);
             if (item.Checked != isChecked) {
                 item.Checked = isChecked;
                 StartCalculateFileSize();

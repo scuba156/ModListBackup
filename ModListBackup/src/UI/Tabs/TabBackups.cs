@@ -1,11 +1,12 @@
 ﻿using ExtraWidgets;
 using ModListBackup.Core;
 using ModListBackup.Mods;
-using ModListBackup.SearchBars;
 using ModListBackup.StorageContainers;
 using ModListBackup.UI.Dialogs;
+using ModListBackup.UI.SearchBars;
 using ModListBackup.Utils;
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,11 +21,9 @@ namespace ModListBackup.UI.Tabs {
         private Vector2 backupListScrollPosition;
         private BackupStorageData selectedBackup;
         private BackupListStorageData selectedMod;
-        private IEnumerable<BackupListStorageData> visibleList = new List<BackupListStorageData>();
-        private Dictionary<string, string> truncatedModNamesCache = new Dictionary<string, string>();
         private ModMetaDataEnhanced selectedModMetaData;
-
-
+        private Dictionary<string, string> truncatedModNamesCache = new Dictionary<string, string>();
+        private IEnumerable<BackupListStorageData> visibleList = new List<BackupListStorageData>();
         private enum SelectedModTab : byte {
             Backups,
             Settings
@@ -32,6 +31,25 @@ namespace ModListBackup.UI.Tabs {
 
         internal override void DrawExtraContent(Rect rect) {
             DoSelectedMod(rect);
+        }
+
+        internal override void ExtraOnGUI() {
+            base.ExtraOnGUI();
+            if (Event.current.isMouse && Event.current.button == 1 && selectedMod != null ) {
+                CreateContextFloatMenuMod(selectedMod).Invoke();
+            }
+        }
+
+        private Action CreateContextFloatMenuMod(BackupListStorageData backup) {
+            return new Action(() => {
+                List<FloatMenuOption> options = new List<FloatMenuOption> {
+                    new FloatMenuOption("OpenDirectory".Translate(), () => HugsLib.Shell.ShellOpenDirectory.Execute(backup.Location)),
+                    new FloatMenuOption("Rename", () => { }),
+                    new FloatMenuOption("Delete", () => { BackupController.Instance.DeleteAllModsBackups(backup); })
+                };
+
+                Find.WindowStack.Add((Window)new FloatMenu(options));
+            });
         }
 
         internal override void DrawLeftControls(Rect rect) {
@@ -44,7 +62,7 @@ namespace ModListBackup.UI.Tabs {
 
             Rect deleteAllRect = new Rect(BackupRect.xMax + Padding, BackupRect.y, ButtonSmallWidth, Page.BottomButHeight);
             if (Widgets.ButtonText(deleteAllRect, "Delete All")) {
-                BackupController.Instance.ShowDeleteAllDialog();
+                BackupController.Instance.ShowDeleteAllBackupsDialog();
             }
 
             Rect restoreRect = new Rect(deleteAllRect.xMax + Padding, BackupRect.y, ButtonSmallWidth, Page.BottomButHeight);
@@ -74,7 +92,7 @@ namespace ModListBackup.UI.Tabs {
                 selectedMod = null;
             } else {
                 foreach (var backup in visibleList) {
-                    DoModRow(backup, listing_Standard);
+                    DrawModRow(backup, listing_Standard);
                     totalSize += backup.TotalSize;
                 }
             }
@@ -113,7 +131,7 @@ namespace ModListBackup.UI.Tabs {
             TabDrawer.DrawTabs(rect, tabsList);
         }
 
-        private void DoBackupRow(BackupStorageData backup, Listing_Standard listing) {
+        private void DrawBackupRow(BackupStorageData backup, Listing_Standard listing) {
             bool selected = backup == selectedBackup;
 
             if (listing.LabelSelectable(backup.CreationDate.ToString() + " - " + PathUtils.GetBytesReadable(backup.Size), ref selected)) {
@@ -121,48 +139,19 @@ namespace ModListBackup.UI.Tabs {
             }
         }
 
-        private void DoModRow(BackupListStorageData mod, Listing_Standard listing) {
-            //listing.Label(mod.modIdentifier + " - " + mod.source);
+        private void DrawModRow(BackupListStorageData mod, Listing_Standard listing) {
             bool selected = mod == selectedMod;
 
-            if (listing.LabelSelectable(mod.ModIdentifier + " - " + mod.Name + " - " + mod.TotalSizeReadable, ref selected)) {
+            Rect rect = listing.GetRect(26f);
+            ContentSourceUtility.DrawContentSource(rect, mod.Source, CreateContextFloatMenuMod(mod));
+            rect.xMin += 28f;
+
+            float num = rect.width - 24f;
+            string label = mod.Name.Truncate(num, this.truncatedModNamesCache);
+
+
+            if (ExtraWidgets.TextWidgets.LabelSelectable(rect, label, ref selected)) {
                 UpdateSelectedMod(mod);
-            }
-        }
-
-        private void UpdateSelectedMod(BackupListStorageData mod) {
-            if (mod == null) {
-                selectedMod = null;
-                UpdateSelectedBackup(null);
-                return;
-            }
-
-
-            if (selectedMod == null || selectedMod.ModIdentifier != mod.ModIdentifier) {
-                selectedMod = mod;
-                if (selectedMod == null) {
-                    selectedBackup = null;
-                    selectedModMetaData = null;
-                } else {
-                    UpdateSelectedBackup(selectedMod.ModBackupsList.FirstOrDefault());
-                }
-            }
-        }
-
-        private void UpdateSelectedBackup(BackupStorageData backup) {
-            if (backup == null) {
-                selectedBackup = null;
-                selectedModMetaData = null;
-                return;
-            }
-
-            if (selectedBackup == null || selectedBackup != backup) {
-                selectedBackup = backup;
-                selectedModMetaData = new ModMetaDataEnhanced(new ModMetaData(Path.Combine(selectedMod.Location, selectedBackup.Id.ToString())));
-
-                if (selectedModMetaData == null) {
-                    Log.Message("Failed to get mod metadata");
-                }
             }
         }
 
@@ -173,11 +162,30 @@ namespace ModListBackup.UI.Tabs {
                 Widgets.DrawMenuSection(backupsListRect);
                 DrawBackupsList(backupsListRect);
 
-
                 Rect modDetailsRect = new Rect(rect.xMin, rect.yMin, rect.width, rect.height - backupsListRect.height - 40f);
                 DebugHelper.DrawBoxAroundRect(modDetailsRect);
                 DrawModDetails(modDetailsRect);
             }
+        }
+
+        private void DrawBackupsList(Rect rect) {
+            float height = (float)(selectedMod.ModBackupsList.Count * 5 + 80);
+            float padding = (height > rect.height) ? 16f : 4f;
+            DrawTabs(rect);
+            Rect innerRect = new Rect(0f, 26f, rect.width - padding, height);
+            Widgets.BeginScrollView(rect, ref backupListScrollPosition, innerRect, true);
+            Rect rect6 = innerRect.ContractedBy(4f);
+            Listing_Standard listing_Standard = new Listing_Standard {
+                ColumnWidth = rect6.width
+            };
+            listing_Standard.Begin(rect6);
+
+            foreach (var backup in selectedMod.ModBackupsList) {
+                DrawBackupRow(backup, listing_Standard);
+            }
+
+            listing_Standard.End();
+            Widgets.EndScrollView();
         }
 
         private void DrawModDetails(Rect rect) {
@@ -231,31 +239,44 @@ namespace ModListBackup.UI.Tabs {
                     Text.WordWrap = true;
                 }
                 WidgetRow widgetRow = new WidgetRow(rect.width, num3 + 25f, UIDirection.LeftThenUp, 99999f, 4f);
-
             }
             GUI.EndGroup();
         }
 
-        private void DrawBackupsList(Rect rect) {
-            float height = (float)(selectedMod.ModBackupsList.Count * 5 + 80);
-            float padding = (height > rect.height) ? 16f : 4f;
-            DrawTabs(rect);
-            Rect innerRect = new Rect(0f, 26f, rect.width - padding, height);
-            Widgets.BeginScrollView(rect, ref backupListScrollPosition, innerRect, true);
-            Rect rect6 = innerRect.ContractedBy(4f);
-            Listing_Standard listing_Standard = new Listing_Standard {
-                ColumnWidth = rect6.width
-            };
-            listing_Standard.Begin(rect6);
-
-            foreach (var backup in selectedMod.ModBackupsList) {
-                DoBackupRow(backup, listing_Standard);
+        private void UpdateSelectedBackup(BackupStorageData backup) {
+            if (backup == null) {
+                selectedBackup = null;
+                selectedModMetaData = null;
+                return;
             }
 
-            listing_Standard.End();
-            Widgets.EndScrollView();
+            if (selectedBackup == null || selectedBackup != backup) {
+                selectedBackup = backup;
+                selectedModMetaData = new ModMetaDataEnhanced(new ModMetaData(Path.Combine(selectedMod.Location, selectedBackup.Id.ToString())));
+
+                if (selectedModMetaData == null) {
+                    Log.Message("Failed to get mod metadata");
+                }
+            }
         }
 
+        private void UpdateSelectedMod(BackupListStorageData mod) {
+            if (mod == null) {
+                selectedMod = null;
+                UpdateSelectedBackup(null);
+                return;
+            }
+
+            if (selectedMod == null || selectedMod.ModIdentifier != mod.ModIdentifier) {
+                selectedMod = mod;
+                if (selectedMod == null) {
+                    selectedBackup = null;
+                    selectedModMetaData = null;
+                } else {
+                    UpdateSelectedBackup(selectedMod.ModBackupsList.FirstOrDefault());
+                }
+            }
+        }
         private void UpdateVisibleList() {
             visibleList = BackupController.Instance.GetAllMods((BackupsSearchBarOptions)SearchBarOptions);
 

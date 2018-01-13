@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Verse;
 
-namespace ModListBackup.SearchBars {
+namespace ModListBackup.UI.SearchBars {
 
     public class ModListFilterOptions : FilterOptionsBase {
         public ModListFilterOptions() => SetAll(true);

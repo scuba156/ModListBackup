@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ModListBackup.SearchBars {
+namespace ModListBackup.UI.SearchBars {
     public class BackupsSearchBarOptions : SearchBarOptionsBase {
         public override bool ShowSortFilterOptions => true;
         public BackupsSearchBarOptions() {

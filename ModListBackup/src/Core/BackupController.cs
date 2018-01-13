@@ -1,8 +1,8 @@
 ﻿using ModListBackup.Mods;
-using ModListBackup.SearchBars;
 using ModListBackup.Settings;
 using ModListBackup.StorageContainers;
 using ModListBackup.UI;
+using ModListBackup.UI.SearchBars;
 using ModListBackup.Utils;
 using RimWorld;
 using System;
@@ -33,6 +33,22 @@ namespace ModListBackup.Core {
         public List<BackupListStorageData> Mods { get { if (modsContainer == null || modsContainer.Data == null) Load(); return modsContainer.Data; } internal set { modsContainer.Data = value; Save(); } }
         private static BackupController _Instance { get; set; }
 
+        public void DeleteAllModsBackups(BackupListStorageData backup) {
+
+            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("DeleteAllBackupsDialog".Translate(backup.Name), () => {
+                LongEventHandler.QueueLongEvent(delegate {
+                    LongEventHandler.SetCurrentEventText(string.Format("Please Wait\nDeleting all backups for\n{0}", backup.Name));
+
+                    Directory.Delete(backup.Location, true);
+                    Mods.Remove(backup);
+
+                    LongEventHandler.ExecuteWhenFinished(delegate {
+                        Save();
+                    });
+                }, "Deleting all mods", true, null);
+            }, true));
+        }
+
         public BackupResult Backup(ModMetaDataEnhanced mod, bool verifyBackup = false) {
             BackupResult result = new BackupResult(mod.Identifier);
             BackupListStorageData existing = GetBackupData(mod.Identifier);
@@ -61,7 +77,6 @@ namespace ModListBackup.Core {
                 } else {
                     Log.Message("skipped verify");
                 }
-
             } catch (Exception e) {
                 result.FailureReason = e.Message;
             }
@@ -128,7 +143,7 @@ namespace ModListBackup.Core {
             StartBackupMods(mods, verifyOnFinish);
         }
 
-        internal void ShowDeleteAllDialog() {
+        internal void ShowDeleteAllBackupsDialog() {
             int count = 0;
             foreach (var item in Mods) {
                 foreach (var backup in item.ModBackupsList) {
@@ -152,7 +167,6 @@ namespace ModListBackup.Core {
                         LongEventHandler.SetCurrentEventText(string.Format("Please Wait\nDeleting All Mods\n({0}/{1})", PathUtils.GetBytesReadable(remainingLength), PathUtils.GetBytesReadable(totalLength)));
                         Directory.Delete(mod.Location, true);
                         remainingLength += mod.TotalSize;
-
                     }
                     LongEventHandler.ExecuteWhenFinished(delegate {
                         Mods.Clear();
@@ -164,12 +178,6 @@ namespace ModListBackup.Core {
     }
 
     public class BackupResult {
-        public long Size { get; internal set; }
-        public string ModIdentifier { get; private set; }
-        public bool Verified { get; internal set; }
-        public bool Success { get; internal set; }
-        public string FailureReason { get; internal set; }
-
         internal BackupResult(string modIdentifier, string failureReason = null, bool verified = false) {
             this.ModIdentifier = modIdentifier;
             this.Verified = verified;
@@ -179,5 +187,11 @@ namespace ModListBackup.Core {
                 this.FailureReason = failureReason;
             }
         }
+
+        public string FailureReason { get; internal set; }
+        public string ModIdentifier { get; private set; }
+        public long Size { get; internal set; }
+        public bool Success { get; internal set; }
+        public bool Verified { get; internal set; }
     }
 }

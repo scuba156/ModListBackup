@@ -1,4 +1,4 @@
-﻿using ModListBackup.SearchBars;
+﻿using ModListBackup.UI.SearchBars;
 using ModListBackup.UI.Tools;
 using System.Collections.Generic;
 using UnityEngine;
@@ -93,24 +93,26 @@ namespace ModListBackup.UI.Tabs {
 
         internal override void DrawMainContent(Rect rect) {
             //TODO: Show warning icon and disable search if translation not available
+
             float height = (float)((ModListRelatedTools.Count + BackupRelatedTools.Count + DebugRelatedTools.Count) * 33f + (3 * 33f) + 52);
             float padding = (height > rect.height) ? 16f : 4f;
-            Rect innerRect = new Rect(0f, rect.yMin, rect.width - padding, height);
-            Widgets.BeginScrollView(rect, ref mainContentScrollPosition, innerRect, true);
+
+            Rect outerRect = new Rect(rect.xMin, rect.yMin, rect.width - 2f, rect.height);
+            Rect innerRect = new Rect(rect.xMin, rect.yMin, outerRect.width - padding, height);
+            Widgets.BeginScrollView(outerRect, ref mainContentScrollPosition, innerRect, true);
             Rect rect6 = innerRect.ContractedBy(4f);
-            Listing_Standard listing_Standard = new Listing_Standard {
+            Listing_Standard listing = new Listing_Standard {
                 ColumnWidth = rect6.width
             };
-            listing_Standard.Begin(rect6);
-            //listing_Standard.Gap();
+            listing.Begin(rect6);
 
             if (DebugRelatedTools.Count > 0) {
-                DrawToolListSection("Debug Tools", DebugRelatedTools, listing_Standard);
+                DrawToolListSection("Debug Tools", DebugRelatedTools, listing);
             }
-            DrawToolListSection("ModListToolsTitle".Translate(), ModListRelatedTools, listing_Standard);
-            DrawToolListSection("BackupToolsTitle".Translate(), BackupRelatedTools, listing_Standard);
+            DrawToolListSection("ModListToolsTitle".Translate(), ModListRelatedTools, listing);
+            DrawToolListSection("BackupToolsTitle".Translate(), BackupRelatedTools, listing);
 
-            listing_Standard.End();
+            listing.End();
             Widgets.EndScrollView();
         }
 
@@ -131,7 +133,6 @@ namespace ModListBackup.UI.Tabs {
             Text.Anchor = TextAnchor.UpperLeft;
             Rect descRect = new Rect(position.xMin, nameRect.yMax + 20f, position.width, 80f);
             Widgets.Label(descRect, SelectedTool.Description);
-
 
             bool onCooldown = true;
             if (toolCooldown > 0) {

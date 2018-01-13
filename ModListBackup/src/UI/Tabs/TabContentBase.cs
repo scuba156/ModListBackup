@@ -1,5 +1,5 @@
 ﻿using ExtraWidgets;
-using ModListBackup.SearchBars;
+using ModListBackup.UI.SearchBars;
 using UnityEngine;
 using Verse;
 
@@ -13,10 +13,9 @@ namespace ModListBackup.UI.Tabs {
         public static readonly float ButtonTinyWidth = 40f;
         internal readonly float LabelWidth = 20f;
         internal readonly float Padding = 5f;
-        private static float SortStringWidth;
-        private static float FilterStringWidth;
         internal Vector2 mainContentScrollPosition = new Vector2();
-
+        private static float FilterStringWidth;
+        private static float SortStringWidth;
         internal TabBase() {
             Init();
         }
@@ -93,7 +92,6 @@ namespace ModListBackup.UI.Tabs {
         }
 
         internal virtual void OnTabSelect() {
-
         }
 
         private void Init() {

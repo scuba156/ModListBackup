@@ -1,5 +1,5 @@
 ﻿using HugsLib.Core;
-using ModListBackup.Mods;
+using ModListBackup.Core;
 using ModListBackup.Utils;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,13 @@ using Verse;
 
 namespace ModListBackup.StorageContainers {
 
+    public enum SourceType { Unknown, Local, Steam }
+
     public class BackupDataStorageContainer : PersistentDataManager {
+        public BackupDataStorageContainer() {
+            Data = new List<BackupListStorageData>();
+        }
+
         public List<BackupListStorageData> Data { get; set; }
         protected override string FileName => PathUtils.Filename_Backups;
         protected override string FolderName => "ModListBackup";
@@ -22,11 +28,6 @@ namespace ModListBackup.StorageContainers {
         public void Save() {
             this.SaveData();
         }
-
-        public BackupDataStorageContainer() {
-            Data = new List<BackupListStorageData>();
-        }
-
         protected override void LoadFromXml(XDocument xml) {
             Data = new List<BackupListStorageData>();
             if (xml.Root == null) throw new NullReferenceException("Missing root node");
@@ -71,7 +72,6 @@ namespace ModListBackup.StorageContainers {
         protected override void WriteXml(XDocument xml) {
             var root = new XElement("ModBackups");
             foreach (var modBackupData in Data) {
-
                 if (modBackupData.ModBackupsList.Count == 0) return;
                 var modElem = new XElement("mod");
                 modElem.Add(new XElement("identifier", new XText(modBackupData.ModIdentifier)));
@@ -95,51 +95,19 @@ namespace ModListBackup.StorageContainers {
         }
     }
 
-    public class BackupStorageData {
-        public int Id { get; set; }
-        public DateTime CreationDate { get; set; }
-        public string ModHash { get; set; }
-        public long Size { get; set; }
-
-        internal BackupStorageData(int id) {
-            if (id < 0) {
-                Log.Message("Failed to create Backup MetaData with id " + id);
-                return;
-            }
-            this.Id = id;
-            CreationDate = DateTime.Now;
-        }
-
-        internal BackupStorageData() { }
-    }
-
     public class BackupListStorageData {
-        public List<BackupStorageData> ModBackupsList { get; set; }
-
-        public string Location { get; set; }
-        public string ModIdentifier { get; private set; }
-        public string Name { get; set; }
-        public ContentSource Source { get; set; }
-        public long TotalSize { get { long result = 0;  foreach (var backup in ModBackupsList) { result += backup.Size; } return result; } }
-        public string TotalSizeReadable { get { return PathUtils.GetBytesReadable(TotalSize); } }
-
-
-        public override string ToString() {
-            string s = "Identifier: " + this.ModIdentifier;
-            s += "\nName: " + this.Name;
-            s += "\nPath: " + this.Location;
-            s += "\nSource: " + this.Source;
-            return s;
-        }
-
         public BackupListStorageData(string Identifier) {
             this.ModIdentifier = Identifier;
             ModBackupsList = new List<BackupStorageData>();
         }
 
-        public BackupStorageData GetLatestBackup() {
-            return ModBackupsList.MaxBy(b=>b.CreationDate);
-        }
+        public string Location { get; set; }
+        public List<BackupStorageData> ModBackupsList { get; set; }
+        public string ModIdentifier { get; private set; }
+        public string Name { get; set; }
+        public ContentSource Source { get; set; }
+        public long TotalSize { get { long result = 0; foreach (var backup in ModBackupsList) { result += backup.Size; } return result; } }
+        public string TotalSizeReadable { get { return PathUtils.GetBytesReadable(TotalSize); } }
 
         public BackupStorageData BackupNow(ModMetaDataEnhanced mod, bool dohash = false) {
             BackupStorageData backup = new BackupStorageData(ModBackupsList.Count);
@@ -152,8 +120,36 @@ namespace ModListBackup.StorageContainers {
             ModBackupsList.Add(backup);
             return backup;
         }
+
+        public BackupStorageData GetLatestBackup() {
+            return ModBackupsList.MaxBy(b => b.CreationDate);
+        }
+
+        public override string ToString() {
+            string s = "Identifier: " + this.ModIdentifier;
+            s += "\nName: " + this.Name;
+            s += "\nPath: " + this.Location;
+            s += "\nSource: " + this.Source;
+            return s;
+        }
     }
 
-    public enum SourceType { Unknown, Local, Steam }
+    public class BackupStorageData {
+        internal BackupStorageData(int id) {
+            if (id < 0) {
+                Log.Message("Failed to create Backup MetaData with id " + id);
+                return;
+            }
+            this.Id = id;
+            CreationDate = DateTime.Now;
+        }
 
+        internal BackupStorageData() {
+        }
+
+        public DateTime CreationDate { get; set; }
+        public int Id { get; set; }
+        public string ModHash { get; set; }
+        public long Size { get; set; }
+    }
 }

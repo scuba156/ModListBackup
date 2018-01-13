@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Verse;
 
-namespace ModListBackup.SearchBars {
+namespace ModListBackup.UI.SearchBars {
     public abstract class SearchBarOptionsBase {
         public string SearchValue { get; set; }
         internal float FilterStringWidth { get; set; }
