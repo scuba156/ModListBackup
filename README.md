@@ -9,7 +9,6 @@
   <a href="#features">Features</a> | <a href="#requirements">Requirements</a> | <a href="#supported-languages">Languages</a> | <a href="#known-issues">Known Issues</a> | <a href="#donations">Donations</a>
 </ p>
 
-
 ---
 ## Description
 Mod List Backup enhances the original RimWorld Mod Menu with extra functionality to organize, backup and manage installed mods.
@@ -53,7 +52,7 @@ Mod List Backup enhances the original RimWorld Mod Menu with extra functionality
 * [Extra Widgets]() (Currently bundled. Source available later)
 
 ## Supported Languages
- See the [wiki](/wiki/Languages#translations) to help translate ModList Backup into more languages.
+ See the [wiki](https://github.com/scuba156/ModListBackup/wiki/Languages#translations) to help translate ModList Backup into more languages.
  * English
  * Chinese Simplified (partial)
  * Chinese Traditional (partial)
