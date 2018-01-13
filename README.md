@@ -5,12 +5,10 @@
   <img src="https://img.shields.io/badge/RimWorld%20Ver.-Beta%2018-blue.svg" alt="RimWorld Version Badge" />
   <img src="https://img.shields.io/badge/Build%20Ver.-2.0%20alpha-blue.svg" alt="Build Version Badge" />
   <img src="https://img.shields.io/badge/Status-Work%20In%20Progress-orange.svg" alt="Status Badge" />
+  <br />
+  <a href="#features">Features</a> | <a href="#requirements">Requirements</a> | <a href="#known-issues">Known Issues</a> | <a href="#donations">Donations</a>
 </ p>
 
-<p align="center">
-<a href="#donations">
-  <img src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_LG.gif" alt=Donate" /> </a>
-</ p>
 
 ---
 ## Description
@@ -56,7 +54,7 @@ Mod List Backup enhances the original RimWorld Mod Menu with extra functionality
 
 ## Known Issues
 * **Right click menu is disabled in OSX\Linux** ![Priority](https://img.shields.io/badge/Priority-Low-yellow.svg) <br /> The right click menu has been disabled due to a bug in Mono. Work arounds will be looked into at a later time. Low Priority as the menu can be accessed by clicking the icon to the left of the selected mod.
----
+
 ### Donations 
 ModList Backup and its source code is entirely available free of charge, and will never include advertisements or ask for money. Coding is my passion and my hobby. All donations are very appreciated and will help support what I love to do.
 
