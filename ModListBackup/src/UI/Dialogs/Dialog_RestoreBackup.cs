@@ -14,10 +14,10 @@ namespace ModListBackup.UI.Dialogs {
     internal class Dialog_RestoreBackup : Window {
         private BackupListStorageData BackupData;
         private ModMetaDataEnhanced ExistingMod;
+        private bool OverwriteCurrent = false;
         private int SelectedBackup;
         private bool verifiedFiles = false;
         private Thread verifyFilesThread;
-        private bool OverwriteCurrent = false;
 
         internal Dialog_RestoreBackup(BackupListStorageData backupData, int selectedBackup) {
             this.absorbInputAroundWindow = true;
@@ -88,7 +88,6 @@ namespace ModListBackup.UI.Dialogs {
             detailsListing.End();
             Text.Font = GameFont.Small;
 
-
             Rect bottomRect = new Rect(inRect.xMin, inRect.yMax - 40f, inRect.width, Page.BottomButHeight);
             DrawBottomButtons(bottomRect);
         }
@@ -120,7 +119,6 @@ namespace ModListBackup.UI.Dialogs {
                 DebugHelper.DrawBoxAroundRect(closeRect);
                 DebugHelper.DrawBoxAroundRect(startRect);
             }
-
         }
 
         private void StartRestore() {
@@ -129,7 +127,6 @@ namespace ModListBackup.UI.Dialogs {
             if (OverwriteCurrent) {
                 ModUtils.OverwriteMod(ExistingMod, Path.Combine(BackupData.Location, SelectedBackup.ToString()));
             } else {
-                
             }
         }
 
