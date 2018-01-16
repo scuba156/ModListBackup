@@ -47,17 +47,18 @@ namespace ModListBackup.Utils {
             return result;
         }
 
-        public static string CreateDirectoryMd5(string dir) {
+        internal static string CreateDirectoryMd5(string dir) {
             return CreateDirectoryMd5(new DirectoryInfo(dir));
         }
 
-        public static string CreateDirectoryMd5(DirectoryInfo dir) {
+        internal static string CreateDirectoryMd5(DirectoryInfo dir) {
+            // TODO : fix
             var filePaths = dir.GetFiles("*", SearchOption.AllDirectories).OrderBy(p => p.FullName).ToArray();
 
             using (var md5 = MD5.Create()) {
                 foreach (var filePath in filePaths) {
                     // hash path
-                    byte[] pathBytes = Encoding.UTF8.GetBytes(filePath.FullName);
+                    byte[] pathBytes = Encoding.UTF8.GetBytes(filePath.FullName.Replace(dir.FullName, ""));
                     md5.TransformBlock(pathBytes, 0, pathBytes.Length, pathBytes, 0);
 
                     // hash contents
@@ -73,7 +74,15 @@ namespace ModListBackup.Utils {
             }
         }
 
-        public static string GetBytesReadable(long i) {
+        internal static void CopyDirectory(string sourcePath, string DestinationPath) {
+            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, DestinationPath));
+
+            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+                File.Copy(newPath, newPath.Replace(sourcePath, DestinationPath), true);
+        }
+
+        internal static string GetBytesReadable(long i) {
             long absolute_i = (i < 0 ? -i : i);
             string suffix;
             double readable;

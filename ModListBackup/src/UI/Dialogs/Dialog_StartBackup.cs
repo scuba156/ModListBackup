@@ -15,13 +15,11 @@ namespace ModListBackup.UI.Dialogs {
         internal Vector2 listScrollPosition = new Vector2();
 
         private List<ListItem> currentList = new List<ListItem>();
-        private long selectedTotalSize;
-        private bool verifyBackups;
         private Thread FileSizeUpdateThread;
+        private long selectedTotalSize;
         private volatile bool threadStop = false;
-        public override Vector2 InitialSize => new Vector2(500f, 700f);
         private Dictionary<string, string> truncatedModNamesCache = new Dictionary<string, string>();
-
+        private bool verifyBackups;
 
         internal Dialog_StartBackup() {
             this.absorbInputAroundWindow = true;
@@ -34,6 +32,8 @@ namespace ModListBackup.UI.Dialogs {
                 currentList.Add(new ListItem(mod));
             }
         }
+
+        public override Vector2 InitialSize => new Vector2(500f, 700f);
 
         public override void DoWindowContents(Rect inRect) {
             //Title
@@ -66,7 +66,6 @@ namespace ModListBackup.UI.Dialogs {
             listing_Standard.End();
             Widgets.EndScrollView();
 
-
             //select all
             Text.Font = GameFont.Tiny;
             Text.Anchor = TextAnchor.UpperLeft;
@@ -74,7 +73,7 @@ namespace ModListBackup.UI.Dialogs {
             DebugHelper.DrawBoxAroundRect(selectAllRect);
             string selectLabel = "select all";
             bool select = true;
-            if (currentList.FindAll(m=>m.Checked).Count == currentList.Count) {
+            if (currentList.FindAll(m => m.Checked).Count == currentList.Count) {
                 selectLabel = "deselect all";
                 select = false;
             }
@@ -174,7 +173,7 @@ namespace ModListBackup.UI.Dialogs {
             }
             FileSizeUpdateThread = new Thread(() => {
                 long size = 0;
-                foreach (var item in currentList.FindAll(m=>m.Checked)) {
+                foreach (var item in currentList.FindAll(m => m.Checked)) {
                     if (threadStop || FileSizeUpdateThread.ThreadState == ThreadState.AbortRequested || FileSizeUpdateThread.ThreadState == ThreadState.StopRequested) {
                         Log.Message("aborted");
                         threadStop = false;
@@ -188,13 +187,17 @@ namespace ModListBackup.UI.Dialogs {
         }
 
         internal class ListItem {
+            private bool _checked;
 
             internal ListItem(ModMetaDataEnhanced mod) {
                 Mod = mod;
             }
-            private bool _checked;
-            internal bool Checked { get { return _checked; } set { _checked = value; }
+
+            internal bool Checked {
+                get { return _checked; }
+                set { _checked = value; }
             }
+
             internal ModMetaDataEnhanced Mod { get; set; }
         }
     }

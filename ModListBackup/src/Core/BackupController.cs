@@ -44,6 +44,7 @@ namespace ModListBackup.Core {
 
                     LongEventHandler.ExecuteWhenFinished(delegate {
                         Save();
+                        Page_ModsConfig_Controller.Notify_BackupListChanged();
                     });
                 }, "Deleting all mods", true, null);
             }, true));
@@ -69,19 +70,21 @@ namespace ModListBackup.Core {
                 if (verifyBackup) {
                     if (VerifyBackup(backup, mod)) {
                         result.Verified = true;
-                        Log.Message("verified " + mod.Identifier);
+                        DebugHelper.DebugMessage("Verified " + mod.Identifier);
                     } else {
                         result.FailureReason = "Failed to verify backup";
-                        Log.Message("verify failed for " + mod.Identifier);
+                        Log.Message("Verify failed for " + mod.Identifier);
                     }
                 } else {
-                    Log.Message("skipped verify");
+                    Log.Message("Skipped verify");
                 }
             } catch (Exception e) {
                 result.FailureReason = e.Message;
             }
 
             Mods.Add(existing);
+            Save();
+            Page_ModsConfig_Controller.Notify_BackupListChanged();
             return result;
         }
 
@@ -101,6 +104,7 @@ namespace ModListBackup.Core {
 
         public void Load() {
             modsContainer.Load();
+            DebugHelper.DebugMessage("Loaded {0} backups", modsContainer.Data.Count);
         }
 
         public void Save() {
@@ -114,10 +118,11 @@ namespace ModListBackup.Core {
                 foreach (ModMetaDataEnhanced mod in mods) {
                     LongEventHandler.SetCurrentEventText(string.Format("Please Wait\nBacking up {0}\n({1}/{2})", mod.Name, currentIndex, mods.Count));
                     results.Add(Backup(mod, verifyBackups));
-                    Save();
                     currentIndex++;
                 }
                 LongEventHandler.ExecuteWhenFinished(delegate {
+                    Save();
+                    Page_ModsConfig_Controller.Notify_BackupListChanged();
                     Page_ModsConfig_Controller.SetMessage("Created " + currentIndex + " backups", MessageTypeDefOf.PositiveEvent);
                     //Show backup results
                 });
@@ -171,6 +176,7 @@ namespace ModListBackup.Core {
                     LongEventHandler.ExecuteWhenFinished(delegate {
                         Mods.Clear();
                         Save();
+                        Page_ModsConfig_Controller.Notify_BackupListChanged();
                     });
                 }, "Deleting all mods", true, null);
             }, true));

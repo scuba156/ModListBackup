@@ -87,6 +87,10 @@ namespace ModListBackup.UI {
             CurrentTab.ExtraOnGUI();
         }
 
+        internal static void Notify_BackupListChanged() {
+            BackupsTab.Notify_BackupListChanged();
+        }
+
         internal static void Notify_ModsListChanged() {
             ModListTab.Notify_ModsListChanged();
         }

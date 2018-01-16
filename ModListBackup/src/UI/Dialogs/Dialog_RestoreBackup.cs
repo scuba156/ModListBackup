@@ -17,6 +17,7 @@ namespace ModListBackup.UI.Dialogs {
         private int SelectedBackup;
         private bool verifiedFiles = false;
         private Thread verifyFilesThread;
+        private bool OverwriteCurrent = false;
 
         internal Dialog_RestoreBackup(BackupListStorageData backupData, int selectedBackup) {
             this.absorbInputAroundWindow = true;
@@ -53,11 +54,13 @@ namespace ModListBackup.UI.Dialogs {
             listing.Begin(new Rect(inRect.xMin, DescRect.yMax + 10f, inRect.width, inRect.height - DescRect.yMax + 10f));
 
             if (ExistingMod != null) {
-                if (listing.RadioButton("Override current", true)) {
+                if (listing.RadioButton("Override current", OverwriteCurrent)) {
+                    OverwriteCurrent = !OverwriteCurrent;
                 }
             }
 
-            if (listing.RadioButton("Install As New", false)) {
+            if (listing.RadioButton("Install As New", !OverwriteCurrent)) {
+                OverwriteCurrent = !OverwriteCurrent;
             }
 
             listing.End();
@@ -108,16 +111,32 @@ namespace ModListBackup.UI.Dialogs {
 
             Rect startRect = new Rect(rect.xMax - ButtonWidgets.ButtonSmallWidth, rect.yMin, ButtonWidgets.ButtonSmallWidth, Page.BottomButHeight);
             if (Widgets.ButtonText(startRect, "RestoreButton".Translate())) {
+                if (OverwriteCurrent) {
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("Are You Sure?", () => { StartRestore(); }, true));
+                } else {
+                    StartRestore();
+                }
+
+                DebugHelper.DrawBoxAroundRect(closeRect);
+                DebugHelper.DrawBoxAroundRect(startRect);
             }
 
-            DebugHelper.DrawBoxAroundRect(closeRect);
-            DebugHelper.DrawBoxAroundRect(startRect);
+        }
+
+        private void StartRestore() {
+            Log.Message("Would Restore");
+
+            if (OverwriteCurrent) {
+                ModUtils.OverwriteMod(ExistingMod, Path.Combine(BackupData.Location, SelectedBackup.ToString()));
+            } else {
+                
+            }
         }
 
         private void StartVerifyFilesThread() {
             verifyFilesThread = new Thread(() => {
                 string genHash = PathUtils.CreateDirectoryMd5(Path.Combine(BackupData.Location, SelectedBackup.ToString()));
-                Log.Message(string.Format("comparing generated {0} | {1}", genHash, BackupData.ModBackupsList[SelectedBackup].ModHash));
+                DebugHelper.DebugMessage(string.Format("generated hashes {0} | {1}", genHash, BackupData.ModBackupsList[SelectedBackup].ModHash));
                 verifiedFiles = genHash.Equals(BackupData.ModBackupsList[SelectedBackup].ModHash);
             });
             verifyFilesThread.Start();

@@ -63,8 +63,10 @@ namespace ModListBackup.StorageContainers {
                         backupData.ModBackupsList.Add(backup);
                     }
                     Data.Add(backupData);
-                } catch (Exception) {
-                    throw;
+                } catch (Exception ex) {
+                    Log.Error("Failed to read backup data");
+                    Log.Error(ex.Message);
+                    throw ex;
                 }
             }
         }
@@ -116,7 +118,7 @@ namespace ModListBackup.StorageContainers {
             if (dohash) {
                 backup.ModHash = PathUtils.CreateDirectoryMd5(mod.RootDir);
             }
-            ModUtils.CopyMod(mod, Path.Combine(Location, backup.Id.ToString()));
+            PathUtils.CopyDirectory(mod.RootDir.FullName, Path.Combine(Location, backup.Id.ToString()));
             ModBackupsList.Add(backup);
             return backup;
         }

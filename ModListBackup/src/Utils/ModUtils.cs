@@ -16,7 +16,7 @@ namespace ModListBackup.Utils {
         internal static void InstallMod(ModMetaDataEnhanced mod, string newName) {
             string dest = Path.Combine(GenFilePaths.CoreModsFolderPath, newName.Replace(" ", ""));
 
-            CopyMod(mod, dest);
+            PathUtils.CopyDirectory(mod.RootDir.FullName, dest);
 
             ModMetaData newMod = new ModMetaData(dest);
             ModMetaDataEnhanced mmde = new ModMetaDataEnhanced(newMod) {
@@ -26,6 +26,9 @@ namespace ModListBackup.Utils {
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
             ModListController.Refresh();
             Page_ModsConfig_Controller.Notify_ModsListChanged();
+        }
+
+        internal static void OverwriteMod(ModMetaDataEnhanced originalMod, string newDataLocation) {
         }
 
         internal static void UnInstallMod(ModMetaDataEnhanced mod) {
@@ -43,12 +46,8 @@ namespace ModListBackup.Utils {
             Page_ModsConfig_Controller.Notify_ModsListChanged();
         }
 
-        internal static void CopyMod(ModMetaDataEnhanced mod, string DestinationPath) {
-            foreach (string dirPath in Directory.GetDirectories(mod.RootDir.FullName, "*", SearchOption.AllDirectories))
-                Directory.CreateDirectory(dirPath.Replace(mod.RootDir.FullName, DestinationPath));
-
-            foreach (string newPath in Directory.GetFiles(mod.RootDir.FullName, "*.*", SearchOption.AllDirectories))
-                File.Copy(newPath, newPath.Replace(mod.RootDir.FullName, DestinationPath), true);
+        internal static bool VerifyModFiles(string hash) {
+            return true;
         }
 
         private static void Unsubscribe(ModMetaDataEnhanced mod) {
@@ -56,10 +55,6 @@ namespace ModListBackup.Utils {
 
             ModListController.Refresh();
             Page_ModsConfig_Controller.Notify_SteamItemUnsubscribed(mod.OriginalMetaData.GetPublishedFileId());
-        }
-
-        internal static bool VerifyModFiles(string hash) {
-            return true;
         }
     }
 }
