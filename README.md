@@ -5,7 +5,9 @@
   <img src="https://img.shields.io/badge/RimWorld%20Ver.-Beta%2018-blue.svg" alt="RimWorld Version Badge" />
   <img src="https://img.shields.io/badge/Build%20Ver.-2.0%20alpha-blue.svg" alt="Build Version Badge" />
   <img src="https://img.shields.io/badge/Status-Work%20In%20Progress-orange.svg" alt="Status Badge" />
-  <br />
+  <a href="https://github.com/scuba156/ModListBackup/blob/master/LICENSE"> <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License Badge" /> </ a>
+  <p />
+<p align="center">
   <a href="#features">Features</a> | <a href="#requirements">Requirements</a> | <a href="#supported-languages">Languages</a> | <a href="#known-issues">Known Issues</a> | <a href="#donations">Donations</a>
 </ p>
 
