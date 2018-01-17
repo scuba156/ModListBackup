@@ -1,6 +1,7 @@
 ﻿using Harmony;
 using ModListBackup.Core;
 using ModListBackup.Mods;
+using ModListBackup.StorageContainers;
 using ModListBackup.UI;
 using RimWorld;
 using System.Collections.Generic;
@@ -14,18 +15,24 @@ namespace ModListBackup.Utils {
     internal static class ModUtils {
 
         internal static void InstallMod(ModMetaDataEnhanced mod, string newName) {
+            InstallMod(mod.RootDir.FullName, newName);
+        }
+
+        internal static ModMetaDataEnhanced InstallMod(string sourcePath, string newName) {
+
             string dest = Path.Combine(GenFilePaths.CoreModsFolderPath, newName.Replace(" ", ""));
 
-            PathUtils.CopyDirectory(mod.RootDir.FullName, dest);
+            PathUtils.CopyDirectory(sourcePath, dest);
 
             ModMetaData newMod = new ModMetaData(dest);
-            ModMetaDataEnhanced mmde = new ModMetaDataEnhanced(newMod) {
+            ModMetaDataEnhanced result = new ModMetaDataEnhanced(newMod) {
                 InstallName = newName
             };
 
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
             ModListController.Refresh();
             Page_ModsConfig_Controller.Notify_ModsListChanged();
+            return result;
         }
 
         internal static void OverwriteMod(ModMetaDataEnhanced originalMod, string newDataLocation) {
@@ -39,7 +46,6 @@ namespace ModListBackup.Utils {
                 messageBox.interactionDelay = 1f;
                 messageBox.closeOnClickedOutside = false;
                 Find.WindowStack.Add(messageBox);
-
             } catch (System.Exception ex) {
                 Log.Error(ex.Message);
                 throw ex;

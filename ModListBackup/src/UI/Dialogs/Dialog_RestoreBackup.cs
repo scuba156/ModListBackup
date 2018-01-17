@@ -5,6 +5,7 @@ using ModListBackup.Utils;
 using RimWorld;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 using Verse;
@@ -16,6 +17,7 @@ namespace ModListBackup.UI.Dialogs {
         private ModMetaDataEnhanced ExistingMod;
         private bool OverwriteCurrent = false;
         private int SelectedBackup;
+        private string NewName;
         private bool verifiedFiles = false;
         private Thread verifyFilesThread;
 
@@ -30,6 +32,7 @@ namespace ModListBackup.UI.Dialogs {
             ExistingMod = Core.ModListController.Instance.GetModEnhancedByIdentifier(backupData.ModIdentifier);
             BackupData = backupData;
             SelectedBackup = selectedBackup;
+            NewName = BackupData.Name;
         }
 
         public override Vector2 InitialSize => new Vector2(500f, 700f);
@@ -53,14 +56,22 @@ namespace ModListBackup.UI.Dialogs {
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(new Rect(inRect.xMin, DescRect.yMax + 10f, inRect.width, inRect.height - DescRect.yMax + 10f));
 
+            // Install as new
+            var origColor = GUI.color;
+            if (OverwriteCurrent) {
+                GUI.color = Color.gray;
+            }
+            NewName = listing.TextEntryLabeled("Name:", NewName);
+            GUI.color = origColor;
+            if (listing.RadioButton("Install As New", !OverwriteCurrent)) {
+                OverwriteCurrent = !OverwriteCurrent;
+            }
+
+            // Overwrite Current
             if (ExistingMod != null) {
                 if (listing.RadioButton("Override current", OverwriteCurrent)) {
                     OverwriteCurrent = !OverwriteCurrent;
                 }
-            }
-
-            if (listing.RadioButton("Install As New", !OverwriteCurrent)) {
-                OverwriteCurrent = !OverwriteCurrent;
             }
 
             listing.End();
@@ -71,7 +82,7 @@ namespace ModListBackup.UI.Dialogs {
             Text.Font = GameFont.Tiny;
 
             detailsListing.Label("Name: " + BackupData.Name);
-            detailsListing.Label("Size: " + BackupData.ModBackupsList[SelectedBackup].CreationDate.ToLongDateString());
+            detailsListing.Label("Created: " + BackupData.ModBackupsList[SelectedBackup].CreationDate.ToLongDateString());
             //detailsListing.Label("Location: " + BackupData.Location);
             detailsListing.Label("MD5: " + BackupData.ModBackupsList[SelectedBackup].ModHash);
 
@@ -113,7 +124,11 @@ namespace ModListBackup.UI.Dialogs {
                 if (OverwriteCurrent) {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("Are You Sure?", () => { StartRestore(); }, true));
                 } else {
-                    StartRestore();
+                    if (ModLister.AllInstalledMods.Where(m=>m.Name == NewName || m.Identifier == NewName.Replace(" ", "")).Count() == 0) {
+                        StartRestore();
+                    } else {
+                        Messages.Message(String.Format("'{0}' already exists.", NewName), MessageTypeDefOf.RejectInput);
+                    }
                 }
 
                 DebugHelper.DrawBoxAroundRect(closeRect);
@@ -122,18 +137,24 @@ namespace ModListBackup.UI.Dialogs {
         }
 
         private void StartRestore() {
-            Log.Message("Would Restore");
 
             if (OverwriteCurrent) {
                 ModUtils.OverwriteMod(ExistingMod, Path.Combine(BackupData.Location, SelectedBackup.ToString()));
                 this.Close();
             } else {
+                var path = Path.Combine(BackupData.Location, SelectedBackup.ToString());
+                var mod = ModUtils.InstallMod(path, NewName);
+                if (BackupController.Instance.VerifyBackup(BackupData.ModBackupsList[SelectedBackup], mod) == false) {
+                    Find.WindowStack.Add(new Dialog_MessageBox("Verify failed for " + NewName, "OK", null ));
+                }
             }
+
+            this.Close();
         }
 
         private void StartVerifyFilesThread() {
             verifyFilesThread = new Thread(() => {
-                string genHash = PathUtils.CreateDirectoryMd5(Path.Combine(BackupData.Location, SelectedBackup.ToString()));
+                string genHash = PathUtils.GenDirectoryMd5(Path.Combine(BackupData.Location, SelectedBackup.ToString()));
                 DebugHelper.DebugMessage(string.Format("generated hashes {0} | {1}", genHash, BackupData.ModBackupsList[SelectedBackup].ModHash));
                 verifiedFiles = genHash.Equals(BackupData.ModBackupsList[SelectedBackup].ModHash);
             });

@@ -29,11 +29,11 @@ namespace ModListBackup.Utils {
                 File.Copy(newPath, newPath.Replace(sourcePath, DestinationPath), true);
         }
 
-        internal static string CreateDirectoryMd5(string dir) {
-            return CreateDirectoryMd5(new DirectoryInfo(dir));
+        internal static string GenDirectoryMd5(string dir) {
+            return GenDirectoryMd5(new DirectoryInfo(dir));
         }
 
-        internal static string CreateDirectoryMd5(DirectoryInfo dir) {
+        internal static string GenDirectoryMd5(DirectoryInfo dir) {
             var filePaths = dir.GetFiles("*", SearchOption.AllDirectories).OrderBy(p => p.FullName).ToArray();
 
             using (var md5 = MD5.Create()) {

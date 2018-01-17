@@ -116,7 +116,7 @@ namespace ModListBackup.StorageContainers {
             backup.CreationDate = DateTime.Now;
             backup.Size = PathUtils.GetDirectorySize(mod.RootDir);
             if (dohash) {
-                backup.ModHash = PathUtils.CreateDirectoryMd5(mod.RootDir);
+                backup.ModHash = PathUtils.GenDirectoryMd5(mod.RootDir);
             }
             PathUtils.CopyDirectory(mod.RootDir.FullName, Path.Combine(Location, backup.Id.ToString()));
             ModBackupsList.Add(backup);

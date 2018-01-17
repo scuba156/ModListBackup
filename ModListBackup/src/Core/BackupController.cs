@@ -130,7 +130,7 @@ namespace ModListBackup.Core {
         }
 
         public bool VerifyBackup(BackupStorageData backup, ModMetaDataEnhanced mod) {
-            if (backup.ModHash == PathUtils.CreateDirectoryMd5(mod.RootDir))
+            if (backup.ModHash == PathUtils.GenDirectoryMd5(mod.RootDir))
                 return true;
             return false;
         }
