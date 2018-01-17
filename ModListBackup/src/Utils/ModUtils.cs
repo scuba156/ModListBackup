@@ -29,6 +29,21 @@ namespace ModListBackup.Utils {
         }
 
         internal static void OverwriteMod(ModMetaDataEnhanced originalMod, string newDataLocation) {
+            try {
+                ModsConfig.SetActive(originalMod.Identifier, false);
+                Directory.Delete(originalMod.RootDir.FullName, true);
+                PathUtils.CopyDirectory(newDataLocation, originalMod.RootDir.FullName);
+                ModsConfig.SetActive(originalMod.Identifier, true);
+                Page_ModsConfig_Controller.SetForceRestart();
+                var messageBox = Dialog_MessageBox.CreateConfirmation("Would you like to restart RimWorld now?\nNOTE: Bugs may occur until a restart is performed.", () => { ModsConfig.RestartFromChangedMods(); }, true);
+                messageBox.interactionDelay = 1f;
+                messageBox.closeOnClickedOutside = false;
+                Find.WindowStack.Add(messageBox);
+
+            } catch (System.Exception ex) {
+                Log.Error(ex.Message);
+                throw ex;
+            }
         }
 
         internal static void UnInstallMod(ModMetaDataEnhanced mod) {
@@ -44,10 +59,6 @@ namespace ModListBackup.Utils {
             AccessTools.Method(typeof(ModLister), "RebuildModList").Invoke(null, null);
             ModListController.Refresh();
             Page_ModsConfig_Controller.Notify_ModsListChanged();
-        }
-
-        internal static bool VerifyModFiles(string hash) {
-            return true;
         }
 
         private static void Unsubscribe(ModMetaDataEnhanced mod) {

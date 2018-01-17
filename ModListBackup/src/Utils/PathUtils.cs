@@ -14,8 +14,8 @@ namespace ModListBackup.Utils {
     internal static class PathUtils {
         internal const string FileExtensionXML = ".xml";
 
+        internal static readonly string DirHome = FolderUnderSaveData("ModListBackup"); //Must always be first initialized
         internal static readonly string DirBackupsDefault = Path.Combine(DirHome, "Backups");
-        internal static readonly string DirHome = FolderUnderSaveData("ModListBackup");
         internal static readonly string DirModSettings = Path.Combine(DirHome, "Mod");
         internal static readonly string Filename_Backups = "Backups" + FileExtensionXML;
         internal static readonly string Filename_ModsConfig = "ModsConfig" + FileExtensionXML;
@@ -25,7 +25,7 @@ namespace ModListBackup.Utils {
             foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
                 Directory.CreateDirectory(dirPath.Replace(sourcePath, DestinationPath));
 
-            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+            foreach (string newPath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
                 File.Copy(newPath, newPath.Replace(sourcePath, DestinationPath), true);
         }
 
@@ -34,7 +34,6 @@ namespace ModListBackup.Utils {
         }
 
         internal static string CreateDirectoryMd5(DirectoryInfo dir) {
-            // TODO : fix
             var filePaths = dir.GetFiles("*", SearchOption.AllDirectories).OrderBy(p => p.FullName).ToArray();
 
             using (var md5 = MD5.Create()) {

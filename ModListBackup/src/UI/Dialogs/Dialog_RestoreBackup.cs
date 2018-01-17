@@ -126,6 +126,7 @@ namespace ModListBackup.UI.Dialogs {
 
             if (OverwriteCurrent) {
                 ModUtils.OverwriteMod(ExistingMod, Path.Combine(BackupData.Location, SelectedBackup.ToString()));
+                this.Close();
             } else {
             }
         }

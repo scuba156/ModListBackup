@@ -27,6 +27,10 @@ namespace ModListBackup.UI.Dialogs {
 
         public Dialog_InstallMod(ModMetaDataEnhanced mod) {
             this.curMod = mod;
+        }
+
+        public override void PreOpen() {
+            base.PreOpen();
             this.OnReset();
         }
 
@@ -89,7 +93,7 @@ namespace ModListBackup.UI.Dialogs {
 
             this.curName = string.Format("{0} {1}", name, DefaultNameSuffix);
             string dirName = curName.Replace(" ", "");
-            int pos = curName.IndexOf(DefaultNameSuffix);
+            int pos = curName.IndexOf(DefaultNameSuffix, StringComparison.Ordinal);
 
             if (Directory.Exists(Path.Combine(GenFilePaths.CoreModsFolderPath, dirName))) {
                 int count = 1;

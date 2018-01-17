@@ -19,6 +19,8 @@ namespace ModListBackup.UI {
         private static readonly TabTools ToolsTab = new TabTools();
         private static TabBase CurrentTab;
 
+        private static bool ForceRestart = false;
+
         static Page_ModsConfig_Controller() {
             CurrentTab = ModListTab;
         }
@@ -28,6 +30,10 @@ namespace ModListBackup.UI {
             Backups,
             Config,
             Tools
+        }
+
+        internal static void SetForceRestart(bool restart = true) {
+            ForceRestart = restart;
         }
 
         internal static void DoWindowContents(this Page_ModsConfig _instance, Rect rect) {
@@ -71,12 +77,22 @@ namespace ModListBackup.UI {
             string closeText = "CloseButton".Translate();
             DebugHelper.DrawBoxAroundRect(closeRect);
             int hash = (int)AccessTools.Field(_instance.GetType(), "activeModsWhenOpenedHash").GetValue(_instance);
+            bool doRestart = ForceRestart;
+
             if (hash != ModLister.InstalledModsListHash(true)) {
+                doRestart = true;
+            }
+            if (doRestart) {
                 closeText = "RestartButton".Translate();
             }
+
             if (Widgets.ButtonText(closeRect, closeText)) {
                 OnClose();
-                _instance.Close();
+                if (doRestart) {
+                    ModsConfig.RestartFromChangedMods();
+                } else {
+                    _instance.Close();
+                }
             }
 
             Text.Font = origFont;
