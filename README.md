@@ -13,6 +13,8 @@
 
 ## Description
 
+**Work In Progress:** This project is currently a work in progress and **_WILL_** have many bugs in its current state.
+
 Mod List Backup enhances the original RimWorld Mod Menu with extra functionality to organize, backup and manage installed mods.
 
 ## Features
