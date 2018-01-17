@@ -34,7 +34,6 @@ Mod List Backup enhances the original RimWorld Mod Menu with extra functionality
 * Backup hash verification
 * Restore created backups
 * Multiple backups for each mod
-* Automatically detect and backup new mods
 * Auto delete older backups
 * Set a storage limit
 
@@ -45,16 +44,16 @@ Mod List Backup enhances the original RimWorld Mod Menu with extra functionality
 * Filter and sort mods and backups by name, load order, source, colours, incompatible and more
 * Set custom colours to mod names for easy highlighting or grouping
 * Rename a mod for easier identification
-* Easily browse files for locally installed mods
+* Easily browse directories of locally installed mods
 
 #### Improved UI
 
-* Clean and simple design
-* Tabbed sections
+* Clean and simple tabbed design
 * Larger list size to view more mods
 * More buttons that fit in with the original design
-* A searchable config tab with many options
-* A searchable tools tab for miscellaneous functions
+* Searchable config tab with many options
+* Searchable tools tab for miscellaneous functions
+* Keyboard shortcuts to navigate easier (See [Keybindings](https://github.com/scuba156/ModListBackup/wiki/Keybindings))
 
 ## Requirements
 
