@@ -48,7 +48,7 @@ namespace ModListBackup.Utils {
                 Find.WindowStack.Add(messageBox);
             } catch (System.Exception ex) {
                 Log.Error(ex.Message);
-                throw ex;
+                throw;
             }
         }
 

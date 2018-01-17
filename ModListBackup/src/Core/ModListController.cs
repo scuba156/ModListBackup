@@ -89,6 +89,7 @@ namespace ModListBackup.Core {
         }
 
         internal static bool ModListIsSet(int state) {
+            //TODO: Fix this
             return false;//File.Exists(PathUtils.GenModListFile(state));
         }
 

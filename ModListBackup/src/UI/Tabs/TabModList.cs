@@ -169,18 +169,36 @@ namespace ModListBackup.UI.Tabs {
                 }
 
                 if (Event.current.type == EventType.keyDown || Event.current.type == EventType.used && selectedMod != null) {
+                    bool reorder = Event.current.modifiers == (EventModifiers.Shift | EventModifiers.FunctionKey);
+
                     if (Event.current.keyCode == KeyCode.UpArrow) {
                         int selectedIndex = visibleModList.IndexOf(selectedMod);
                         if (selectedIndex > 0) {
-                            selectedMod = visibleModList[selectedIndex - 1];
-                            mainContentScrollPosition.y = visibleModList.IndexOf(selectedMod) * 23;
+                            if (reorder) {
+                                if (selectedMod.Active && visibleModList[selectedIndex - 1].Active) {
+                                    AccessTools.Method(typeof(ModsConfig), "Reorder").Invoke(null, new object[] { selectedIndex, selectedIndex - 1 });
+                                    SoundDefOf.TickHigh.PlayOneShotOnCamera(null);
+                                    UpdateVisibleModList();
+                                }
+                            } else {
+                                selectedMod = visibleModList[selectedIndex - 1];
+                                mainContentScrollPosition.y = visibleModList.IndexOf(selectedMod) * 23;
+                            }
                         }
                     }
                     if (Event.current.keyCode == KeyCode.DownArrow) {
                         int selectedIndex = visibleModList.IndexOf(selectedMod);
                         if (selectedIndex < visibleModList.Count - 1) {
-                            selectedMod = visibleModList[selectedIndex + 1];
-                            mainContentScrollPosition.y = visibleModList.IndexOf(selectedMod) * 23;
+                            if (reorder) {
+                                if (selectedMod.Active && visibleModList[selectedIndex + 1].Active) {
+                                    AccessTools.Method(typeof(ModsConfig), "Reorder").Invoke(null, new object[] { selectedIndex, selectedIndex + 1 });
+                                    SoundDefOf.TickHigh.PlayOneShotOnCamera(null);
+                                    UpdateVisibleModList();
+                                }
+                            } else {
+                                selectedMod = visibleModList[selectedIndex + 1];
+                                mainContentScrollPosition.y = visibleModList.IndexOf(selectedMod) * 23;
+                            }
                         }
                     }
                     if (Event.current.keyCode == KeyCode.Space) {

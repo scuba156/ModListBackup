@@ -68,11 +68,16 @@ namespace ModListBackup.UI.Dialogs {
             }
 
             // Overwrite Current
-            if (ExistingMod != null) {
-                if (listing.RadioButton("Override current", OverwriteCurrent)) {
-                    OverwriteCurrent = !OverwriteCurrent;
-                }
+            bool enabled = false;
+
+            if(ExistingMod != null && ExistingMod.OriginalMetaData.Source == ContentSource.LocalFolder) {
+                enabled = true;
             }
+
+            if (listing.RadioButton("Override current", OverwriteCurrent, enabled)) {
+                OverwriteCurrent = !OverwriteCurrent;
+            }
+            
 
             listing.End();
 

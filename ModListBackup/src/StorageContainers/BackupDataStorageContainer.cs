@@ -66,7 +66,7 @@ namespace ModListBackup.StorageContainers {
                 } catch (Exception ex) {
                     Log.Error("Failed to read backup data");
                     Log.Error(ex.Message);
-                    throw ex;
+                    throw;
                 }
             }
         }

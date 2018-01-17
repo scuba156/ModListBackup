@@ -98,6 +98,23 @@ namespace ModListBackup.UI.Tabs {
             if (Event.current.isMouse && Event.current.button == 1 && selectedMod != null) {
                 CreateContextFloatMenuMod(selectedMod).Invoke();
             }
+
+            if (Event.current.type == EventType.keyDown || Event.current.type == EventType.used && selectedMod != null) {
+                if (Event.current.keyCode == KeyCode.UpArrow) {
+                    int selectedIndex = visibleList.FirstIndexOf(m => m == selectedMod);
+                    if (selectedIndex > 0) {
+                        selectedMod = visibleList.ElementAt(selectedIndex - 1);
+                        mainContentScrollPosition.y = visibleList.FirstIndexOf(m => m == selectedMod) * 23;
+                    }
+                }
+                if (Event.current.keyCode == KeyCode.DownArrow) {
+                    int selectedIndex = visibleList.FirstIndexOf(m => m == selectedMod);
+                    if (selectedIndex < visibleList.Count() - 1) {
+                        selectedMod = visibleList.ElementAt(selectedIndex + 1);
+                        mainContentScrollPosition.y = visibleList.FirstIndexOf(m => m == selectedMod) * 23;
+                    }
+                }
+            }
         }
 
         internal void Notify_BackupListChanged() {

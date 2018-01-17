@@ -4,6 +4,7 @@ using ModListBackup.UI.Tabs;
 using ModListBackup.Utils;
 using RimWorld;
 using Steamworks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -18,6 +19,7 @@ namespace ModListBackup.UI {
         private static readonly List<TabRecord> TabContent = new List<TabRecord>();
         private static readonly TabTools ToolsTab = new TabTools();
         private static TabBase CurrentTab;
+        private static ModsConfigTab CurrentTabType;
 
         private static bool ForceRestart = false;
 
@@ -30,10 +32,6 @@ namespace ModListBackup.UI {
             Backups,
             Config,
             Tools
-        }
-
-        internal static void SetForceRestart(bool restart = true) {
-            ForceRestart = restart;
         }
 
         internal static void DoWindowContents(this Page_ModsConfig _instance, Rect rect) {
@@ -100,6 +98,24 @@ namespace ModListBackup.UI {
         }
 
         internal static void ExtraOnGUI() {
+            if (Event.current.type == EventType.KeyDown || Event.current.type == EventType.KeyUp) {
+                if (Event.current.keyCode == KeyCode.Tab) {
+                    if (CurrentTab.GetType() == typeof(TabModList)) {
+                        CurrentTab = BackupsTab;
+                    } else if (CurrentTab.GetType() == typeof(TabBackups)) {
+                        CurrentTab = ToolsTab;
+                    } else if (CurrentTab.GetType() == typeof(TabTools)) {
+                        CurrentTab = ConfigTab;
+                    } else {
+                        CurrentTab = ModListTab;
+                    }
+                    CurrentTab.OnTabSelect();
+
+                    Event.current.Use();
+                    return;
+                }
+            }
+
             CurrentTab.ExtraOnGUI();
         }
 
@@ -128,11 +144,16 @@ namespace ModListBackup.UI {
             Find.WindowStack.WindowOfType<Page_ModsConfig>().closeOnEscapeKey = value;
         }
 
+        internal static void SetForceRestart(bool restart = true) {
+            ForceRestart = restart;
+        }
         internal static void SetMessage(string message, MessageTypeDef messageTypeDef) {
             Messages.Message(message, messageTypeDef);
         }
 
         private static void DrawTabs(Rect rect) {
+            //if (TabContent != null)
+
             TabContent.Clear();
             TabContent.Add(new TabRecord("MainTab".Translate(), delegate {
                 CurrentTab = ModListTab;
