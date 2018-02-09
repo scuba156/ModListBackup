@@ -1,157 +1,153 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AAC133EF-7E43-4142-AFB1-24F99041B808}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModListBackup</RootNamespace>
-    <AssemblyName>ModListBackup</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="%24HugsLibChecker, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\rimworldhugslibchecker\Mods\HugsLibChecker\Assemblies\$HugsLibChecker.dll</HintPath>
-    </Reference>
-    <Reference Include="0Harmony, Version=1.0.9.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\1181070440\Assemblies\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ExtraWidgets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ExtraWidgets\ExtraWidgets\output\ExtraWidgets\Assemblies\ExtraWidgets.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="HugsLib">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\818773962\Assemblies\HugsLib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\DoWindowContents_Patch.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\ExtraOnGUI_Patch.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_ModsListChanged_Patch.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\PreOpen_Patch.cs" />
-    <Compile Include="src\Patches\Patcher.cs" />
-    <Compile Include="src\UI\SearchBars\BackupsSearchBarOptions.cs" />
-    <Compile Include="src\Core\BackupController.cs" />
-    <Compile Include="src\Core\ModListController.cs" />
-    <Compile Include="src\UI\SearchBars\ConfigSearchBarOptions.cs" />
-    <Compile Include="src\UI\SearchBars\SearchBarOptionsBase.cs" />
-    <Compile Include="src\UI\SearchBars\ToolsSearchBarOptions.cs" />
-    <Compile Include="src\StorageContainers\BackupDataStorageContainer.cs" />
-    <Compile Include="src\UI\Dialogs\Dialog_BackupReport.cs" />
-    <Compile Include="src\UI\Dialogs\Dialog_RestoreBackup.cs" />
-    <Compile Include="src\UI\Dialogs\Dialog_StartBackup.cs" />
-    <Compile Include="src\UI\Tabs\ConfigUIContent\ConfigUIContentBase.cs" />
-    <Compile Include="src\UI\Tabs\ToolsUIContent\BackupContent.cs" />
-    <Compile Include="src\UI\Tabs\ToolsUIContent\DebugContent.cs" />
-    <Compile Include="src\UI\Tabs\ToolsUIContent\ModListContent.cs" />
-    <Compile Include="src\UI\Tabs\ToolsUIContent\ToolUIContentBase.cs" />
-    <Compile Include="src\Utils\DebugHelper.cs" />
-    <Compile Include="src\Utils\ModUtils.cs" />
-    <Compile Include="src\StorageContainers\ModListSettingsStorageContainer.cs" />
-    <Compile Include="src\StorageContainers\ModListStateStorageContainer.cs" />
-    <Compile Include="src\Core\ModMetaDataEnhanced.cs" />
-    <Compile Include="src\UI\ModStatusMessages\NotificationActiveDuplicate.cs" />
-    <Compile Include="src\UI\ModStatusMessages\NotificationBase.cs" />
-    <Compile Include="src\UI\ModStatusMessages\NotificationNoBackup.cs" />
-    <Compile Include="src\UI\ModStatusMessages\NotificationVersionIncompatible.cs" />
-    <Compile Include="src\UI\SearchBars\ModListSearchBarOptions.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_SteamItemUnsubscribed_Patch.cs" />
-    <Compile Include="src\UI\Dialogs\Dialog_InstallMod.cs" />
-    <Compile Include="src\UI\Page_ModsConfig_Controller.cs" />
-    <Compile Include="src\UI\Dialogs\Dialog_EditNames.cs" />
-    <Compile Include="src\UI\Dialogs\Dialog_Import.cs" />
-    <Compile Include="src\UI\Tabs\TabContentBase.cs" />
-    <Compile Include="src\Utils\PathUtils.cs" />
-    <Compile Include="src\Utils\ModsConfigUtils.cs" />
-    <Compile Include="src\Utils\SaveFileUtils.cs" />
-    <Compile Include="src\Settings\SettingsHandler.cs" />
-    <Compile Include="src\Utils\SteamSyncUtils.cs" />
-    <Compile Include="src\Main.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Settings\StateNamesHandleType.cs" />
-    <Compile Include="src\UI\Tabs\TabBackups.cs" />
-    <Compile Include="src\UI\Tabs\TabConfig.cs" />
-    <Compile Include="src\UI\Tabs\TabModList.cs" />
-    <Compile Include="src\UI\Tabs\TabTools.cs" />
-    <Compile Include="src\UI\Textures.cs" />
-    <Compile Include="src\Utils\HarmonyUtils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".gitattributes" />
-    <None Include=".gitignore" />
-    <None Include="img\Preview.xcf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lib\%24HugsLibChecker.dll" />
-    <Content Include="Output\ModListBackup\About\About.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Output\ModListBackup\About\Preview.png" />
-    <Content Include="Output\ModListBackup\About\Version.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Output\ModListBackup\Assemblies\%24HugsLibChecker.dll" />
-    <Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
-    <Content Include="Output\ModListBackup\Languages\ChineseSimplified\Keyed\Chinese.xml" />
-    <Content Include="Output\ModListBackup\Languages\ChineseSimplified\LanguageInfo.xml" />
-    <Content Include="Output\ModListBackup\Languages\ChineseTraditional\Keyed\Chinese.xml" />
-    <Content Include="Output\ModListBackup\Languages\ChineseTraditional\LanguageInfo.xml" />
-    <Content Include="Output\ModListBackup\Languages\English\Keyed\English.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Output\ModListBackup\Languages\English\Keyed\Tools.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Output\ModListBackup\Languages\English\LanguageInfo.xml" />
-    <Content Include="Output\ModListBackup\Textures\undo-icon.png" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /I /E /Y "$(ProjectDir)Output\*" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\"</PostBuildEvent>
-  </PropertyGroup>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<ProjectGuid>{AAC133EF-7E43-4142-AFB1-24F99041B808}</ProjectGuid>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>ModListBackup</RootNamespace>
+		<AssemblyName>ModListBackup</AssemblyName>
+		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+		<FileAlignment>512</FileAlignment>
+		<TargetFrameworkProfile />
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>none</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
+		<DefineConstants>TRACE;DEBUG</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>0</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType>none</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="ExtraWidgets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>..\..\ExtraWidgets\ExtraWidgets\output\ExtraWidgets\Assemblies\ExtraWidgets.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Xml" />
+		<Reference Include="Microsoft.Build.Utilities" />
+		<Reference Include="Microsoft.Build.Tasks" />
+		<Reference Include="Microsoft.Build.Framework" />
+		<Reference Include="0Harmony">
+			<HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.0.1\lib\net35\0Harmony.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="HugsLib">
+			<HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.0.1\lib\net35\HugsLib.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="$HugsLibChecker">
+			<HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLibChecker.4.0.0\lib\net35\%24HugsLibChecker.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="src\Patches\Page_ModsConfig_Patches\DoWindowContents_Patch.cs" />
+		<Compile Include="src\Patches\Page_ModsConfig_Patches\ExtraOnGUI_Patch.cs" />
+		<Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_ModsListChanged_Patch.cs" />
+		<Compile Include="src\Patches\Page_ModsConfig_Patches\PreOpen_Patch.cs" />
+		<Compile Include="src\Patches\Patcher.cs" />
+		<Compile Include="src\UI\SearchBars\BackupsSearchBarOptions.cs" />
+		<Compile Include="src\Core\BackupController.cs" />
+		<Compile Include="src\Core\ModListController.cs" />
+		<Compile Include="src\UI\SearchBars\ConfigSearchBarOptions.cs" />
+		<Compile Include="src\UI\SearchBars\SearchBarOptionsBase.cs" />
+		<Compile Include="src\UI\SearchBars\ToolsSearchBarOptions.cs" />
+		<Compile Include="src\StorageContainers\BackupDataStorageContainer.cs" />
+		<Compile Include="src\UI\Dialogs\Dialog_BackupReport.cs" />
+		<Compile Include="src\UI\Dialogs\Dialog_RestoreBackup.cs" />
+		<Compile Include="src\UI\Dialogs\Dialog_StartBackup.cs" />
+		<Compile Include="src\UI\Tabs\ConfigUIContent\ConfigUIContentBase.cs" />
+		<Compile Include="src\UI\Tabs\ToolsUIContent\BackupContent.cs" />
+		<Compile Include="src\UI\Tabs\ToolsUIContent\DebugContent.cs" />
+		<Compile Include="src\UI\Tabs\ToolsUIContent\ModListContent.cs" />
+		<Compile Include="src\UI\Tabs\ToolsUIContent\ToolUIContentBase.cs" />
+		<Compile Include="src\Utils\DebugHelper.cs" />
+		<Compile Include="src\Utils\ModUtils.cs" />
+		<Compile Include="src\StorageContainers\ModListSettingsStorageContainer.cs" />
+		<Compile Include="src\StorageContainers\ModListStateStorageContainer.cs" />
+		<Compile Include="src\Core\ModMetaDataEnhanced.cs" />
+		<Compile Include="src\UI\ModStatusMessages\NotificationActiveDuplicate.cs" />
+		<Compile Include="src\UI\ModStatusMessages\NotificationBase.cs" />
+		<Compile Include="src\UI\ModStatusMessages\NotificationNoBackup.cs" />
+		<Compile Include="src\UI\ModStatusMessages\NotificationVersionIncompatible.cs" />
+		<Compile Include="src\UI\SearchBars\ModListSearchBarOptions.cs" />
+		<Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_SteamItemUnsubscribed_Patch.cs" />
+		<Compile Include="src\UI\Dialogs\Dialog_InstallMod.cs" />
+		<Compile Include="src\UI\Page_ModsConfig_Controller.cs" />
+		<Compile Include="src\UI\Dialogs\Dialog_EditNames.cs" />
+		<Compile Include="src\UI\Dialogs\Dialog_Import.cs" />
+		<Compile Include="src\UI\Tabs\TabContentBase.cs" />
+		<Compile Include="src\Utils\PathUtils.cs" />
+		<Compile Include="src\Utils\ModsConfigUtils.cs" />
+		<Compile Include="src\Utils\SaveFileUtils.cs" />
+		<Compile Include="src\Settings\SettingsHandler.cs" />
+		<Compile Include="src\Utils\SteamSyncUtils.cs" />
+		<Compile Include="src\Main.cs" />
+		<Compile Include="Properties\AssemblyInfo.cs" />
+		<Compile Include="src\Settings\StateNamesHandleType.cs" />
+		<Compile Include="src\UI\Tabs\TabBackups.cs" />
+		<Compile Include="src\UI\Tabs\TabConfig.cs" />
+		<Compile Include="src\UI\Tabs\TabModList.cs" />
+		<Compile Include="src\UI\Tabs\TabTools.cs" />
+		<Compile Include="src\UI\Textures.cs" />
+		<Compile Include="src\Utils\HarmonyUtils.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include=".gitattributes" />
+		<None Include=".gitignore" />
+		<None Include="img\Preview.xcf" />
+		<None Include="build\InstallMod.proj" />
+		<None Include="build\RimWorldLocations.txt" />
+		<None Include="build\tasks\FindRimWorld.task" />
+		<None Include="build\ImportReferences.proj" />
+		<None Include="packages.config" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="Output\ModListBackup\About\About.xml">
+			<SubType>Designer</SubType>
+		</Content>
+		<Content Include="Output\ModListBackup\About\Preview.png" />
+		<Content Include="Output\ModListBackup\About\Version.xml">
+			<SubType>Designer</SubType>
+		</Content>
+		<Content Include="Output\ModListBackup\Assemblies\%24HugsLibChecker.dll" />
+		<Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
+		<Content Include="Output\ModListBackup\Languages\ChineseSimplified\Keyed\Chinese.xml" />
+		<Content Include="Output\ModListBackup\Languages\ChineseSimplified\LanguageInfo.xml" />
+		<Content Include="Output\ModListBackup\Languages\ChineseTraditional\Keyed\Chinese.xml" />
+		<Content Include="Output\ModListBackup\Languages\ChineseTraditional\LanguageInfo.xml" />
+		<Content Include="Output\ModListBackup\Languages\English\Keyed\English.xml">
+			<SubType>Designer</SubType>
+		</Content>
+		<Content Include="Output\ModListBackup\Languages\English\Keyed\Tools.xml">
+			<SubType>Designer</SubType>
+		</Content>
+		<Content Include="Output\ModListBackup\Languages\English\LanguageInfo.xml" />
+		<Content Include="Output\ModListBackup\Textures\undo-icon.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="lib\" />
+	</ItemGroup>
+	<ItemGroup />
+	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<!-- Custom Events -->
+	<Import Project="build\ImportReferences.proj" />
+	<Import Project="build\InstallMod.proj" />
 </Project>
