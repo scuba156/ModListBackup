@@ -74,7 +74,8 @@ Mod List Backup enhances the original RimWorld Mod Menu with extra functionality
 
 ## Known Issues
 
-* **Right click menu is disabled in OSX\Linux** ![Priority](https://img.shields.io/badge/Priority-Low-yellow.svg) <br /> The right click menu has been disabled due to a bug in Mono. Work arounds will be looked into at a later time. Low Priority as the menu can be accessed by clicking the icon to the left of the selected mod.
+* **Some features are broken or do not work correctly** ![Priority](https://img.shields.io/badge/Priority-High-orange.svg) <br /> This project is still a work in progress, and I have focused on adding features while fixing things one by one. I aim to focus on fixing bugs before release. Feel free to create an issue ticket to track any problems you may find.
+* **Right click menu is disabled or missing in OSX\Linux** ![Priority](https://img.shields.io/badge/Priority-Low-yellow.svg) <br /> The right click menu has been disabled due to a bug in Mono. Work arounds will be looked into at a later time. Low Priority as the menu can be accessed by clicking the icon to the left of the selected mod.
 
 ### Donations
 
