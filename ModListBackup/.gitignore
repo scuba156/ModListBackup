@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 
 Output/ModListBackup/About/PublishedFileId.txt
+*.zip

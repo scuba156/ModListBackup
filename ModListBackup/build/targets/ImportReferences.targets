@@ -10,9 +10,14 @@
         If your RimWorld install is not detected, add the folder to 
         "RimWorldLocations.txt"
 -->
-<Project DefaultTargets="BeforeBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="tasks\FindRimWorld.task" />
-	<Target Name="ImportReferences" AfterTargets="BeforeBuild">
+	
+	<ItemGroup>  
+        <RimWorldRefrenceFiles Include="a.cs;b.cs;c.cs"/>  
+    </ItemGroup> 
+	
+	<Target Name="FindReferences" AfterTargets="BeforeBuild">
 		<FindRimWorld Condition="'$(RimWorldInstall)' == ''">
 			<Output TaskParameter="RimWorldInstall" PropertyName="RimWorldInstall" />
 			<Output TaskParameter="IsInstalled" PropertyName="IsInstalled" />
@@ -38,22 +43,25 @@
 		<PropertyGroup Condition="$(IsInstalled)">
 			<LibFolder>$(DataPath)\</LibFolder>
 		</PropertyGroup>
-		<!-- Load references -->
-		<ItemGroup Condition="'$(IsInstalled)' OR $(InLibFolder)">
-			<Reference Include="Assembly-CSharp">
-				<HintPath>$(LibFolder)\Assembly-CSharp.dll</HintPath>
-				<Private>False</Private>
-			</Reference>
-			<Reference Include="Assembly-CSharp-firstpass">
-				<HintPath>$(LibFolder)\Assembly-CSharp-firstpass.dll</HintPath>
-				<Private>False</Private>
-			</Reference>
-			<Reference Include="UnityEngine">
-				<HintPath>$(LibFolder)\UnityEngine.dll</HintPath>
-				<Private>False</Private>
-			</Reference>
-		</ItemGroup>
-		<!-- Assume nothing went wrong -->
-		<Message Text="Imported succesfully" Importance="high" Condition="'$(IsInstalled)'" />
+        <Message Text="Using path $(LibFolder)" Importance="high" Condition="'$(IsInstalled)'" />
+
+        <!-- Load references -->
+    <ItemGroup Condition="$(IsInstalled) == true OR $(InLibFolder) == true">
+      <Reference Include="Assembly-CSharp">
+        <HintPath>$(LibFolder)\Assembly-CSharp.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="Assembly-CSharp-firstpass">
+        <HintPath>$(LibFolder)\Assembly-CSharp-firstpass.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>$(LibFolder)\UnityEngine.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+    </ItemGroup>
 	</Target>
+
+  
+
 </Project>

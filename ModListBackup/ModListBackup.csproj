@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -34,7 +35,6 @@
 		<Reference Include="ExtraWidgets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>..\..\ExtraWidgets\ExtraWidgets\output\ExtraWidgets\Assemblies\ExtraWidgets.dll</HintPath>
-			<Private>False</Private>
 		</Reference>
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
@@ -45,16 +45,16 @@
 		<Reference Include="Microsoft.Build.Utilities" />
 		<Reference Include="Microsoft.Build.Tasks" />
 		<Reference Include="Microsoft.Build.Framework" />
-		<Reference Include="0Harmony">
-			<HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.0.1\lib\net35\0Harmony.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="HugsLib">
-			<HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.0.1\lib\net35\HugsLib.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
 		<Reference Include="$HugsLibChecker">
 			<HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLibChecker.4.0.0\lib\net35\%24HugsLibChecker.dll</HintPath>
+		</Reference>
+		<Reference Include="0Harmony">
+		  <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.1.1\lib\net35\0Harmony.dll</HintPath>
+		  <Private>False</Private>
+		</Reference>
+		<Reference Include="HugsLib">
+		  <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.1.1\lib\net35\HugsLib.dll</HintPath>
+		  <Private>False</Private>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
@@ -108,16 +108,20 @@
 		<Compile Include="src\UI\Tabs\TabTools.cs" />
 		<Compile Include="src\UI\Textures.cs" />
 		<Compile Include="src\Utils\HarmonyUtils.cs" />
+		<Compile Include="build\tasks\EmptyClass.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include=".gitattributes" />
 		<None Include=".gitignore" />
 		<None Include="img\Preview.xcf" />
-		<None Include="build\InstallMod.proj" />
 		<None Include="build\RimWorldLocations.txt" />
-		<None Include="build\tasks\FindRimWorld.task" />
-		<None Include="build\ImportReferences.proj" />
+		<None Include="build\tasks\FindRimWorld.tasks" />
 		<None Include="packages.config" />
+		<None Include="build\Build.targets" />
+		<None Include="build\Build.config" />
+		<None Include="build\tasks\ZipDirectory.tasks" />
+		<None Include="build\tasks\ReadAssemblyVersion.tasks" />
+		<None Include="build\tasks\WriteAssemblyVersion.tasks" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Output\ModListBackup\About\About.xml">
@@ -144,10 +148,10 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="lib\" />
+		<Folder Include="build\targets\" />
 	</ItemGroup>
 	<ItemGroup />
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-	<!-- Custom Events -->
-	<Import Project="build\ImportReferences.proj" />
-	<Import Project="build\InstallMod.proj" />
+	<!-- Custom Build Events -->
+  <Import Project="build\Build.targets" />
 </Project>

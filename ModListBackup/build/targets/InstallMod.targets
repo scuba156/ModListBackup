@@ -10,7 +10,7 @@
         "RimWorldLocations.txt"
 -->
 <Project DefaultTargets="AfterBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="tasks/FindRimWorld.task" />
+  <Import Project="..\tasks\FindRimWorld.task" />
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
 		<CopyCommand>xcopy /I /E /Y</CopyCommand>
 	</PropertyGroup>
@@ -23,7 +23,7 @@
 			<Output TaskParameter="RimWorldInstall" PropertyName="RimWorldInstall" />
 			<Output TaskParameter="IsInstalled" PropertyName="IsInstalled" />
 		</FindRimWorld>
-		<Message Text="RimWorld not found, skipping install" Importance="high" Condition="'!$(IsInstalled)'" />
+		<Message Text="RimWorld not found, skipping install" Importance="high" Condition="!$(IsInstalled)" />
 		<Message Text="If it is installed, check the path are correct in 'RimWorldLocations.txt'" Importance="high" Condition="'!$(IsInstalled)'" />
 		<Message Text="Installing $(MSBuildProjectName)..." Importance="high" Condition="'$(IsInstalled)'" />
 		<Exec Command="$(CopyCommand) &quot;$(ProjectDir)Output\$(MSBuildProjectName)&quot; &quot;$(RimWorldInstall)\Mods\$(MSBuildProjectName)&quot;" ConsoleToMSBuild="true" Condition="'$(IsInstalled)'" />

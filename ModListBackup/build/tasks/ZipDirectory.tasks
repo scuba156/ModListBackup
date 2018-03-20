@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ <UsingTask TaskName="ZipDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+     <ParameterGroup>
+    <ZipFileName ParameterType="System.String" Required="true" />
+    <DirectoryName ParameterType="System.String" Required="true" />
+  </ParameterGroup>
+  <Task>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Xml" />
+    <Using Namespace="System" />
+    <Using Namespace="System.IO.Compression" />
+    <Code Type="Fragment" Language="cs"><![CDATA[
+      try
+      {
+        //Log.LogMessage(MessageImportance.High, string.Format("Zipping Directory {0} to {1}", DirectoryName, ZipFileName));
+        File.Delete(ZipFileName);
+        ZipFile.CreateFromDirectory( DirectoryName, ZipFileName, CompressionLevel.Fastest, true);
+        return true;
+      }
+      catch(Exception ex)
+      {
+        Log.LogMessage(MessageImportance.High, ex.Message);
+        return false;
+      }
+    ]]></Code>
+  </Task>
+ </UsingTask>
+</Project>
