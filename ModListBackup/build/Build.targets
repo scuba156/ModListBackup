@@ -81,7 +81,7 @@
     <Message Text="RimWorld not found, skipping install" Importance="high" Condition="!$(RimWorldIsInstalled)" />
     <Message Text="If it is installed, check the path exists in 'RimWorldLocations.txt'" Importance="high" Condition="'!$(RimWorldIsInstalled)'" />
     <!-- RimWorld IS installed -->
-    <Exec Command="$(CopyCommand) '$(ProjectDir)Output\$(MSBuildProjectName)' '$(RimWorldInstall)\Mods\$(MSBuildProjectName)'" ConsoleToMSBuild="true" Condition="'$(RimWorldIsInstalled)'" />
+    <Exec Command='$(CopyCommand) "$(ProjectDir)Output\$(MSBuildProjectName)" "$(RimWorldInstall)\Mods\$(MSBuildProjectName)"' ConsoleToMSBuild="true" Condition="'$(RimWorldIsInstalled)'" />
     <Message Text="Installed $(MSBuildProjectName) v$(AssemblyVersionMajor).$(AssemblyVersionMinor).$(AssemblyVersionBuild).$(AssemblyVersionRevision)" Importance="high" Condition="'$(RimWorldIsInstalled)'" />
   </Target>
 

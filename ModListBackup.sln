@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "ModListBackup", "ModListBackup\ModListBackup.csproj", "{B48F92E2-DBB0-4C1E-9A1A-4577A2F29804}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModListBackup", "ModListBackup\ModListBackup.csproj", "{AAC133EF-7E43-4142-AFB1-24F99041B808}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B48F92E2-DBB0-4C1E-9A1A-4577A2F29804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B48F92E2-DBB0-4C1E-9A1A-4577A2F29804}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B48F92E2-DBB0-4C1E-9A1A-4577A2F29804}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B48F92E2-DBB0-4C1E-9A1A-4577A2F29804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAC133EF-7E43-4142-AFB1-24F99041B808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAC133EF-7E43-4142-AFB1-24F99041B808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAC133EF-7E43-4142-AFB1-24F99041B808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAC133EF-7E43-4142-AFB1-24F99041B808}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F826F50-FFAB-4B50-B267-2A968FDDF8FC}
 	EndGlobalSection
 EndGlobal
