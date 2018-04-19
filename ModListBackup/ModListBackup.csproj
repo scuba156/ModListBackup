@@ -32,10 +32,6 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
-		<Reference Include="ExtraWidgets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\..\ExtraWidgets\ExtraWidgets\output\ExtraWidgets\Assemblies\ExtraWidgets.dll</HintPath>
-		</Reference>
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Xml.Linq" />
@@ -50,11 +46,13 @@
 		</Reference>
 		<Reference Include="0Harmony">
 		  <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.1.1\lib\net35\0Harmony.dll</HintPath>
-		  <Private>False</Private>
 		</Reference>
 		<Reference Include="HugsLib">
 		  <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.1.1\lib\net35\HugsLib.dll</HintPath>
 		  <Private>False</Private>
+		</Reference>
+		<Reference Include="ExtraWidgets">
+		  <HintPath>lib\ExtraWidgets.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
@@ -122,6 +120,7 @@
 		<None Include="build\tasks\ZipDirectory.tasks" />
 		<None Include="build\tasks\ReadAssemblyVersion.tasks" />
 		<None Include="build\tasks\WriteAssemblyVersion.tasks" />
+		<None Include="lib\ExtraWidgets.dll" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Output\ModListBackup\About\About.xml">
