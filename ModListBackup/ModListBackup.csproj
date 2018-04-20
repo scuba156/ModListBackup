@@ -113,6 +113,7 @@
 		<Compile Include="src\Core\Mods\ModMetaDataEnhanced.cs" />
 		<Compile Include="src\UI\Dialogs\BackupCleanConfig.cs" />
 		<Compile Include="src\UI\Dialogs\Dialog_Base.cs" />
+		<Compile Include="build\tasks\EmptyClass.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include=".gitattributes" />
@@ -120,6 +121,16 @@
 		<None Include="img\Preview.xcf" />
 		<None Include="packages.config" />
 		<None Include="lib\ExtraWidgets.dll" />
+		<None Include="build\targets\CopyRimWorldLibs.targets" />
+		<None Include="build\targets\ImportReferences.targets" />
+		<None Include="build\targets\InstallMod.targets" />
+		<None Include="build\tasks\FindRimWorld.tasks" />
+		<None Include="build\tasks\ReadAssemblyVersion.tasks" />
+		<None Include="build\tasks\WriteAssemblyVersion.tasks" />
+		<None Include="build\tasks\ZipDirectory.tasks" />
+		<None Include="build\Build.config" />
+		<None Include="build\Build.targets" />
+		<None Include="build\RimWorldLocations.txt" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Output\ModListBackup\About\About.xml">
