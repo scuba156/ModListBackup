@@ -1,5 +1,6 @@
 ﻿using ExtraWidgets;
-using ModListBackup.Core;
+using ModListBackup.Core.Mods;
+using ModListBackup.Core.Backups;
 using ModListBackup.StorageContainers;
 using ModListBackup.Utils;
 using RimWorld;
@@ -29,7 +30,7 @@ namespace ModListBackup.UI.Dialogs {
             this.doCloseX = false;
             this.onlyOneOfTypeAllowed = true;
 
-            ExistingMod = Core.ModListController.Instance.GetModEnhancedByIdentifier(backupData.ModIdentifier);
+            ExistingMod = ModListController.Instance.GetModEnhancedByIdentifier(backupData.ModIdentifier);
             BackupData = backupData;
             SelectedBackup = selectedBackup;
             NewName = BackupData.Name;

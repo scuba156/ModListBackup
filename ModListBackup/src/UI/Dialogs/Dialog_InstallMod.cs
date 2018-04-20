@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 using ExtraWidgets.Dialogs;
-using ModListBackup.Core;
+using ModListBackup.Core.Mods;
 using ModListBackup.Utils;
 
 namespace ModListBackup.UI.Dialogs {

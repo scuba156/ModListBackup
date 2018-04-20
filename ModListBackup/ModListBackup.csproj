@@ -54,6 +54,10 @@
 		<Reference Include="ExtraWidgets">
 		  <HintPath>lib\ExtraWidgets.dll</HintPath>
 		</Reference>
+		<Reference Include="RimBuild">
+		  <HintPath>..\..\..\Projects\RimBuild\RimBuild\bin\Debug\RimBuild.dll</HintPath>
+		  <Private>False</Private>
+		</Reference>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="src\Patches\Page_ModsConfig_Patches\DoWindowContents_Patch.cs" />
@@ -62,8 +66,6 @@
 		<Compile Include="src\Patches\Page_ModsConfig_Patches\PreOpen_Patch.cs" />
 		<Compile Include="src\Patches\Patcher.cs" />
 		<Compile Include="src\UI\SearchBars\BackupsSearchBarOptions.cs" />
-		<Compile Include="src\Core\BackupController.cs" />
-		<Compile Include="src\Core\ModListController.cs" />
 		<Compile Include="src\UI\SearchBars\ConfigSearchBarOptions.cs" />
 		<Compile Include="src\UI\SearchBars\SearchBarOptionsBase.cs" />
 		<Compile Include="src\UI\SearchBars\ToolsSearchBarOptions.cs" />
@@ -80,7 +82,6 @@
 		<Compile Include="src\Utils\ModUtils.cs" />
 		<Compile Include="src\StorageContainers\ModListSettingsStorageContainer.cs" />
 		<Compile Include="src\StorageContainers\ModListStateStorageContainer.cs" />
-		<Compile Include="src\Core\ModMetaDataEnhanced.cs" />
 		<Compile Include="src\UI\ModStatusMessages\NotificationActiveDuplicate.cs" />
 		<Compile Include="src\UI\ModStatusMessages\NotificationBase.cs" />
 		<Compile Include="src\UI\ModStatusMessages\NotificationNoBackup.cs" />
@@ -106,21 +107,30 @@
 		<Compile Include="src\UI\Tabs\TabTools.cs" />
 		<Compile Include="src\UI\Textures.cs" />
 		<Compile Include="src\Utils\HarmonyUtils.cs" />
+		<Compile Include="src\Core\Backups\BackupCleaner.cs" />
+		<Compile Include="src\Core\Backups\BackupController.cs" />
+		<Compile Include="src\Core\Mods\ModListController.cs" />
+		<Compile Include="src\Core\Mods\ModMetaDataEnhanced.cs" />
+		<Compile Include="src\UI\Dialogs\BackupCleanConfig.cs" />
+		<Compile Include="src\UI\Dialogs\Dialog_Base.cs" />
 		<Compile Include="build\tasks\EmptyClass.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include=".gitattributes" />
 		<None Include=".gitignore" />
 		<None Include="img\Preview.xcf" />
-		<None Include="build\RimWorldLocations.txt" />
-		<None Include="build\tasks\FindRimWorld.tasks" />
 		<None Include="packages.config" />
-		<None Include="build\Build.targets" />
-		<None Include="build\Build.config" />
-		<None Include="build\tasks\ZipDirectory.tasks" />
+		<None Include="lib\ExtraWidgets.dll" />
+		<None Include="build\targets\CopyRimWorldLibs.targets" />
+		<None Include="build\targets\ImportReferences.targets" />
+		<None Include="build\targets\InstallMod.targets" />
+		<None Include="build\tasks\FindRimWorld.tasks" />
 		<None Include="build\tasks\ReadAssemblyVersion.tasks" />
 		<None Include="build\tasks\WriteAssemblyVersion.tasks" />
-		<None Include="lib\ExtraWidgets.dll" />
+		<None Include="build\tasks\ZipDirectory.tasks" />
+		<None Include="build\Build.config" />
+		<None Include="build\Build.targets" />
+		<None Include="build\RimWorldLocations.txt" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Output\ModListBackup\About\About.xml">
@@ -147,7 +157,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="lib\" />
-		<Folder Include="build\targets\" />
+		<Folder Include="src\Core\Backups\" />
+		<Folder Include="src\Core\Mods\" />
 	</ItemGroup>
 	<ItemGroup />
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

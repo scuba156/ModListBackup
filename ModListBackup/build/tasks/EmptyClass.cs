@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ModListBackup.build.tasks
+namespace RimBuild.build.tasks
 {
     public class EmptyClass
     {

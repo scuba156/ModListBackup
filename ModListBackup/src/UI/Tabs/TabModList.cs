@@ -1,7 +1,7 @@
 ﻿using ExtraWidgets;
 using ExtraWidgets.FloatMenu;
 using Harmony;
-using ModListBackup.Core;
+using ModListBackup.Core.Mods;
 using ModListBackup.Mods.Notifications;
 using ModListBackup.Settings;
 using ModListBackup.StorageContainers;

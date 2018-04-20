@@ -1,4 +1,4 @@
-﻿using ModListBackup.Core;
+﻿using ModListBackup.Core.Backups;
 using System;
 using Verse;
 
@@ -17,7 +17,7 @@ namespace ModListBackup.UI.Tools {
         internal override string Description => "BackupAllDescription".Translate();
 
         internal override Action OnStartAction => () => {
-            Core.BackupController.Instance.BackupAll(false, false, false);
+            BackupController.Instance.BackupAll(false, false, false);
         };
 
         internal override string OnFinishMessage => "BackupAllSuccessMessage".Translate();

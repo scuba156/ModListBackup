@@ -1,5 +1,5 @@
 ﻿using Harmony;
-using ModListBackup.Core;
+using ModListBackup.Core.Mods;
 using ModListBackup.Mods;
 using ModListBackup.StorageContainers;
 using ModListBackup.UI;

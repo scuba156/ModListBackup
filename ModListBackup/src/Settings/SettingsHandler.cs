@@ -1,5 +1,5 @@
 ﻿using HugsLib.Settings;
-using ModListBackup.Core;
+using ModListBackup.Core.Mods;
 using ModListBackup.Utils;
 using System;
 using UnityEngine;

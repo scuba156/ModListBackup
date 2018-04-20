@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace ModListBackup.Core {
+namespace ModListBackup.Core.Mods {
 
     public class ModListController {
 

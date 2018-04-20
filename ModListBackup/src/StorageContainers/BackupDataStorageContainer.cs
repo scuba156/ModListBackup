@@ -1,5 +1,5 @@
 ﻿using HugsLib.Core;
-using ModListBackup.Core;
+using ModListBackup.Core.Mods;
 using ModListBackup.Utils;
 using System;
 using System.Collections.Generic;
