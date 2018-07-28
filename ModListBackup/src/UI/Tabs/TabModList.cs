@@ -1,5 +1,5 @@
-﻿using ExtraWidgets;
-using ExtraWidgets.FloatMenu;
+﻿using RimToolsUI.ExtraWidgets;
+using RimToolsUI.FloatMenus;
 using Harmony;
 using ModListBackup.Core.Mods;
 using ModListBackup.Mods.Notifications;
@@ -100,10 +100,11 @@ namespace ModListBackup.UI.Tabs {
                     ModListController.Instance.RestorePreviousState();
             //if (ModListController.Instance.CanRestorePreviousState) { Log.Message("can restore"); }
 
-            // Undo Button
+            // Context Menu (As linux right-click is broken)
             Rect undoRect2 = new Rect(undoRect.xMax + Padding + 7f, undoRect.y, ButtonTinyWidth, Page.BottomButHeight);
             TooltipHandler.TipRegion(undoRect, "Button_Undo_Tooltip".Translate());
-            if (ButtonWidgets.ButtonImage(undoRect2, Textures.Undo, true, ModListController.Instance.CanRestorePreviousState)) {
+            if (ButtonWidgets.ButtonImage(undoRect2, Textures.ContextMenu, true, selectedMod != null)) {
+                ShowSelectedItemsContextMenu();
             }
 
             //Reset text
@@ -136,9 +137,9 @@ namespace ModListBackup.UI.Tabs {
                         }), MessageTypeDefOf.RejectInput);
                     } else {
                         Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmSteamWorkshopUpload".Translate(), delegate {
-                            SoundDefOf.TickHigh.PlayOneShotOnCamera(null);
+                            SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                             Dialog_MessageBox dialog_MessageBox = Dialog_MessageBox.CreateConfirmation("ConfirmContentAuthor".Translate(), delegate {
-                                SoundDefOf.TickHigh.PlayOneShotOnCamera(null);
+                                SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                                 AccessTools.Method(typeof(Workshop), "Upload").Invoke(null, new object[] { selectedMod.OriginalMetaData });
                             }, true, null);
                             dialog_MessageBox.buttonAText = "Yes".Translate();
@@ -148,6 +149,17 @@ namespace ModListBackup.UI.Tabs {
                         }, true, null));
                     }
                 }
+            }
+        }
+
+        private void ShowSelectedItemsContextMenu() {
+            if (selectedMod == null) {
+                return;
+            }
+            if (selectedMod.OriginalMetaData.Source == ContentSource.SteamWorkshop) {
+                CreateContextFloatMenuSteam(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
+            } else {
+                CreateContextFloatMenuLocal(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
             }
         }
 
@@ -161,11 +173,7 @@ namespace ModListBackup.UI.Tabs {
                     Page_ModsConfig_Controller.SetCloseOnEscapeKey(false);
             } else {
                 if (Event.current.isMouse && Event.current.button == 1) {
-                    if (selectedMod.OriginalMetaData.Source == ContentSource.SteamWorkshop) {
-                        CreateContextFloatMenuSteam(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
-                    } else {
-                        CreateContextFloatMenuLocal(ModListController.Instance.GetModEnhanced(selectedMod.OriginalMetaData)).Invoke();
-                    }
+                    ShowSelectedItemsContextMenu();
                 }
 
                 if (Event.current.type == EventType.keyDown || Event.current.type == EventType.used && selectedMod != null) {
@@ -177,7 +185,7 @@ namespace ModListBackup.UI.Tabs {
                             if (reorder) {
                                 if (selectedMod.Active && visibleModList[selectedIndex - 1].Active) {
                                     AccessTools.Method(typeof(ModsConfig), "Reorder").Invoke(null, new object[] { selectedIndex, selectedIndex - 1 });
-                                    SoundDefOf.TickHigh.PlayOneShotOnCamera(null);
+                                    SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                                     UpdateVisibleModList();
                                 }
                             } else {
@@ -192,7 +200,7 @@ namespace ModListBackup.UI.Tabs {
                             if (reorder) {
                                 if (selectedMod.Active && visibleModList[selectedIndex + 1].Active) {
                                     AccessTools.Method(typeof(ModsConfig), "Reorder").Invoke(null, new object[] { selectedIndex, selectedIndex + 1 });
-                                    SoundDefOf.TickHigh.PlayOneShotOnCamera(null);
+                                    SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                                     UpdateVisibleModList();
                                 }
                             } else {
@@ -392,9 +400,9 @@ namespace ModListBackup.UI.Tabs {
             if (SortingOptions.SearchValue.NullOrEmpty()) {
                 reorderableGroup = ReorderableWidget.NewGroup(delegate (int from, int to) {
                     AccessTools.Method(typeof(ModsConfig), "Reorder").Invoke(null, new object[] { from, to });
-                    SoundDefOf.TickHigh.PlayOneShotOnCamera(null);
+                    SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                     UpdateVisibleModList();
-                });
+                }, ReorderableDirection.Vertical);
             }
             if (visibleModList.Count == 0) {
                 listing_Standard.Label("No mods found!");

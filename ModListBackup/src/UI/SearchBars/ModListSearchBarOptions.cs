@@ -1,4 +1,4 @@
-﻿using ExtraWidgets.FloatMenu;
+﻿using RimToolsUI.FloatMenus;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -6,7 +6,7 @@ using Verse;
 namespace ModListBackup.UI.SearchBars {
 
     public class ModListFilterOptions : FilterOptionsBase {
-        public ModListFilterOptions() => SetAll(true);
+        public ModListFilterOptions() => SetShowAll(true);
 
         public bool ShowDisabled { get; set; }
         public bool ShowEnabled { get; set; }
@@ -14,22 +14,40 @@ namespace ModListBackup.UI.SearchBars {
         public bool ShowIncompatible { get; set; }
         public bool ShowLocal { get; set; }
         public bool ShowSteam { get; set; }
-        public override void SetAll(bool value) {
+
+        public override void SetShowAll(bool value) {
+            Log.Message("Setting Show all to " + value);
             ShowAll = value;
-            ShowDisabled = value;
-            ShowEnabled = value;
-            ShowIncompatible = value;
-            ShowLocal = value;
-            ShowSteam = value;
+            //if (value) {
+                ShowDisabled = value;
+                ShowEnabled = value;
+                ShowIncompatible = value;
+                ShowLocal = value;
+                ShowSteam = value;
+            //}
         }
+
+        private void update() {
+            if(ShowDisabled && 
+                ShowEnabled && 
+                //ShowHidden && 
+                ShowIncompatible && 
+                ShowLocal && 
+                ShowSteam) {
+                SetShowAll(true);
+            } else {
+                ShowAll = false;
+            }
+        }
+
         public override void ShowFloatMenu(Action OnChanged) {
             List<FloatMenuOption> options = new List<FloatMenuOption> {
-                new FloatMenuOptionCheckBox("All", (value) => { SetAll(value); OnChanged(); }, ShowAll),
-                new FloatMenuOptionCheckBox("Incompatible", (value) => { ShowIncompatible = value; OnChanged(); }, ShowIncompatible),
-                new FloatMenuOptionCheckBox("Disabled", (value) => { ShowDisabled = value; OnChanged(); }, ShowDisabled),
-                new FloatMenuOptionCheckBox("Enabled", (value) => { ShowEnabled = value; OnChanged(); }, ShowEnabled),
-                new FloatMenuOptionCheckBox("Local", (value) => { ShowLocal = value; OnChanged(); }, ShowLocal),
-                new FloatMenuOptionCheckBox("Steam", (value) => { ShowSteam = value; OnChanged(); }, ShowSteam)
+                new FloatMenuOptionCheckBox("All", (value) => { SetShowAll(value); OnChanged(); }, ShowAll),
+                new FloatMenuOptionCheckBox("Incompatible", (value) => { ShowIncompatible = value; update(); OnChanged(); }, ShowIncompatible),
+                new FloatMenuOptionCheckBox("Disabled", (value) => { ShowDisabled = value; update(); OnChanged(); }, ShowDisabled),
+                new FloatMenuOptionCheckBox("Enabled", (value) => { ShowEnabled = value; update(); OnChanged(); }, ShowEnabled),
+                new FloatMenuOptionCheckBox("Local", (value) => { ShowLocal = value; update(); OnChanged(); }, ShowLocal),
+                new FloatMenuOptionCheckBox("Steam", (value) => { ShowSteam = value; update(); OnChanged(); }, ShowSteam)
             };
             Find.WindowStack.Add(new FloatMenu(options));
         }
@@ -72,25 +90,6 @@ namespace ModListBackup.UI.SearchBars {
             Find.WindowStack.Add(new FloatMenu(options));
         }
 
-        //public void ToggleSortAlphabetical() {
-        //    Clear();
-        //    ortByAlphabetical = true;
-        //}
-
-        //public void ToggleSortColor() {
-        //    Clear();
-        //    _sortByColor = true;
-        //}
-
-        //public void ToggleSortLoadOrder() {
-        //    Clear();
-        //    _sortByLoadOrder = true;
-        //}
-
-        //public void SortBySource() {
-        //    Clear();
-        //    _sortBySource = true;
-        //}
         private void Clear() {
             SortByAlphabetical = false;
             SortByColor = false;

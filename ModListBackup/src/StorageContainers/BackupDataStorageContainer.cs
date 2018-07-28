@@ -56,7 +56,7 @@ namespace ModListBackup.StorageContainers {
                                     backup.ModHash = backupNode.Value;
                                 }
                             } catch (Exception e) {
-                                Log.Notify_Exception(e);
+                                Log.Error(e.Message);
                                 throw;
                             }
                         }

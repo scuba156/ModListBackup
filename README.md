@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/scuba156/ModListBackup/master/ModListBackup/Output/ModListBackup/About/Preview.png" alt="Logo" />
 </ p>
 <p align="center">
-  <img src="https://img.shields.io/badge/RimWorld%20Ver.-Beta%2018-blue.svg" alt="RimWorld Version Badge" />
+  <img src="https://img.shields.io/badge/RimWorld%20Ver.-1.0-blue.svg" alt="RimWorld Version Badge" />
   <img src="https://img.shields.io/badge/Build%20Ver.-2.0%20alpha-blue.svg" alt="Build Version Badge" />
   <img src="https://img.shields.io/badge/Status-Work%20In%20Progress-orange.svg" alt="Status Badge" />
   <a href="https://github.com/scuba156/ModListBackup/blob/master/LICENSE"> <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License Badge" /> </ a>

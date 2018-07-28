@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project DefaultTargets="BeforeBuild" InitialTargets="Start" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Start" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Import Files -->
     <Import Project="tasks\FindRimWorld.tasks" />
     <Import Project="tasks\ReadAssemblyVersion.tasks" />
@@ -22,7 +22,7 @@
     </ItemGroup>
 
   <!-- Entry Point -->
-  <Target Name="Start">
+  <Target Name="Start" BeforeTargets="BeforeBuild">
     <Message Text="Preparing for $(OS) build..." Importance="high" Condition="!$(SilentMode)"/>
 
     <!-- Tries to find if RimWorld is installed, and its location -->

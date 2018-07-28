@@ -1,4 +1,4 @@
-﻿using ExtraWidgets;
+﻿using RimToolsUI.ExtraWidgets;
 using ModListBackup.Core.Mods;
 using ModListBackup.Core.Backups;
 using ModListBackup.Mods;
@@ -263,7 +263,7 @@ namespace ModListBackup.UI.Tabs {
             float num = rect.width - 24f;
             string label = mod.Name.Truncate(num, this.truncatedModNamesCache);
 
-            if (ExtraWidgets.TextWidgets.LabelSelectable(rect, label, ref selected)) {
+            if (TextWidgets.LabelSelectable(rect, label, ref selected)) {
                 UpdateSelectedMod(mod);
             }
         }

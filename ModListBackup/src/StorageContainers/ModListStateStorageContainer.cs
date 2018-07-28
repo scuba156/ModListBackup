@@ -36,8 +36,12 @@ namespace ModListBackup.StorageContainers {
             Data = new ModListStateStorageData();
             if (xml.Root == null) throw new NullReferenceException("Missing root node");
 
+            DebugHelper.DebugMessage("Reading file {0}", Path.Combine(FolderName, FileName));
+
             XElement stateXml = xml.Element("ModListState");
             Data.BuildNumber = int.Parse(stateXml.Element("BuildNumber").Value);
+
+            DebugHelper.DebugMessage("Got build number {0}", Data.BuildNumber);
 
             foreach (var activeMod in stateXml.Element("ActiveMods").Elements("id"))
                 Data.ActiveMods.Add(activeMod.Value);

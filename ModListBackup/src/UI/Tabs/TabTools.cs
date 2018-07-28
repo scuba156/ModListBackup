@@ -34,7 +34,7 @@ namespace ModListBackup.UI.Tabs {
                 new ImportFromSave(),
                 new EnableOnlyCore(),
                 new EnableOnlyCoreWithModList(),
-                new CleanUninstalledFromSave(),
+                //new CleanUninstalledFromSave(),
                 new EditColors(),
                 new RemoveAllColors(),
                 new DeleteAllMods()

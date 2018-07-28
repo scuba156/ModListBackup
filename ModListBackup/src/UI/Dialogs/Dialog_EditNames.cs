@@ -34,7 +34,7 @@ namespace ModListBackup.UI.Dialogs {
         /// Constructor
         /// </summary>
         public Dialog_EditNames() {
-            this.closeOnEscapeKey = true;
+            this.closeOnCancel = true;
             this.doCloseButton = true;
             this.doCloseX = true;
             this.forcePause = true;

@@ -1,4 +1,4 @@
-﻿using ExtraWidgets.FloatMenu;
+﻿using RimToolsUI.FloatMenus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace ModListBackup.UI.SearchBars {
         public bool ShowAll { get; set; }
 
 
-        public virtual void SetAll(bool value) {
+        public virtual void SetShowAll(bool value) {
             ShowAll = value;
         }
 

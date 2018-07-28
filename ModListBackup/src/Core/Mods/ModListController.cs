@@ -39,6 +39,10 @@ namespace ModListBackup.Core.Mods {
             Instance.UpdateLoadedMods();
         }
 
+        public static void ActivateCurrentModList() {
+            Instance.UpdateLoadedMods();
+        }
+
         public ModMetaDataEnhanced GetModEnhanced(ModMetaData mod) {
             return ActiveModList.First(m => m.OriginalMetaData == mod);
         }
@@ -48,6 +52,7 @@ namespace ModListBackup.Core.Mods {
         }
 
         public IEnumerable<ModMetaDataEnhanced> LoadState(int stateId) {
+            Page_ModsConfig_Controller.SetMessage("Loading state " + stateId, MessageTypeDefOf.NeutralEvent);
             ModListStateStorageContainer file = new ModListStateStorageContainer(stateId);
             file.Load();
             SetActiveMods(file.Data);
@@ -91,6 +96,20 @@ namespace ModListBackup.Core.Mods {
         internal static bool ModListIsSet(int state) {
             //TODO: Fix this
             return false;//File.Exists(PathUtils.GenModListFile(state));
+        }
+
+        internal IEnumerable<ModMetaDataEnhanced> ModsInLoadOrder() {
+            foreach (ModMetaData mod in ModsConfig.ActiveModsInLoadOrder) {
+                yield return GetModEnhancedByIdentifier(mod.Identifier);
+            }
+            foreach (ModMetaDataEnhanced mod2 in from m in ActiveModList
+                                                 orderby m.Name ascending
+                                                 orderby m.VersionCompatible descending
+                                                 //orderby m.OriginalMetaData.OnSteamWorkshop ascending
+                                                 where !m.Active
+                                                 select m) {
+                yield return mod2;
+            }
         }
 
         internal List<ModMetaDataEnhanced> ModsInSortedOrder(ModListSearchBarOptions options) {
@@ -168,8 +187,7 @@ namespace ModListBackup.Core.Mods {
             }
             PreviousStateMetaData = CurrentStateMetaData;
             CurrentStateMetaData = data;
-            DebugHelper.DebugMessage("Undo:There are currently {0} active mods, previously there was {1} active.", CurrentStateMetaData.ActiveMods.Count, PreviousStateMetaData.ActiveMods.Count);
-
+            //DebugHelper.DebugMessage("Undo:There are currently {0} active mods, previously there was {1} active.", CurrentStateMetaData.ActiveMods.Count, PreviousStateMetaData.ActiveMods.Count);
             Page_ModsConfig_Controller.Notify_ModsListChanged();
         }
 
@@ -178,6 +196,7 @@ namespace ModListBackup.Core.Mods {
             foreach (var mod in ModLister.AllInstalledMods.Where(m => m.enabled)) {
                 ActiveModList.Add(new ModMetaDataEnhanced(mod));
             }
+
 
             DebugHelper.DebugMessage("Updated with {0} loaded mods from {1} mods.", ActiveModList.Count, ModLister.AllInstalledMods.Count());
         }

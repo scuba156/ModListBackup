@@ -23,7 +23,7 @@ namespace ModListBackup.UI.Dialogs {
         private float titleHeight = 45f;
 
         public Dialog_Import() {
-            this.closeOnEscapeKey = true;
+            this.closeOnCancel = true;
             this.doCloseButton = true;
             this.doCloseX = true;
             this.forcePause = true;

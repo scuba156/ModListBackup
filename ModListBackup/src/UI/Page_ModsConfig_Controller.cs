@@ -1,5 +1,6 @@
-﻿using ExtraWidgets;
+﻿using RimToolsUI.ExtraWidgets;
 using Harmony;
+using ModListBackup.Core.Mods;
 using ModListBackup.UI.Tabs;
 using ModListBackup.Utils;
 using RimWorld;
@@ -87,6 +88,8 @@ namespace ModListBackup.UI {
             if (Widgets.ButtonText(closeRect, closeText)) {
                 OnClose();
                 if (doRestart) {
+                    //Utils.ModsConfigUtils.SetActiveMods(ModListController.Instance.);
+                    ModsConfig.Save();
                     ModsConfig.RestartFromChangedMods();
                 } else {
                     _instance.Close();
@@ -141,7 +144,7 @@ namespace ModListBackup.UI {
         }
 
         internal static void SetCloseOnEscapeKey(bool value) {
-            Find.WindowStack.WindowOfType<Page_ModsConfig>().closeOnEscapeKey = value;
+            Find.WindowStack.WindowOfType<Page_ModsConfig>().closeOnCancel = value;
         }
 
         internal static void SetForceRestart(bool restart = true) {

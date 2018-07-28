@@ -1,4 +1,4 @@
-﻿using ExtraWidgets;
+﻿using RimToolsUI.ExtraWidgets;
 using ModListBackup.Core.Mods;
 using ModListBackup.Core.Backups;
 using ModListBackup.StorageContainers;
@@ -25,7 +25,7 @@ namespace ModListBackup.UI.Dialogs {
         internal Dialog_RestoreBackup(BackupListStorageData backupData, int selectedBackup) {
             this.absorbInputAroundWindow = true;
             this.closeOnClickedOutside = false;
-            this.closeOnEscapeKey = true;
+            this.closeOnCancel = true;
             this.doCloseButton = false;
             this.doCloseX = false;
             this.onlyOneOfTypeAllowed = true;
