@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -18,9 +18,10 @@
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Output\ModListBackup\Assemblies\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -29,82 +30,107 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="%24HugsLibChecker, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RimworldHugsLibChecker\Mods\HugsLibChecker\Assemblies\$HugsLibChecker.dll</HintPath>
+    <Reference Include="%24HugsLibChecker, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLibChecker.5.0.0\lib\net35\$HugsLibChecker.dll</HintPath>
     </Reference>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\RimworldHugsLib\Mods\HugsLib\Assemblies\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="0Harmony, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.5.0.0\lib\net35\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="1RimToolsUI">
+      <HintPath>..\..\RimToolsUI\RimToolsUI\Output\RimToolsUI\Assemblies\1RimToolsUI.dll</HintPath>
+    </Reference>
+    <Reference Include="HugsLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.5.0.0\lib\net35\HugsLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ExtraWidgets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ExtraWidgets\ExtraWidgets\output\ExtraWidgets\Assemblies\ExtraWidgets.dll</HintPath>
-    </Reference>
-    <Reference Include="HugsLib">
-      <HintPath>..\..\RimworldHugsLib\Mods\HugsLib\Assemblies\HugsLib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="Microsoft.Build.Conversion.v3.5" />
+    <Reference Include="Microsoft.Build.Engine" />
+    <Reference Include="Microsoft.Build.Tasks.v3.5" />
+    <Reference Include="Microsoft.Build.Utilities.v3.5" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Mods\ModController.cs" />
-    <Compile Include="src\Mods\ModListController.cs" />
-    <Compile Include="src\Mods\ModMetaDataEnhanced.cs" />
-    <Compile Include="src\Mods\ModSettingsController.cs" />
-    <Compile Include="src\Mods\Notifications\NotificationActiveDuplicate.cs" />
-    <Compile Include="src\Mods\Notifications\NotificationBase.cs" />
-    <Compile Include="src\Mods\Notifications\NotificationVersionIncompatible.cs" />
-    <Compile Include="src\Mods\UndoAction.cs" />
+    <Compile Include="src\Core\Backups\BackupController.cs" />
     <Compile Include="src\Patches\Page_ModsConfig_Patches\DoWindowContents_Patch.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\ExtraOnGUI_Patch.cs" />
     <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_ModsListChanged_Patch.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_SteamItemUnsubscribed_Patch.cs" />
     <Compile Include="src\Patches\Page_ModsConfig_Patches\PreOpen_Patch.cs" />
-    <Compile Include="src\UI\Common.cs" />
-    <Compile Include="src\UI\Dialogs\ConfirmCancelResetDialog.cs" />
-    <Compile Include="src\UI\Dialogs\InstallModDialog.cs" />
+    <Compile Include="src\Patches\Patcher.cs" />
+    <Compile Include="src\UI\SearchBars\BackupsSearchBarOptions.cs" />
+    <Compile Include="src\UI\SearchBars\ConfigSearchBarOptions.cs" />
+    <Compile Include="src\UI\SearchBars\SearchBarOptionsBase.cs" />
+    <Compile Include="src\UI\SearchBars\ToolsSearchBarOptions.cs" />
+    <Compile Include="src\StorageContainers\BackupDataStorageContainer.cs" />
+    <Compile Include="src\UI\Dialogs\Dialog_BackupReport.cs" />
+    <Compile Include="src\UI\Dialogs\Dialog_RestoreBackup.cs" />
+    <Compile Include="src\UI\Dialogs\Dialog_StartBackup.cs" />
+    <Compile Include="src\UI\Tabs\ConfigUIContent\ConfigUIContentBase.cs" />
+    <Compile Include="src\UI\Tabs\ToolsUIContent\BackupContent.cs" />
+    <Compile Include="src\UI\Tabs\ToolsUIContent\DebugContent.cs" />
+    <Compile Include="src\UI\Tabs\ToolsUIContent\ModListContent.cs" />
+    <Compile Include="src\UI\Tabs\ToolsUIContent\ToolUIContentBase.cs" />
+    <Compile Include="src\Utils\DebugHelper.cs" />
+    <Compile Include="src\Utils\ModUtils.cs" />
+    <Compile Include="src\StorageContainers\ModListSettingsStorageContainer.cs" />
+    <Compile Include="src\StorageContainers\ModListStateStorageContainer.cs" />
+    <Compile Include="src\UI\ModStatusMessages\NotificationActiveDuplicate.cs" />
+    <Compile Include="src\UI\ModStatusMessages\NotificationBase.cs" />
+    <Compile Include="src\UI\ModStatusMessages\NotificationNoBackup.cs" />
+    <Compile Include="src\UI\ModStatusMessages\NotificationVersionIncompatible.cs" />
+    <Compile Include="src\UI\SearchBars\ModListSearchBarOptions.cs" />
+    <Compile Include="src\Patches\Page_ModsConfig_Patches\Notify_SteamItemUnsubscribed_Patch.cs" />
+    <Compile Include="src\UI\Dialogs\Dialog_InstallMod.cs" />
     <Compile Include="src\UI\Page_ModsConfig_Controller.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_EditNames.cs" />
     <Compile Include="src\UI\Dialogs\Dialog_Import.cs" />
-    <Compile Include="src\Controllers\PathHandler.cs" />
-    <Compile Include="src\Mods\ModsConfigHandler.cs" />
-    <Compile Include="src\Controllers\SaveFileHandler.cs" />
-    <Compile Include="src\Controllers\Settings\SettingsHandler.cs" />
-    <Compile Include="src\Controllers\SteamSyncHandler.cs" />
+    <Compile Include="src\UI\Tabs\TabContentBase.cs" />
+    <Compile Include="src\Utils\PathUtils.cs" />
+    <Compile Include="src\Utils\ModsConfigUtils.cs" />
+    <Compile Include="src\Utils\SaveFileUtils.cs" />
+    <Compile Include="src\Settings\SettingsHandler.cs" />
+    <Compile Include="src\Utils\SteamSyncUtils.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Controllers\Settings\StateNamesHandleType.cs" />
-    <Compile Include="src\Patches\Page_ModsConfig_Patches\ExtraOnGUI_Patch.cs" />
+    <Compile Include="src\Settings\StateNamesHandleType.cs" />
+    <Compile Include="src\UI\Tabs\TabBackups.cs" />
+    <Compile Include="src\UI\Tabs\TabConfig.cs" />
+    <Compile Include="src\UI\Tabs\TabModList.cs" />
+    <Compile Include="src\UI\Tabs\TabTools.cs" />
     <Compile Include="src\UI\Textures.cs" />
     <Compile Include="src\Utils\HarmonyUtils.cs" />
+    <Compile Include="src\Core\Mods\ModListController.cs" />
+    <Compile Include="src\Core\Mods\ModMetaDataEnhanced.cs" />
+    <Compile Include="src\UI\Dialogs\BackupCleanConfig.cs" />
+    <Compile Include="src\UI\Dialogs\Dialog_Base.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="img\Preview.xcf" />
-    <None Include="Output\ModListBackup\Textures\Thumbs.db" />
+    <None Include="packages.config" />
+    <None Include="lib\ExtraWidgets.dll" />
+    <None Include="build\targets\CopyRimWorldLibs.targets" />
+    <None Include="build\targets\ImportReferences.targets" />
+    <None Include="build\targets\InstallMod.targets" />
+    <None Include="build\tasks\FindRimWorld.tasks" />
+    <None Include="build\tasks\ReadAssemblyVersion.tasks" />
+    <None Include="build\tasks\WriteAssemblyVersion.tasks" />
+    <None Include="build\tasks\ZipDirectory.tasks" />
+    <None Include="build\Build.config" />
+    <None Include="build\Build.targets" />
+    <None Include="build\RimWorldLocations.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\%24HugsLibChecker.dll" />
     <Content Include="Output\ModListBackup\About\About.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -114,7 +140,6 @@
     </Content>
     <Content Include="Output\ModListBackup\Assemblies\%24HugsLibChecker.dll" />
     <Content Include="Output\ModListBackup\Assemblies\ModListBackup.dll" />
-    <Content Include="Output\ModListBackup\Assemblies\RimWorldHandler.dll" />
     <Content Include="Output\ModListBackup\Languages\ChineseSimplified\Keyed\Chinese.xml" />
     <Content Include="Output\ModListBackup\Languages\ChineseSimplified\LanguageInfo.xml" />
     <Content Include="Output\ModListBackup\Languages\ChineseTraditional\Keyed\Chinese.xml" />
@@ -122,13 +147,16 @@
     <Content Include="Output\ModListBackup\Languages\English\Keyed\English.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Output\ModListBackup\Languages\English\Keyed\Tools.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Output\ModListBackup\Languages\English\LanguageInfo.xml" />
-    <Content Include="Output\ModListBackup\Textures\undo-icon.png" />
-    <Content Include="Output\ModListBackup\Textures\whiteBG.png" />
+    <Content Include="Output\ModListBackup\Textures\ContextMenu-Icon.png" />
+    <Content Include="Output\ModListBackup\Textures\Undo-Icon.png" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /I /E /Y "$(ProjectDir)Output\*" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\"</PostBuildEvent>
-  </PropertyGroup>
+  <!-- Custom Build Events -->
+  <Import Project="build\Build.targets" />
 </Project>

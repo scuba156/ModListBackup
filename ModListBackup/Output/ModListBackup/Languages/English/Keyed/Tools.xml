@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+	<ModListToolsTitle>Mod List Related Tools</ModListToolsTitle>
+	<BackupToolsTitle>Backup Related Tools</BackupToolsTitle>
+
+	<BackupAllButtonText>Backup All Mods</BackupAllButtonText>
+	<BackupAllSuccessMessage>All mods backuped successfully.</BackupAllSuccessMessage>
+	<BackupAllDescription>Backup all installed mods.</BackupAllDescription>
+
+	<CleanUninstalledFromSaveButtonText>Clean Uninstalled Mods From Save File</CleanUninstalledFromSaveButtonText>
+	<CleanUninstalledFromSaveDescription></CleanUninstalledFromSaveDescription>
+	<CleanUninstalledFromSaveSuccessMessage></CleanUninstalledFromSaveSuccessMessage>
+	
+	<DeleteAllModsButtonText>Delete All Installed Mods</DeleteAllModsButtonText>
+	<DeleteAllModsDescription></DeleteAllModsDescription>
+	<DeleteAllModsSuccessMessage></DeleteAllModsSuccessMessage>
+	
+	<EditColorsButtonText>Edit Available Colors</EditColorsButtonText>
+	<EditColorsDescription></EditColorsDescription>
+	<EditColorsSuccessMessage></EditColorsSuccessMessage>
+	
+	<RemoveAllColorsButtonText>Remove Colors From List</RemoveAllColorsButtonText>
+	<RemoveAllColorsDescription></RemoveAllColorsDescription>
+	<RemoveAllColorsSuccessMessage></RemoveAllColorsSuccessMessage>
+	
+	<EnableOnlyCoreButtonText>Enable Only Core</EnableOnlyCoreButtonText>
+	<EnableOnlyCoreDescription></EnableOnlyCoreDescription>
+	<EnableOnlyCoreSuccessMessage></EnableOnlyCoreSuccessMessage>
+	
+	<EnableOnlyCoreWithModListButtonText>Enable Only Core With ModListBackup</EnableOnlyCoreWithModListButtonText>
+	<EnableOnlyCoreWithModListDescription></EnableOnlyCoreWithModListDescription>
+	<EnableOnlyCoreWithModListSuccessMessage></EnableOnlyCoreWithModListSuccessMessage>
+	
+	<ImportFromSaveButtonText>Import From Save</ImportFromSaveButtonText>
+	<ImportFromSaveDescription></ImportFromSaveDescription>
+	<ImportFromSaveSuccessMessage></ImportFromSaveSuccessMessage>
+	
+	<BackupActiveModsButtonText>Backup Active Mods</BackupActiveModsButtonText>
+	<BackupActiveModsDescription></BackupActiveModsDescription>
+	<BackupActiveModsSuccessMessage></BackupActiveModsSuccessMessage>
+	
+	<DeleteAllBackupsButtonText>Delete All Backups</DeleteAllBackupsButtonText>
+	<DeleteAllBackupsDescription></DeleteAllBackupsDescription>
+	<DeleteAllBackupsSuccessMessage></DeleteAllBackupsSuccessMessage>
+	
+	<DeleteBackupsOlderThanButtonText>Delete Backups Older Than {0} Months</DeleteBackupsOlderThanButtonText>
+	<DeleteBackupsOlderThanDescription></DeleteBackupsOlderThanDescription>
+	<DeleteBackupsOlderThanSuccessMessage></DeleteBackupsOlderThanSuccessMessage>
+	
+	<MoveBackupsToDefaultPathButtonText>Move All Backups To Default Path</MoveBackupsToDefaultPathButtonText>
+	<MoveBackupsToDefaultPathDescription></MoveBackupsToDefaultPathDescription>
+	<MoveBackupsToDefaultPathSuccessMessage></MoveBackupsToDefaultPathSuccessMessage>
+
+</LanguageData>

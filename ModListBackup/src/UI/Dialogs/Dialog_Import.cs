@@ -1,4 +1,4 @@
-﻿using ModListBackup.Controllers;
+﻿using ModListBackup.Utils;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -13,8 +13,8 @@ namespace ModListBackup.UI.Dialogs {
     /// </summary>
     internal class Dialog_Import : Window {
         private static readonly Color DefaultFileTextColor = new Color(1f, 1f, 0.6f);
-        private List<SaveFileInfo> files = new List<SaveFileInfo>();
-        private List<int> filesModCount = new List<int>();
+        private readonly List<SaveFileInfo> files = new List<SaveFileInfo>();
+        private readonly List<int> filesModCount = new List<int>();
         private string interactButLabel = "Button_Select_Text".Translate();
         private float labelDescriptionHeight = 60f;
         private float listViewHeight = 500f;
@@ -22,50 +22,40 @@ namespace ModListBackup.UI.Dialogs {
         private Vector2 scrollPosition = Vector2.zero;
         private float titleHeight = 45f;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
         public Dialog_Import() {
-            this.closeOnEscapeKey = true;
+            this.closeOnCancel = true;
             this.doCloseButton = true;
             this.doCloseX = true;
             this.forcePause = true;
             this.absorbInputAroundWindow = true;
         }
 
-        /// <summary>
-        /// The windows initial size
-        /// </summary>
         public override Vector2 InitialSize { get { return new Vector2(650f, 700f); } }
 
         internal string SelectedFile { get; private set; }
 
-        /// <summary>
-        /// Draws the window contents
-        /// </summary>
-        /// <param name="rect">The rect to draw into</param>
-        public override void DoWindowContents(Rect rect) {
+        public override void DoWindowContents(Rect inRect) {
             // Title
             Text.Font = GameFont.Medium;
-            Widgets.Label(new Rect(0f, 0f, rect.width, titleHeight), "Dialog_Import_Title".Translate());
+            Widgets.Label(new Rect(0f, 0f, inRect.width, titleHeight), "Dialog_Import_Title".Translate());
             Text.Font = GameFont.Small;
 
-            Rect inRect = rect;
+            Rect rect = inRect;
 
             // Description
-            Rect DescRect = inRect;
+            Rect DescRect = rect;
             DescRect.y = titleHeight + paddingSize;
             DescRect.height = labelDescriptionHeight;
             Widgets.Label(DescRect, "Dialog_Import_Desc".Translate());
 
             // File list
-            Vector2 vector2_1 = new Vector2(inRect.width - 16f, 36f);
+            Vector2 vector2_1 = new Vector2(rect.width - 16f, 36f);
             Text.Font = GameFont.Small;
             Vector2 vector2_2 = new Vector2(100f, vector2_1.y - 2f);
-            inRect.height = listViewHeight;
+            rect.height = listViewHeight;
             float height = (float)this.files.Count * (vector2_1.y + 3f);
-            Rect viewRect = new Rect(0.0f, 0.0f, inRect.width - 800f, height);
-            Rect outRect = inRect.AtZero();
+            Rect viewRect = new Rect(0.0f, 0.0f, rect.width - 800f, height);
+            Rect outRect = rect.AtZero();
             outRect.y = DescRect.yMax + paddingSize;
             Widgets.BeginScrollView(outRect, ref this.scrollPosition, viewRect);
             float y = 0.0f;
@@ -108,9 +98,6 @@ namespace ModListBackup.UI.Dialogs {
             Widgets.EndScrollView();
         }
 
-        /// <summary>
-        /// Before the Dialog has opened
-        /// </summary>
         public override void PreOpen() {
             base.PreOpen();
             SelectedFile = "";
@@ -125,12 +112,12 @@ namespace ModListBackup.UI.Dialogs {
             SelectedFile = file;
 
             SaveFileHandler.ImportMods(file);
-            Page_ModsConfig_Controller.SetStatus("Status_Message_Imported".Translate());
+            //Page_ModsConfig_Controller.SetStatus("Status_Message_Imported".Translate());
             this.Close(true);
         }
 
         /// <summary>
-        /// Gets the Default file text colour
+        /// Gets the Default file text color
         /// </summary>
         /// <param name="sfi"></param>
         /// <returns></returns>

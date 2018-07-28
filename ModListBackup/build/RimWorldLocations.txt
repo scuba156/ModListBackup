@@ -1,0 +1,5 @@
+﻿C:\Program Files (x86)\Steam\steamapps\common\
+D:\Program Files (x86)\Steam\steamapps\common\
+C:\SteamLibrary\steamapps\common\
+D:\SteamLibrary\steamapps\common\
+~/.local/share/Steam/steamapps/common/

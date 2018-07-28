@@ -11,8 +11,6 @@
   <Button_Select_Tooltip>導入此遊戲的mod列表。</Button_Select_Tooltip>
   <Button_State_Select_Tooltip>選擇要備份/恢復的插槽。\n帶*號表示尚未配置插槽。</Button_State_Select_Tooltip>
   <Button_Undo_Tooltip>撤銷上一次動作。</Button_Undo_Tooltip>
-  <Checkbox_Restart_Label>立即重新啟動RimWorld</Checkbox_Restart_Label>
-  <Checkbox_Restart_Tooltip>立即重新啟動RimWorld，而不是在更改後返回主選單。\n\n這將節省時間，因為您應該在更改mod後重新啟動RimWorld。</Checkbox_Restart_Tooltip>
   <Default_State_Name>[未命名]</Default_State_Name>
   <Dialog_EditNames_ModCount_Label>Mod(s)</Dialog_EditNames_ModCount_Label>
   <Dialog_EditNames_Title>編輯插槽名稱</Dialog_EditNames_Title>

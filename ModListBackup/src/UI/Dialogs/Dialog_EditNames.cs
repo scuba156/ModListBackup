@@ -1,5 +1,5 @@
 ﻿using HugsLib;
-using ModListBackup.Controllers.Settings;
+using ModListBackup.Settings;
 using UnityEngine;
 using Verse;
 
@@ -22,12 +22,11 @@ namespace ModListBackup.UI.Dialogs {
 
             //Name list
             var scrollViewVisible = new Rect(0f, titleRect.height + 10, inRect.width, inRect.height - titleRect.height - 60f);
-            var scrollBarVisible = SettingsHandler.STATE_LIMIT * 42f > scrollViewVisible.height;
-            var scrollViewTotal = new Rect(0f, 0f - 10f, scrollViewVisible.width - (scrollBarVisible ? ScrollBarWidthMargin : 0) - 20f, SettingsHandler.STATE_LIMIT * 42f);
+            var scrollBarVisible = SettingsHandler.ModListStateLimit * 42f > scrollViewVisible.height;
+            var scrollViewTotal = new Rect(0f, 0f - 10f, scrollViewVisible.width - (scrollBarVisible ? ScrollBarWidthMargin : 0) - 20f, SettingsHandler.ModListStateLimit * 42f);
             Widgets.BeginScrollView(scrollViewVisible, ref scrollPosition, scrollViewTotal);
 
-            if (SettingsHandler.DoStateNamesDrawerContents(scrollViewTotal))
-                settingsHaveChanged = true;
+            settingsHaveChanged |= SettingsHandler.DoStateNamesDrawerContents(scrollViewTotal);
             Widgets.EndScrollView();
         }
 
@@ -35,7 +34,7 @@ namespace ModListBackup.UI.Dialogs {
         /// Constructor
         /// </summary>
         public Dialog_EditNames() {
-            this.closeOnEscapeKey = true;
+            this.closeOnCancel = true;
             this.doCloseButton = true;
             this.doCloseX = true;
             this.forcePause = true;
